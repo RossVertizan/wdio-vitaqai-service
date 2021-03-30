@@ -19,10 +19,7 @@ module.exports = class VitaqService {
         global.vitaq = this;
         this.counter= 0;
     }
-
-
-
-    nextAction(suite, currentSuite) {
+    nextActionSelector(suite, currentSuite) {
         // log.info("VitaqService: nextAction: context: ", currentSuite.ctx)
         if (typeof currentSuite.ctx !== "undefined") {
             // log.info("VitaqService: nextAction: _runnable: ", currentSuite.ctx._runnable)
@@ -58,6 +55,8 @@ module.exports = class VitaqService {
         return null;
     }
 
+    // =========================================================================
+    // =========================================================================
 
     /**
      * gather information about runner
@@ -269,42 +268,43 @@ module.exports = class VitaqService {
      * VM message data
      */
     getBody (failures, calledOnReload = false, browserName) {
-        let body = {}
-
-        /**
-         * set default values
-         */
-        body.name = this.suiteTitle
-
-        if (browserName) {
-            body.name = `${browserName}: ${body.name}`
-        }
-
-        /**
-         * add reload count to title if reload is used
-         */
-        if (calledOnReload || this.testCnt) {
-            let testCnt = ++this.testCnt
-
-            if (global.browser.isMultiremote) {
-                testCnt = Math.ceil(testCnt / global.browser.instances.length)
-            }
-
-            body.name += ` (${testCnt})`
-        }
-
-        let caps = this.capabilities['sauce:options'] || this.capabilities
-
-        for (let prop of jobDataProperties) {
-            if (!caps[prop]) {
-                continue
-            }
-
-            body[prop] = caps[prop]
-        }
-
-        body.passed = failures === 0
-        return body
+        log.info("Running the service getBody method")
+        // let body = {}
+        //
+        // /**
+        //  * set default values
+        //  */
+        // body.name = this.suiteTitle
+        //
+        // if (browserName) {
+        //     body.name = `${browserName}: ${body.name}`
+        // }
+        //
+        // /**
+        //  * add reload count to title if reload is used
+        //  */
+        // if (calledOnReload || this.testCnt) {
+        //     let testCnt = ++this.testCnt
+        //
+        //     if (global.browser.isMultiremote) {
+        //         testCnt = Math.ceil(testCnt / global.browser.instances.length)
+        //     }
+        //
+        //     body.name += ` (${testCnt})`
+        // }
+        //
+        // let caps = this.capabilities['sauce:options'] || this.capabilities
+        //
+        // for (let prop of jobDataProperties) {
+        //     if (!caps[prop]) {
+        //         continue
+        //     }
+        //
+        //     body[prop] = caps[prop]
+        // }
+        //
+        // body.passed = failures === 0
+        // return body
     }
 
     /**
@@ -313,6 +313,7 @@ module.exports = class VitaqService {
      * @returns {*}
      */
     updateUP(failures){
-        return global.browser.execute(`sauce:job-result=${failures === 0}`)
+        log.info("Running the service updateUP method")
+        // return global.browser.execute(`sauce:job-result=${failures === 0}`)
     }
 }

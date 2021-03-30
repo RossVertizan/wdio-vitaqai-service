@@ -83,6 +83,7 @@ export default class VitaqLauncher {
     }
 
     async startTunnel(retryCount = 0) {
+        log.info("Running the launcher startTunnel method")
         // try {
         //     const scProcess = await this.api.startVitaqConnect(this.sauceConnectOpts)
         //     return scProcess

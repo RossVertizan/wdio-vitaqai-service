@@ -1,7 +1,7 @@
-// import VitaqLauncher from './launcher'
-// import VitaqService from './service'
+import VitaqLauncher from './launcher'
+import VitaqService from './service'
 
-const VitaqService = require("./service");
+export default VitaqService
+export const launcher = VitaqLauncher
 
-exports.VitaqService = VitaqService;
-// exports.VitaqLauncher = VitaqLauncher
+
