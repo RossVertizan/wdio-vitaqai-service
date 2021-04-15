@@ -21,11 +21,17 @@ git submodule add https://RossVertizan@bitbucket.org/RossVertizan/wdio-vitaqai-s
 npm publish --registry http://localhost:4873
 ```
 
-
 ### How to install
 Installed as part of wdio-vitaq-mocha-framework
 
 npm install @wdio/vitaq-mocha-framework@<version> --save-dev
 
 
+
+
+
+
+
+## Development Notes
+### Study of the Sauce Service
 
