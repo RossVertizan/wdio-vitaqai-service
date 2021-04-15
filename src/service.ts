@@ -69,11 +69,11 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             if (typeof currentSuite === "undefined") {
                 log.info("VitaqService: nextActionSelector: currentSuite is undefined");
                 // @ts-ignore
-                nextAction = this._browser.call(() =>
+                nextAction = global.browser.call(() =>
                     this._api.getNextTestActionCaller(undefined, true));
             } else {
                 // @ts-ignore
-                nextAction = this._browser.call(() =>
+                nextAction = global.browser.call(() =>
                     this._api.getNextTestActionCaller(currentSuite.title, true));
             }
             log.info("VitaqService: nextActionSelector: Returning nextAction: ", nextAction);

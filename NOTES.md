@@ -37,7 +37,7 @@ npm install @wdio/vitaq-mocha-framework@<version> --registry http://localhost:48
 ```
 or manually with:
 ```node
-npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873--save-dev
+npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873 --save-dev
 ```
 
 
