@@ -3,7 +3,8 @@ const logger = require('@wdio/logger').default;
 const log = logger('@wdio/vitaq-service')
 
 // Packages
-import VitaqAiApi from ('vitaqai_api')
+// @ts-ignore
+import VitaqAiApi from 'vitaqai_api'
 
 // Type import
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'

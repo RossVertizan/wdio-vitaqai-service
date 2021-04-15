@@ -1,5 +1,5 @@
-import type { VitaqServiceConfig } from './types'
+import type { VitaqServiceOptions } from './types'
 
-export const DEFAULT_OPTIONS: Partial<VitaqServiceConfig> = {
+export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
     url: ""
 }
