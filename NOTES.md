@@ -31,10 +31,14 @@ npm publish --registry http://localhost:4873
 ```
 
 ### How to install
-Installed as part of wdio-vitaq-mocha-framework
-
-npm install @wdio/vitaq-mocha-framework@<version> --save-dev
-
+Installed as part of wdio-vitaq-mocha-framework:
+```node
+npm install @wdio/vitaq-mocha-framework@<version> --registry http://localhost:4873--save-dev
+```
+or manually with:
+```node
+npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873--save-dev
+```
 
 
 

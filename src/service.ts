@@ -41,6 +41,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     }
 
     nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
+        let nextAction: string;
         log.info("VitaqService: nextActionSelector: suite: ", suite)
 
         // Get the result (pass/fail) off the _runnable
@@ -68,13 +69,15 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             if (typeof currentSuite === "undefined") {
                 log.info("VitaqService: nextActionSelector: currentSuite is undefined");
                 // @ts-ignore
-                return this._browser.call(() =>
+                nextAction = this._browser.call(() =>
                     this._api.getNextTestActionCaller(undefined, true));
             } else {
                 // @ts-ignore
-                return this._browser.call(() =>
+                nextAction = this._browser.call(() =>
                     this._api.getNextTestActionCaller(currentSuite.title, true));
             }
+            log.info("VitaqService: nextActionSelector: Returning nextAction: ", nextAction);
+            return nextAction;
         }
     }
 
