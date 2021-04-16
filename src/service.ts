@@ -40,8 +40,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         this._counter = 0;
     }
 
-    nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
+    async nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
         let nextAction: string;
+        let result: boolean = true;
         log.info("VitaqService: nextActionSelector: suite: ", suite)
 
         // Get the result (pass/fail) off the _runnable
@@ -50,7 +51,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             log.info("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
             log.info("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
             // Map the passed/failed result to true and false
-            let result;
             if (currentSuite.ctx._runnable.state === "passed") {
                 result = true;
             } else if (currentSuite.ctx._runnable.state === "failed") {
@@ -69,15 +69,19 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             if (typeof currentSuite === "undefined") {
                 log.info("VitaqService: nextActionSelector: currentSuite is undefined");
                 // @ts-ignore
-                nextAction = global.browser.call(() =>
-                    this._api.getNextTestActionCaller(undefined, true));
+                // nextAction = global.browser.call(() =>
+                //     this._api.getNextTestActionCaller(undefined, true));
+                nextAction = await this._api.getNextTestActionCaller(undefined, result);
             } else {
                 // @ts-ignore
-                nextAction = global.browser.call(() =>
-                    this._api.getNextTestActionCaller(currentSuite.title, true));
+                // i.getNextTestActionCaller(currentSuite.title, true));
+                log.info("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
+                nextAction = await this._api.getNextTestActionCaller(currentSuite.title, result);
             }
             log.info("VitaqService: nextActionSelector: Returning nextAction: ", nextAction);
-            return nextAction;
+
+            // Need to return the suite object
+            return this.getSuite(suite, nextAction);
         }
     }
 

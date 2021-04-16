@@ -21,13 +21,13 @@ Before publishing, the code needs to be built. To do this go to the webdriverio-
 ```node
 npm run build
 ```
-when it has built succesfully it can then be committed, version number updated:
-```node
-npm version <version number>
-```
-and then published to the registry
+when it has built successfully it can then be committed and then published to the registry
 ```node
 npm publish --registry http://localhost:4873
+```
+after publishing update the version number for any further changes
+```node
+npm version <version number>
 ```
 
 ### How to install
