@@ -43,6 +43,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     async nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
         let nextAction: string;
         let result: boolean = true;
+        let returnSuite: MochaSuite;
         log.info("VitaqService: nextActionSelector: suite: ", suite)
 
         // Get the result (pass/fail) off the _runnable
@@ -59,6 +60,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 // Didn't get either passed or failed
                 log.error('VitaqService: nextActionSelector: Unexpected value for state: ',
                     currentSuite.ctx._runnable.state)
+                result
             }
         }
 
@@ -85,62 +87,12 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         }
     }
 
-    // nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite) {
-    //     log.info("VitaqService: nextActionSelector: suite: ", suite)
-    //     if (typeof currentSuite !== "undefined") {
-    //         // log.info("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
-    //         log.info("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
-    //         log.info("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
-    //     }
-    //     if (suite.root) {
-    //         log.info("VitaqService: nextActionSelector: This is the root suite");
-    //         if (typeof currentSuite === "undefined") {
-    //             log.info("VitaqService: nextActionSelector: currentSuite is undefined");
-    //             this._counter += 1;
-    //             return this.getSuite(suite, "Suite3");
-    //         }
-    //         else if (currentSuite.title === 'Suite3') {
-    //             log.info("VitaqService: nextActionSelector: currentSuite is: ", currentSuite);
-    //             log.info("VitaqService: nextActionSelector: counter: ", this._counter);
-    //             this._counter += 1;
-    //             return this.getSuite(suite, "Suite2");
-    //         }
-    //         else if (currentSuite.title === 'Suite2') {
-    //             log.info("VitaqService: nextActionSelector: currentSuite is: ", currentSuite);
-    //             log.info("VitaqService: nextActionSelector: counter: ", this._counter);
-    //             this._counter += 1;
-    //             return this.getSuite(suite, "Suite1");
-    //         }
-    //         else if (currentSuite.title === 'Suite1' && this._counter < 10) {
-    //             log.info("VitaqService: nextActionSelector: currentSuite is: ", currentSuite);
-    //             log.info("VitaqService: nextActionSelector: counter: ", this._counter);
-    //             this._counter += 1;
-    //             return this.getSuite(suite, "Suite3");
-    //         }
-    //         else {
-    //             return null;
-    //         }
-    //     }
-    // }
-
-    multiply(val1: number, val2: number) {
-        return val1 * val2;
-    }
-
-
     /**
-     * Create an async sleep statement to test the sync capabilities in our test files
-     * @param duration
-     * @returns {null|*}
+     *
+     * @param suite - The root suite that we will look through to find the sub-suite
+     * @param suiteName - Name of the suite we are looking for
+     * @returns {suite/null}
      */
-    sleep(ms: number) {
-        log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
-        // @ts-ignore
-        return global.browser.call(() =>
-            new Promise(resolve => setTimeout(resolve, ms))
-        );
-    }
-
     getSuite(suite: MochaSuite, suiteName: string) {
         for (let index = 0; index < suite.suites.length; index += 1) {
             const subSuite = suite.suites[index];
@@ -148,8 +100,21 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 return subSuite;
             }
         }
+        console.error("Error: Was unable to find a test action script for: ", suiteName)
+        console.warn(`Make sure you have a test file with ${suiteName} as the text in the describe block`)
+        console.warn(`This will cause the test to end`)
         return null;
     }
+
+    /**
+     * Vitaq command to enable/disable actions
+     * @param actionName - name of tbe action to enable/disable
+     * @param enabled - true sets enabled, false sets disabled
+     */
+    set_enabled(actionName: string, enabled: boolean) {
+        this._api.runCommandCaller("set_enabled", arguments)
+    }
+
 
     // =========================================================================
     // =========================================================================
@@ -413,4 +378,21 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     //     log.info("Running the service updateUP method")
     //     // return global.browser.execute(`sauce:job-result=${failures === 0}`)
     // }
+
+    /**
+     * Create an async sleep statement to test the sync capabilities in our test files
+     * @param duration
+     * @returns {null|*}
+     */
+    sleep(ms: number) {
+        log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
+        // @ts-ignore
+        return global.browser.call(() =>
+            new Promise(resolve => setTimeout(resolve, ms))
+        );
+    }
 }
+
+// =============================================================================
+// END OF FILE
+// =============================================================================
