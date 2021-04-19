@@ -107,14 +107,30 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     }
 
     /**
+     * Create an async sleep statement to test the sync capabilities in our test files
+     * @param duration
+     * @returns {null|*}
+     */
+    sleep(ms: number) {
+        log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
+        // @ts-ignore
+        return global.browser.call(() =>
+            new Promise(resolve => setTimeout(resolve, ms))
+        );
+    }
+
+    /**
      * Vitaq command to enable/disable actions
      * @param actionName - name of tbe action to enable/disable
      * @param enabled - true sets enabled, false sets disabled
      */
     set_enabled(actionName: string, enabled: boolean) {
-        this._api.runCommandCaller("set_enabled", arguments)
+        log.debug("VitaqService: set_enabled: actionName, enabled", actionName, enabled);
+        // @ts-ignore
+        return this._browser.call((actionName: string, enabled: boolean) =>
+            this._api.runCommandCaller("set_enabled", arguments)
+        )
     }
-
 
     // =========================================================================
     // =========================================================================
@@ -379,18 +395,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     //     // return global.browser.execute(`sauce:job-result=${failures === 0}`)
     // }
 
-    /**
-     * Create an async sleep statement to test the sync capabilities in our test files
-     * @param duration
-     * @returns {null|*}
-     */
-    sleep(ms: number) {
-        log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
-        // @ts-ignore
-        return global.browser.call(() =>
-            new Promise(resolve => setTimeout(resolve, ms))
-        );
-    }
+
 }
 
 // =============================================================================
