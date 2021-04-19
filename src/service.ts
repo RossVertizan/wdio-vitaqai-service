@@ -126,10 +126,24 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     set_enabled(actionName: string, enabled: boolean) {
         log.debug("VitaqService: set_enabled: actionName, enabled", actionName, enabled);
+        // Set non-string arguments to be strings
+        const enabledStr = this.boolToString(enabled)
+
         // @ts-ignore
-        return this._browser.call((actionName: string, enabled: boolean) =>
+        return this._browser.call((actionName: string, enabledStr: string) =>
             this._api.runCommandCaller("set_enabled", arguments)
         )
+    }
+
+    /**
+     * boolToString
+     * @param boolean - boolean to convert to a string
+     */
+    boolToString(boolean: boolean) {
+        if (boolean) {
+            return "True"
+        }
+        return "False"
     }
 
     // =========================================================================
