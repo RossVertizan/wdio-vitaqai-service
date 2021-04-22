@@ -21,7 +21,9 @@ Before publishing, the code needs to be built. To do this go to the webdriverio-
 ```node
 npm run build
 ```
-when it has built successfully it can then be committed and then published to the registry
+when it has built successfully it can then be committed
+
+then published to the registry
 ```node
 npm publish --registry http://localhost:4873
 ```

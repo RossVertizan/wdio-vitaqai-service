@@ -320,7 +320,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         }
         // @ts-ignore
         return this._browser.call(() =>
-            this._api.runCommandCaller('disallow_values', arguments)
+            this._api.runCommandCaller('disallow_values', vtqArguments)
         )
     }
 
