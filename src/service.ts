@@ -350,6 +350,18 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     }
 
     /**
+     * get Vitaq to generate a new value for the variable
+     * @param variableName - name of the variable
+     */
+    gen(variableName: string) {
+        log.debug('VitaqService: gen: variableName', variableName);
+        // @ts-ignore
+        return this._browser.call(() =>
+            this._api.runCommandCaller('gen', arguments)
+        )
+    }
+
+    /**
      * Get the current call count for this action
      * @param actionName - name of the action
      */

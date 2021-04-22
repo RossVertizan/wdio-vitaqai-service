@@ -153,7 +153,7 @@ methods:
     # pre_next_sequence is a hook method not accessible to the end user
 
     remove_all_next:
-       description: Remova all actions in the next action list
+       description: Remove all actions in the next action list
        include: true
        parameters:
          - name: actionName
@@ -402,6 +402,17 @@ methods:
          - name: value
            type: boolean
            description: true prevents values from being repeated
+       return:
+         - type: None
+
+    # Need gen for testing if not for users
+    gen:
+       description: get Vitaq to generate a new value for the variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
        return:
          - type: None
 

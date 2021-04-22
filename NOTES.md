@@ -57,6 +57,8 @@ npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873 --s
    Need to modify template code to handle a list of values
    ```
 5. Need to remove the name sequence/sequences and replace it with action/actions - implemented with altname field in YAML
+6. add_next/remove_next need the action specified as the second argument to be prefixed with "top." - implemented in the convertArguments method in vitaqai_api.
+7. Need to convert boolean return values from Python  - implemented in vitaqai_api/convertReturn method
 
 ### Study of the Sauce Service
 
