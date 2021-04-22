@@ -46,5 +46,17 @@ npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873 --s
 
 
 ## Development Notes
+
+### Notes during selection of methods to expose
+
+1. Focussing on the methods associated with controlling the actions/next actions because we don't know how mch people will want to programmatically control the data generation.
+2. abort - need to find a way to pass the current action without the user having to do anything. Should be able to get this from the next action mechanism. Implemented in vitaqai_api convertArguments method
+3. Need to handle default values in the writer - implemented with default in YAML
+4. Several methods need customising, see:
+   ```yaml
+   Need to modify template code to handle a list of values
+   ```
+5. Need to remove the name sequence/sequences and replace it with action/actions - implemented with altname field in YAML
+
 ### Study of the Sauce Service
 

@@ -1,0 +1,535 @@
+methods:
+# ==============================================================================
+# GenSequence methods (Action related)
+# ==============================================================================
+    # actionName parameter is hardcoded to be the currentAction
+    abort:
+      description: Abort the action causing it to not select a next action
+      include: true
+      parameters: []
+      return:
+        - type: None
+
+#    /**
+#     * Abort the action causing it to not select a next action
+#     */
+#    abort() {
+#        log.debug('VitaqService: abort: ');
+#                // @ts-ignore
+#                return this._browser.call(() =>
+#                    this._api.runCommandCaller('abort', {'0': 'currentAction'})
+#            )
+#        }
+
+    # add_dynamic_weight - can only be used in pre_next_sequence which is
+    # not accessible from the user code
+
+    add_next:
+      description: Add an action that can be called after this one
+      include: true
+      parameters:
+        - name: actionName
+          type: string
+          description: name of the action
+        - name: nextAction
+          type: string
+          description: name of the action that could be called next
+        - name: weight
+          type: number
+          description: Weight for the selection of the next action
+          default: 1
+      return:
+        - type: None
+
+    clear_call_count:
+      description: Set the call_count back to zero
+      include: true
+      parameters:
+        - name: actionName
+          type: string
+          description: name of the action
+        - name: tree
+          type: boolean
+          description: clear call counts on all next actions
+      return:
+        - type: None
+
+    display_next_sequences:
+      altname: display_next_actions
+      description: Get a string listing all of the possible next actions
+      include: true
+      parameters:
+        - name: actionName
+          type: string
+          description: name of the action
+      return:
+        - type: string
+
+    # do_seq is a hook method not accessible to the end user
+
+    # export_graph - have a graphical description of the test space in the UI
+
+    get_call_count:
+      description: Get the current call count for this action
+      include: true
+      parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+      return:
+         - type: number
+
+    get_call_limit:
+       description: Get the maximum number of times this action can be called
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: number
+
+    # get_delete_on_complete - advanced usage - leave for now
+
+    get_enabled:
+       description: Query if the action is enabled
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: boolean
+
+    get_id:
+       description: Get a unique ID for this action
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: string
+
+    # get_previous - advanced usage - leave for now
+
+    # get_progress_on_complete - advanced usage - leave for now
+
+    # get_remove_on_complete - advanced usage - leave for now
+
+    next_sequences:
+       altname: next_actions
+       description: Get all of the possible next actions
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: string
+
+    number_active_next_sequences:
+       altname: number_active_next_actions
+       description: Return the number of active next actions
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: number
+
+    number_next_sequences:
+       altname: number_next_actions
+       description: Return the number of possible next actions
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: number
+
+    # pre_next_sequence is a hook method not accessible to the end user
+
+    remove_all_next:
+       description: Remova all actions in the next action list
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: None
+
+    remove_from_callers:
+       description: Remove this action from all callers lists
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+       return:
+         - type: None
+
+    remove_next:
+       description: Remove an existing next action from the list of next actions
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+         - name: nextAction
+           type: string
+           description: name of the action to remove
+       return:
+         - type: None
+
+    # run_seq is a hook method not accessible to the end user
+
+    # sequence_complete is a hook method not accessible to the end user
+
+    set_call_limit:
+       description: Set the maximum number of calls for this action
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+         - name: limit
+           type: number
+           description: the call limit to set
+       return:
+         - type: None
+
+    # set_delete_on_complete - advanced usage - leave for now
+
+    set_enabled:
+      description: Vitaq command to enable/disable actions
+      include: true
+      parameters:
+        - name: actionName
+          type: string
+          description: name of the action to enable/disable
+        - name: enabled
+          type: boolean
+          description: true sets enabled, false sets disabled
+      return:
+        - type: None
+
+    set_exhaustive:
+      description: set or clear the exhaustive flag
+      include: true
+      parameters:
+        - name: actionName
+          type: string
+          description: name of the action
+        - name: exhaustive
+          type: boolean
+          description: true sets exhaustive, false clears exhaustive
+      return:
+        - type: None
+
+    set_max_sequence_depth:
+       altname: set_max_action_depth
+       description: Set the maximum allowable recursive depth
+       include: true
+       parameters:
+         - name: actionName
+           type: string
+           description: name of the action
+         - name: depth
+           type: number
+           description: Maximum allowable recursive depth
+           default: 1000
+       return:
+         - type: None
+
+    # set_progress_on_complete - advanced usage - leave for now
+
+    # set_remove_on_complete - advanced usage - leave for now
+
+# ==============================================================================
+# GenField/GenFieldBase methods (Data related)
+# ==============================================================================
+
+    allow_only_range:
+       description: Allow ONLY the defined range to be the allowable range for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: low
+           type: number
+           description: Lower limit of the range
+         - name: high
+           type: number
+           description: Upper limit of the range
+       return:
+         - type: None
+
+    allow_only_value:
+       description: Allow ONLY the defined value to be the allowable value for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: value
+           type: number
+           description: The value to be allowed
+       return:
+         - type: None
+
+    # Need to modify template code to handle a list of values
+    #        let vtqArguments = {'0': variableName, '1': valueList.length}
+    #        for (let index = 0; index < valueList.length; index += 1) {
+    #            let key = index + 2
+    #            // @ts-ignore
+    #            vtqArguments[key.toString()] = valueList[index]
+    #        }
+    #        // @ts-ignore
+    #        return this._browser.call(() =>
+    #        this._api.runCommandCaller('allow_only_values', vtqArguments)
+    #        )
+    allow_only_values:
+       description: Allow ONLY the passed list of values as the allowable values for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: valueList
+           type: Array
+           description: list of values that should be allowed
+       return:
+         - type: None
+
+    allow_range:
+       description: Add the defined range to the allowable values for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: low
+           type: number
+           description: Lower limit of the range
+         - name: high
+           type: number
+           description: Upper limit of the range
+       return:
+         - type: None
+
+    allow_value:
+       description: Add the defined value to the allowable values for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: value
+           type: number
+           description: The value to be allowed
+       return:
+         - type: None
+
+    # Need to modify template code to handle a list of values
+    allow_values:
+       description: Add the passed list of values to the allowable values for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: valueList
+           type: Array
+           description: list of values that should be allowed
+       return:
+         - type: None
+
+    disallow_range:
+       description: Remove the defined range from the allowable values for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: low
+           type: number
+           description: Lower limit of the range
+         - name: high
+           type: number
+           description: Upper limit of the range
+       return:
+         - type: None
+
+    disallow_value:
+       description: Remove the defined value from the allowable values for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: value
+           type: number
+           description: The value to be removed
+       return:
+         - type: None
+
+    # Need to modify template code to handle a list of values
+    disallow_values:
+       description: Remove the passed list of values from the allowable values for the integer variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: valueList
+           type: Array
+           description: list of values that should be removed
+       return:
+         - type: None
+
+    do_not_repeat:
+       description: Specify that values should not be repeated
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: value
+           type: boolean
+           description: true prevents values from being repeated
+       return:
+         - type: None
+
+    get_do_not_repeat:
+       description: Get the current status of do not repeat
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+       return:
+         - type: boolean
+
+    get_seed:
+       description: Get the starting seed being used
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+       return:
+         - type: number
+
+    # Including the depth argument is advanced usage - leaving for now
+    get_value:
+       description: Get the current value of the variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+       return:
+         - type: None
+
+    reset_ranges:
+       description: Remove all constraints on values
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+       return:
+         - type: None
+
+    set_seed:
+       description: Set the seed to use
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: seed
+           type: number
+           description: Seed to use
+       return:
+         - type: None
+
+    # Not passing argument for clear dynamic as this is advanced usage
+    set_value:
+       description: Manually set a value for a variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: value
+           type: number
+           description: value to set
+       return:
+         - type: None
+
+# ==============================================================================
+# Methods implemented in Python
+# ==============================================================================
+
+    # Need to modify template code to handle a list of values
+    allow_only_list:
+       description: Specify the ONLY list to select from in a list variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: list
+           type: Array
+           description: The list to be used for selecting from
+       return:
+         - type: None
+
+    # Need to modify template code to handle a list of values
+    allow_list:
+       description: Specify a list to add to the existing list in a list variable
+       include: true
+       parameters:
+         - name: variableName
+           type: string
+           description: name of the variable
+         - name: list
+           type: Array
+           description: The list to add to the existing list
+       return:
+         - type: None
+
+
+# =============================  ACTION TEMPLATE  ===========================
+#    <name>
+#       description:
+#       include: true
+#       parameters:
+#         - name: actionName
+#           type: string
+#           description: name of the action
+#         - name:
+#           type:
+#           description:
+#       return:
+#         - type: None
+
+# =============================  VARIABLE TEMPLATE  ===========================
+#    <name>
+#       description:
+#       include: true
+#       parameters:
+#         - name: variableName
+#           type: string
+#           description: name of the variable
+#         - name:
+#           type:
+#           description:
+#       return:
+#         - type: None
