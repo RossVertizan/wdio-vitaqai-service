@@ -119,6 +119,84 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         );
     }
 
+    // -------------------------------------------------------------------------
+    // VITAQ CONTROL METHODS
+    // -------------------------------------------------------------------------
+    /**
+     * Get Vitaq to generate a new value for the variable and then get it
+     * @param variableName - name of the variable
+     */
+    requestData(variableName: string) {
+        this._api.requestDataCaller(variableName)
+    }
+
+    /**
+     * Get Vitaq to record coverage for the variables in the array
+     * @param variablesArray - array of variables to record coverage for
+     */
+    recordCoverage(variablesArray: []) {
+        this._api.recordCoverageCaller(variablesArray)
+    }
+
+    /**
+     * Send data to Vitaq and record it on the named variable
+     * @param variableName - name of the variable
+     * @param value - value to store
+     */
+    sendDataToVitaq(variableName: string, value: any) {
+        this._api.sendDataToVitaqCaller(variableName, value)
+    }
+
+    /**
+     * Read data from a variable in Vitaq
+     * @param variableName - name of the variable to read
+     */
+    readDataFromVitaq(variableName: string) {
+        this._api.readDataFromVitaqCaller(variableName)
+    }
+
+    /**
+     * Create an entry in the Vitaq log
+     * @param message - message/data to put into the log
+     * @param format - format of the message/data, can be "text" (default) or "json"
+     */
+    createVitaqLogEntry(message: string | {}, format: string) {
+        this._api.createVitaqLogEntryCaller(message, format)
+    }
+
+    // -------------------------------------------------------------------------
+    // VITAQ CONTROL METHOD ALIASES
+    // -------------------------------------------------------------------------
+    // Easier names to use with the Vitaq control methods
+
+    // recordCoverage
+    record(variablesArray: []) {
+        this.recordCoverage(variablesArray)
+    }
+
+    // sendDataToVitaq
+    writeDataToVitaq(variableName: string, value: any) {
+        this.sendDataToVitaq(variableName, value)
+    }
+
+    write(variableName: string, value: any) {
+        this.sendDataToVitaq(variableName, value)
+    }
+
+    // readDataFromVitaq
+    read(variableName: string) {
+        this.readDataFromVitaq(variableName)
+    }
+
+    // createVitaqLogEntry
+    log(message: string | {}, format: string) {
+        this.createVitaqLogEntry(message, format)
+    }
+
+
+    // -------------------------------------------------------------------------
+    // STANDARD VITAQ METHODS
+    // -------------------------------------------------------------------------
     /**
      * Abort the action causing it to not select a next action
      */
@@ -358,6 +436,22 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         // @ts-ignore
         return this._browser.call(() =>
             this._api.runCommandCaller('gen', arguments)
+        )
+    }
+
+    /**
+     * get Vitaq to generate a new value for the variable and then get it
+     * @param variableName - name of the variable
+     */
+    getGen(variableName: string) {
+        log.debug('VitaqService: getGen: variableName', variableName);
+        // @ts-ignore
+        this._browser.call(() =>
+            this._api.runCommandCaller('gen', arguments)
+        )
+        // @ts-ignore
+        return this._browser.call(() =>
+            this._api.runCommandCaller('get_value', arguments)
         )
     }
 

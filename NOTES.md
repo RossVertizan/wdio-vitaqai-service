@@ -42,11 +42,6 @@ or manually with:
 npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873 --save-dev
 ```
 
-
-
-
-
-
 ## Development Notes
 
 ### Notes during selection of methods to expose
@@ -61,6 +56,33 @@ npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873 --s
 5. Need to remove the name sequence/sequences and replace it with action/actions - implemented with altname field in YAML
 6. add_next/remove_next need the action specified as the second argument to be prefixed with "top." - implemented in the convertArguments method in vitaqai_api.
 7. Need to convert boolean return values from Python  - implemented in vitaqai_api/convertReturn method
+8. Discovered bug in GenFromList - weights are incorrect if not initialised with weights.  A weights array is maintained which keeps a list of the weights, but this is not initialised if the starting description does not have weights.  This issue has now been fixed  - just need a new build of the C++ code.
+
+### Client methods to port
+
+Need to have all of these methods supported from the Vitaq client
+Three bits to the implementation:
+1. In the socketClient.js (vitaqai_api)
+2. In index.js - a caller function (vitaqai_api)
+3. In service.ts - the exposed method (wdio_vitaq_service)
+
+
+1. requestData - implemented
+   - Also have getGen which is implemented as two runCommand calls (gen + get_value)
+2. runCommand - already implemented in above work - this is the "core" function
+3. recordCoverage
+4. sendDataToVitaq/ writeDataToVitaq
+5. readDataFromVitaq
+6. createVitaqLogEntry
+
+### Other things to do
+1. Make all this work in K8S
+2. Check coverage is working - how to specify ?
+3. Check AI is working - need to make re-runs possible
+4. Enable sequence runs
+
+
+
 
 ### Study of the Sauce Service
 
