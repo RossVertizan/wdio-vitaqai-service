@@ -186,26 +186,26 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     // recordCoverage
     record(variablesArray: []) {
-        this.recordCoverage(variablesArray)
+        return this.recordCoverage(variablesArray)
     }
 
     // sendDataToVitaq
     writeDataToVitaq(variableName: string, value: any) {
-        this.sendDataToVitaq(variableName, value)
+        return this.sendDataToVitaq(variableName, value)
     }
 
     write(variableName: string, value: any) {
-        this.sendDataToVitaq(variableName, value)
+        return this.sendDataToVitaq(variableName, value)
     }
 
     // readDataFromVitaq
     read(variableName: string) {
-        this.readDataFromVitaq(variableName)
+        return this.readDataFromVitaq(variableName)
     }
 
     // createVitaqLogEntry
     log(message: string | {}, format: string) {
-        this.createVitaqLogEntry(message, format)
+        return this.createVitaqLogEntry(message, format)
     }
 
 
