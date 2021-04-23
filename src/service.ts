@@ -44,13 +44,20 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         let nextAction: string;
         let result: boolean = true;
         let returnSuite: MochaSuite;
-        log.info("VitaqService: nextActionSelector: suite: ", suite)
+        if (typeof this._options.verbosityLevel !== 'undefined'
+            &&this._options.verbosityLevel > 50) {
+            log.info("VitaqService: nextActionSelector: suite: ", suite)
+        }
 
         // Get the result (pass/fail) off the _runnable
         if (typeof currentSuite !== "undefined") {
             // log.info("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
-            log.info("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
-            log.info("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
+            // @ts-ignore
+            if (typeof this._options.verbosityLevel !== 'undefined'
+                &&this._options.verbosityLevel > 50) {
+                log.info("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
+                log.info("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
+            }
             // Map the passed/failed result to true and false
             if (currentSuite.ctx._runnable.state === "passed") {
                 result = true;

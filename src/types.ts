@@ -25,6 +25,10 @@ export interface VitaqServiceOptions {
      */
     projectName?: string
 
+    /**
+     * Specify a verbosityLevel 0-100 - higher is more verbose
+     */
+    verbosityLevel?: number
 }
 
 export interface MochaSuite {
