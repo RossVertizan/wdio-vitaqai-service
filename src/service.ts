@@ -127,7 +127,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param variableName - name of the variable
      */
     requestData(variableName: string) {
-        this._api.requestDataCaller(variableName)
+        // @ts-ignore
+        return this._browser.call(() =>
+            this._api.requestDataCaller(variableName)
+        )
     }
 
     /**
@@ -135,7 +138,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param variablesArray - array of variables to record coverage for
      */
     recordCoverage(variablesArray: []) {
-        this._api.recordCoverageCaller(variablesArray)
+        // @ts-ignore
+        return this._browser.call(() =>
+            this._api.recordCoverageCaller(variablesArray)
+        )
     }
 
     /**
@@ -144,7 +150,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param value - value to store
      */
     sendDataToVitaq(variableName: string, value: any) {
-        this._api.sendDataToVitaqCaller(variableName, value)
+        // @ts-ignore
+        return this._browser.call(() =>
+            this._api.sendDataToVitaqCaller(variableName, value)
+        )
     }
 
     /**
@@ -152,7 +161,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param variableName - name of the variable to read
      */
     readDataFromVitaq(variableName: string) {
-        this._api.readDataFromVitaqCaller(variableName)
+        // @ts-ignore
+        return this._browser.call(() =>
+            this._api.readDataFromVitaqCaller(variableName)
+        )
     }
 
     /**
@@ -161,7 +173,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param format - format of the message/data, can be "text" (default) or "json"
      */
     createVitaqLogEntry(message: string | {}, format: string) {
-        this._api.createVitaqLogEntryCaller(message, format)
+        // @ts-ignore
+        return this._browser.call(() =>
+            this._api.createVitaqLogEntryCaller(message, format)
+        )
     }
 
     // -------------------------------------------------------------------------
