@@ -24,5 +24,5 @@ export async function getEnabled(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     validateArguments("getEnabled", argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_enabled', arguments)
+    return await api.runCommandCaller('get_enabled', args)
 }

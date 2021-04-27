@@ -25,6 +25,6 @@ export function getEnabled(actionName: string,
     validateArguments("getEnabled", argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
-        api.runCommandCaller('get_enabled', arguments)
+        api.runCommandCaller('get_enabled', args)
     )
 }

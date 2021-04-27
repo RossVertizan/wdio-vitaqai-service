@@ -35,10 +35,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         // Import either the Sync or Async versions of the functions
         if (this._options.useSync) {
             // @ts-ignore
-            import * as vitaqFunctions from './functionsSync'
+            this.vitaqFunctions = require('./functionsSync')
         } else {
             // @ts-ignore
-            import * as vitaqFunctions from './functionsAsync'
+            this.vitaqFunctions = require('./functionsAsync')
         }
         this._capabilities = capabilities;
         this._config = config;
@@ -528,7 +528,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     getEnabled(actionName: string) {
         // @ts-ignore
-        vitaqFunctions.getEnabled(actionName, this._browser, this._api)
+        return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
     }
 
     // /**
