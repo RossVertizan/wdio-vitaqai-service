@@ -35,7 +35,7 @@ npm version <version number>
 ### How to install
 Installed as part of wdio-vitaq-mocha-framework:
 ```node
-npm install @wdio/vitaq-mocha-framework@<version> --registry http://localhost:4873--save-dev
+npm install @wdio/vitaq-mocha-framework@<version> --registry http://localhost:4873 --save-dev
 ```
 or manually with:
 ```node

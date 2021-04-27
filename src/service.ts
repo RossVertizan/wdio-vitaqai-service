@@ -13,6 +13,7 @@ import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 // Default options
 import { VitaqServiceOptions, MochaSuite } from './types'
 import { DEFAULT_OPTIONS } from './constants'
+import { validateArguments } from './arguments'
 
 module.exports = class VitaqService implements Services.ServiceInstance {
     private _options: VitaqServiceOptions
@@ -522,6 +523,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     getEnabled(actionName: string) {
         log.debug('VitaqService: getEnabled: actionName', actionName);
+        let argumentsDescription = {"actionName": "string"}
+        validateArguments("getEnabled", argumentsDescription, arguments);
         // @ts-ignore
         return this._browser.call(() =>
             this._api.runCommandCaller('get_enabled', arguments)
