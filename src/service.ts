@@ -178,6 +178,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * Create an entry in the Vitaq log
      * @param message - message/data to put into the log
      * @param format - format of the message/data, can be "text" (default) or "json"
+     *
+     * When using the JSON option the JSON data needs to be stringified using the
+     * JSON.stringify() method
      */
     createVitaqLogEntry(message: string | {}, format: string) {
         // @ts-ignore
@@ -257,7 +260,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         )
     }
 
-    /**[]
+    /**
      * Specify the ONLY list to select from in a list variable
      * @param variableName - name of the variable
      * @param list - The list to be used for selecting from
@@ -723,11 +726,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._api.runCommandCaller('set_value', arguments)
         )
     }
-
-
-
-
-
 
 
     // /**

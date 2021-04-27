@@ -22,7 +22,9 @@
   "bugs": {
     "url": "https://bitbucket.org/RossVertizan/wdio-vitaqai-service"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bycontract": "^2.0.10"
+  },
   "files": [
     "build/*",
     "package.json",
