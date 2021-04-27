@@ -94,6 +94,5 @@ All implemented and passign correct usage tests
 
 
 
-
 ### Study of the Sauce Service
 

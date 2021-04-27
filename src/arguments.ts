@@ -14,7 +14,7 @@ import { VitaqServiceError } from "./VitaqServiceError"
  */
 export function validateArguments(functionName: string,
                                   argumentsDescription: { [p: string]: string },
-                                  argumentsObject: IArguments) {
+                                  argumentsObject: any []) {
 
     // First count the number if non-optional arguments and compare that with the
     // number of arguments passed
@@ -50,7 +50,7 @@ function countNonOptionalArguments(argumentsDescription: {}) {
  * Count how many arguments we received
  * @param argumentsObject - the Javascript arguments object
  */
-function countArgumentsReceived(argumentsObject: IArguments) {
+function countArgumentsReceived(argumentsObject: any []) {
     return argumentsObject.length
 }
 
@@ -62,7 +62,7 @@ function countArgumentsReceived(argumentsObject: IArguments) {
  */
 function checkArgumentTypes(functionName: string,
                             argumentsDescription: { [p: string]: string },
-                            argumentsObject: IArguments) {
+                            argumentsObject: any []) {
     let descriptionKey: string;
     let descriptionType: string;
     let descriptionKeys = Object.keys(argumentsDescription)

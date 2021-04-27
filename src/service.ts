@@ -32,6 +32,14 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         log.debug("capabilities: ", capabilities);
         log.debug("config: ", config);
         this._options = { ...DEFAULT_OPTIONS, ...serviceOptions };
+        // Import either the Sync or Async versions of the functions
+        if (this._options.useSync) {
+            // @ts-ignore
+            import * as vitaqFunctions from './functionsSync'
+        } else {
+            // @ts-ignore
+            import * as vitaqFunctions from './functionsAsync'
+        }
         this._capabilities = capabilities;
         this._config = config;
         this._api = new VitaqAiApi(this._options)
@@ -517,19 +525,25 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         )
     }
 
-    /**
-     * Query if the action is enabled
-     * @param actionName - name of the action
-     */
+
     getEnabled(actionName: string) {
-        log.debug('VitaqService: getEnabled: actionName', actionName);
-        let argumentsDescription = {"actionName": "string"}
-        validateArguments("getEnabled", argumentsDescription, arguments);
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_enabled', arguments)
-        )
+        vitaqFunctions.getEnabled(actionName, this._browser, this._api)
     }
+
+    // /**
+    //  * Query if the action is enabled
+    //  * @param actionName - name of the action
+    //  */
+    // getEnabled(actionName: string) {
+    //     log.debug('VitaqService: getEnabled: actionName', actionName);
+    //     let argumentsDescription = {"actionName": "string"}
+    //     validateArguments("getEnabled", argumentsDescription, arguments);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_enabled', arguments)
+    //     )
+    // }
 
     /**
      * Get a unique ID for this action

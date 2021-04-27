@@ -29,6 +29,11 @@ export interface VitaqServiceOptions {
      * Specify a verbosityLevel 0-100 - higher is more verbose
      */
     verbosityLevel?: number
+
+    /**
+     * Specify if we shoul duse sync or async mode
+     */
+    useSync?: boolean
 }
 
 export interface MochaSuite {

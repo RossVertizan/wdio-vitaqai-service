@@ -7,7 +7,7 @@
 exports.VitaqServiceError = class VitaqServiceError extends Error {
     constructor(message) {
         super(message);
-        this.name = "VitaqError";
+        this.name = "VitaqServiceError";
     }
 }
 
