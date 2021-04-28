@@ -7,7 +7,7 @@
  */
 export declare function validateArguments(functionName: string, argumentsDescription: {
     [p: string]: string;
-}, argumentsObject: any[]): void;
+}, argumentsObject: any[]): any[];
 /**
  * Get the number of non-optionel arguments from the argumentsDescription object
  * @param argumentsDescription  -the arguments description object passed in

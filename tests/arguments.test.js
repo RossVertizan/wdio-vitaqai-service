@@ -2,8 +2,10 @@
 // (c) Vertizan Limited 2011-2021
 //==============================================================================
 
-const {countNonOptionalArguments, countArgumentsReceived, checkArgumentTypes} = require("../build/arguments");
-
+const {countNonOptionalArguments,
+    countArgumentsReceived,
+    checkArgumentTypes,
+    validateArguments} = require("../build/arguments");
 
 describe('countNonOptionalArguments', () => {
     let result;
@@ -54,8 +56,6 @@ describe('countArgumentsReceived', () => {
         expect(result).toBe(2);
     })
 })
-
-checkArgumentTypes
 
 describe('checkArgumentTypes', () => {
     let result;
@@ -127,5 +127,32 @@ describe('checkArgumentTypes', () => {
         }
         expect(receivedError.message).toBe("Argument 4 of TestFunction is a required argument but is undefined")
         expect(receivedError.name).toBe("VitaqServiceError")
+
+        try {
+            checkArgumentTypes("TestFunction",
+                {"argOne?": "string", "argTwo": "number", "argThree?": "array", "argFour": "object"},
+                ["hello", 3, undefined, {"obj": 2}])
+            receivedError = {message: "All OK", name: "All OK"}
+        } catch(error) {
+            receivedError = error;
+        }
+        expect(receivedError.message).toBe("All OK")
+        expect(receivedError.name).toBe("All OK")
+    })
+})
+
+describe('validateArguments', () => {
+    let result;
+
+    test('it should remove undefined optional arguments without error', async () => {
+        let result;
+        try {
+            result = validateArguments("TestFunction",
+                {"argOne?": "string", "argTwo": "number", "argThree?": "array", "argFour": "object"},
+                ["hello", 3, undefined, {"obj": 2}])
+        } catch(error) {
+            result = error;
+        }
+        expect(result).toStrictEqual(["hello", 3, {"obj": 2}])
     })
 })

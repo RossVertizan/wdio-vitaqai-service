@@ -27,6 +27,9 @@ export function validateArguments(functionName: string,
     // Next go through each argument in turn and validate its type
     checkArgumentTypes(functionName, argumentsDescription, argumentsObject);
 
+    // And finally filter out any undefined values
+    // (which by now should belong to optional arguments)
+    return argumentsObject.filter((value) => {return value !== undefined})
 }
 
 /**

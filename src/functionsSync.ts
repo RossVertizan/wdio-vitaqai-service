@@ -22,7 +22,7 @@ const log = logger('@wdio/vitaq-service')
 //     args.splice(-2, 2)
 //     log.debug('VitaqService: getEnabled: actionName', actionName);
 //     let argumentsDescription = {"actionName": "string"}
-//     validateArguments("getEnabled", argumentsDescription, args);
+//     args = validateArguments("getEnabled", argumentsDescription, args);
 //     // @ts-ignore
 //     return browser.call(() =>
 //         api.runCommandCaller('get_enabled', args)
@@ -126,7 +126,7 @@ export function abort(browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
     args.splice(-2, 2);
     log.debug('VitaqService: abort: ', );
     let argumentsDescription = {}
-    validateArguments('abort', argumentsDescription, args);
+    args = validateArguments('abort', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('abort', args)
@@ -148,7 +148,7 @@ export function addNext(actionName: string, nextAction: string, weight: number =
     args.splice(-2, 2);
     log.debug('VitaqService: addNext: actionName, nextAction, weight', actionName, nextAction, weight);
     let argumentsDescription = {"actionName": "string", "nextAction": "string", "weight": "number"}
-    validateArguments('addNext', argumentsDescription, args);
+    args = validateArguments('addNext', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('add_next', args)
@@ -169,7 +169,7 @@ export function clearCallCount(actionName: string, tree: boolean,
     args.splice(-2, 2);
     log.debug('VitaqService: clearCallCount: actionName, tree', actionName, tree);
     let argumentsDescription = {"actionName": "string", "tree?": "boolean"}
-    validateArguments('clearCallCount', argumentsDescription, args);
+    args = args = validateArguments('clearCallCount', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('clear_call_count', args)
@@ -189,7 +189,7 @@ export function displayNextActions(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: displayNextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('displayNextActions', argumentsDescription, args);
+    args = args = validateArguments('displayNextActions', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('display_next_sequences', args)
@@ -209,7 +209,7 @@ export function getCallCount(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getCallCount: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('getCallCount', argumentsDescription, args);
+    args = args = validateArguments('getCallCount', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_call_count', args)
@@ -229,7 +229,7 @@ export function getCallLimit(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getCallLimit: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('getCallLimit', argumentsDescription, args);
+    args = args = validateArguments('getCallLimit', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_call_limit', args)
@@ -249,7 +249,7 @@ export function getEnabled(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getEnabled: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('getEnabled', argumentsDescription, args);
+    args = args = validateArguments('getEnabled', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_enabled', args)
@@ -269,7 +269,7 @@ export function getId(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getId: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('getId', argumentsDescription, args);
+    args = args = validateArguments('getId', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_id', args)
@@ -289,7 +289,7 @@ export function nextActions(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: nextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('nextActions', argumentsDescription, args);
+    args = validateArguments('nextActions', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('next_sequences', args)
@@ -309,7 +309,7 @@ export function numberActiveNextActions(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: numberActiveNextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('numberActiveNextActions', argumentsDescription, args);
+    args = validateArguments('numberActiveNextActions', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('number_active_next_sequences', args)
@@ -329,7 +329,7 @@ export function numberNextActions(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: numberNextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('numberNextActions', argumentsDescription, args);
+    args = validateArguments('numberNextActions', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('number_next_sequences', args)
@@ -349,7 +349,7 @@ export function removeAllNext(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: removeAllNext: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('removeAllNext', argumentsDescription, args);
+    args = validateArguments('removeAllNext', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('remove_all_next', args)
@@ -369,7 +369,7 @@ export function removeFromCallers(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: removeFromCallers: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    validateArguments('removeFromCallers', argumentsDescription, args);
+    args = validateArguments('removeFromCallers', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('remove_from_callers', args)
@@ -390,7 +390,7 @@ export function removeNext(actionName: string, nextAction: string,
     args.splice(-2, 2);
     log.debug('VitaqService: removeNext: actionName, nextAction', actionName, nextAction);
     let argumentsDescription = {"actionName": "string", "nextAction": "string"}
-    validateArguments('removeNext', argumentsDescription, args);
+    args = validateArguments('removeNext', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('remove_next', args)
@@ -411,7 +411,7 @@ export function setCallLimit(actionName: string, limit: number,
     args.splice(-2, 2);
     log.debug('VitaqService: setCallLimit: actionName, limit', actionName, limit);
     let argumentsDescription = {"actionName": "string", "limit": "number"}
-    validateArguments('setCallLimit', argumentsDescription, args);
+    args = validateArguments('setCallLimit', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('set_call_limit', args)
@@ -432,7 +432,7 @@ export function setEnabled(actionName: string, enabled: boolean,
     args.splice(-2, 2);
     log.debug('VitaqService: setEnabled: actionName, enabled', actionName, enabled);
     let argumentsDescription = {"actionName": "string", "enabled": "boolean"}
-    validateArguments('setEnabled', argumentsDescription, args);
+    args = validateArguments('setEnabled', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('set_enabled', args)
@@ -453,7 +453,7 @@ export function setExhaustive(actionName: string, exhaustive: boolean,
     args.splice(-2, 2);
     log.debug('VitaqService: setExhaustive: actionName, exhaustive', actionName, exhaustive);
     let argumentsDescription = {"actionName": "string", "exhaustive": "boolean"}
-    validateArguments('setExhaustive', argumentsDescription, args);
+    args = validateArguments('setExhaustive', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('set_exhaustive', args)
@@ -474,7 +474,7 @@ export function setMaxActionDepth(actionName: string, depth: number = 1000,
     args.splice(-2, 2);
     log.debug('VitaqService: setMaxActionDepth: actionName, depth', actionName, depth);
     let argumentsDescription = {"actionName": "string", "depth": "number"}
-    validateArguments('setMaxActionDepth', argumentsDescription, args);
+    args = validateArguments('setMaxActionDepth', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('set_max_sequence_depth', args)
@@ -499,7 +499,7 @@ export function allowList(variableName: string, list: [],
     args.splice(-2, 2);
     log.debug('VitaqService: allowList: variableName, list', variableName, list);
     let argumentsDescription = {"variableName": "string", "list": "array"}
-    validateArguments('allowList', argumentsDescription, args);
+    args = validateArguments('allowList', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('allow_list', args)
@@ -520,7 +520,7 @@ export function allowOnlyList(variableName: string, list: [],
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyList: variableName, list', variableName, list);
     let argumentsDescription = {"variableName": "string", "list": "array"}
-    validateArguments('allowOnlyList', argumentsDescription, args);
+    args = validateArguments('allowOnlyList', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('allow_only_list', args)
@@ -542,7 +542,7 @@ export function allowOnlyRange(variableName: string, low: number, high: number,
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyRange: variableName, low, high', variableName, low, high);
     let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
-    validateArguments('allowOnlyRange', argumentsDescription, args);
+    args = validateArguments('allowOnlyRange', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('allow_only_range', args)
@@ -563,7 +563,7 @@ export function allowOnlyValue(variableName: string, value: number,
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "number"}
-    validateArguments('allowOnlyValue', argumentsDescription, args);
+    args = validateArguments('allowOnlyValue', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('allow_only_value', args)
@@ -584,7 +584,7 @@ export function allowOnlyValues(variableName: string, valueList: [],
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyValues: variableName, valueList', variableName, valueList);
     let argumentsDescription = {"variableName": "string", "valueList": "array"}
-    validateArguments('allowOnlyValues', argumentsDescription, args);
+    args = validateArguments('allowOnlyValues', argumentsDescription, args);
     let vtqArguments = [variableName, valueList.length]
     for (let index = 0; index < valueList.length; index += 1) {
         vtqArguments.push(valueList[index])
@@ -610,7 +610,7 @@ export function allowRange(variableName: string, low: number, high: number,
     args.splice(-2, 2);
     log.debug('VitaqService: allowRange: variableName, low, high', variableName, low, high);
     let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
-    validateArguments('allowRange', argumentsDescription, args);
+    args = validateArguments('allowRange', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('allow_range', args)
@@ -631,7 +631,7 @@ export function allowValue(variableName: string, value: number,
     args.splice(-2, 2);
     log.debug('VitaqService: allowValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "number"}
-    validateArguments('allowValue', argumentsDescription, args);
+    args = validateArguments('allowValue', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('allow_value', args)
@@ -652,7 +652,7 @@ export function allowValues(variableName: string, valueList: [],
     args.splice(-2, 2);
     log.debug('VitaqService: allowValues: variableName, valueList', variableName, valueList);
     let argumentsDescription = {"variableName": "string", "valueList": "array"}
-    validateArguments('allowValues', argumentsDescription, args);
+    args = validateArguments('allowValues', argumentsDescription, args);
     let vtqArguments = [variableName, valueList.length]
     for (let index = 0; index < valueList.length; index += 1) {
         vtqArguments.push(valueList[index])
@@ -678,7 +678,7 @@ export function disallowRange(variableName: string, low: number, high: number,
     args.splice(-2, 2);
     log.debug('VitaqService: disallowRange: variableName, low, high', variableName, low, high);
     let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
-    validateArguments('disallowRange', argumentsDescription, args);
+    args = validateArguments('disallowRange', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('disallow_range', args)
@@ -699,7 +699,7 @@ export function disallowValue(variableName: string, value: number,
     args.splice(-2, 2);
     log.debug('VitaqService: disallowValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "number"}
-    validateArguments('disallowValue', argumentsDescription, args);
+    args = validateArguments('disallowValue', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('disallow_value', args)
@@ -720,7 +720,7 @@ export function disallowValues(variableName: string, valueList: [],
     args.splice(-2, 2);
     log.debug('VitaqService: disallowValues: variableName, valueList', variableName, valueList);
     let argumentsDescription = {"variableName": "string", "valueList": "array"}
-    validateArguments('disallowValues', argumentsDescription, args);
+    args = validateArguments('disallowValues', argumentsDescription, args);
     let vtqArguments = [variableName, valueList.length]
     for (let index = 0; index < valueList.length; index += 1) {
         vtqArguments.push(valueList[index])
@@ -745,7 +745,7 @@ export function doNotRepeat(variableName: string, value: boolean,
     args.splice(-2, 2);
     log.debug('VitaqService: doNotRepeat: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "boolean"}
-    validateArguments('doNotRepeat', argumentsDescription, args);
+    args = validateArguments('doNotRepeat', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('do_not_repeat', args)
@@ -765,7 +765,7 @@ export function gen(variableName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: gen: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
-    validateArguments('gen', argumentsDescription, args);
+    args = validateArguments('gen', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('gen', args)
@@ -785,7 +785,7 @@ export function getDoNotRepeat(variableName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getDoNotRepeat: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
-    validateArguments('getDoNotRepeat', argumentsDescription, args);
+    args = validateArguments('getDoNotRepeat', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_do_not_repeat', args)
@@ -805,7 +805,7 @@ export function getSeed(variableName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getSeed: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
-    validateArguments('getSeed', argumentsDescription, args);
+    args = validateArguments('getSeed', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_seed', args)
@@ -825,7 +825,7 @@ export function getValue(variableName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getValue: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
-    validateArguments('getValue', argumentsDescription, args);
+    args = validateArguments('getValue', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_value', args)
@@ -845,7 +845,7 @@ export function resetRanges(variableName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: resetRanges: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
-    validateArguments('resetRanges', argumentsDescription, args);
+    args = validateArguments('resetRanges', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('reset_ranges', args)
@@ -866,7 +866,7 @@ export function setSeed(variableName: string, seed: number,
     args.splice(-2, 2);
     log.debug('VitaqService: setSeed: variableName, seed', variableName, seed);
     let argumentsDescription = {"variableName": "string", "seed": "number"}
-    validateArguments('setSeed', argumentsDescription, args);
+    args = validateArguments('setSeed', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('set_seed', args)
@@ -887,7 +887,7 @@ export function setValue(variableName: string, value: number,
     args.splice(-2, 2);
     log.debug('VitaqService: setValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "number"}
-    validateArguments('setValue', argumentsDescription, args);
+    args = validateArguments('setValue', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('set_value', args)
