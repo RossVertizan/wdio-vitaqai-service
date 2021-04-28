@@ -1,4 +1,4 @@
-methods:
+action_methods:
 # ==============================================================================
 # GenSequence methods (Action related)
 # ==============================================================================
@@ -252,7 +252,7 @@ methods:
 # ==============================================================================
 # GenField/GenFieldBase methods (Data related)
 # ==============================================================================
-
+data_methods:
     allow_only_range:
        description: Allow ONLY the defined range to be the allowable range for the integer variable
        include: true
@@ -301,7 +301,7 @@ methods:
            type: string
            description: name of the variable
          - name: valueList
-           type: Array
+           type: array
            description: list of values that should be allowed
        return:
          - type: None
@@ -344,7 +344,7 @@ methods:
            type: string
            description: name of the variable
          - name: valueList
-           type: Array
+           type: array
            description: list of values that should be allowed
        return:
          - type: None
@@ -387,7 +387,7 @@ methods:
            type: string
            description: name of the variable
          - name: valueList
-           type: Array
+           type: array
            description: list of values that should be removed
        return:
          - type: None
@@ -497,7 +497,7 @@ methods:
            type: string
            description: name of the variable
          - name: list
-           type: Array
+           type: array
            description: The list to be used for selecting from
        return:
          - type: None
@@ -511,7 +511,7 @@ methods:
            type: string
            description: name of the variable
          - name: list
-           type: Array
+           type: array
            description: The list to add to the existing list
        return:
          - type: None

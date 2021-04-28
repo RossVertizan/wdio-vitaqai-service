@@ -16,7 +16,7 @@ const log = logger('@wdio/vitaq-service')
  * @param api
  */
 export function getEnabled(actionName: string,
-                           browser: Browser<'async'> | MultiRemoteBrowser<'async'> ,
+                           browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                            api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2)
