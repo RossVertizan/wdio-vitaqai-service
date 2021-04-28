@@ -659,7 +659,7 @@ export function allowValues(variableName: string, valueList: [],
     }
     // @ts-ignore
     return browser.call(() =>
-        api.runCommandCaller('allow_values', args)
+        api.runCommandCaller('allow_values', vtqArguments)
     )
 }
 
@@ -727,7 +727,7 @@ export function disallowValues(variableName: string, valueList: [],
     }
     // @ts-ignore
     return browser.call(() =>
-        api.runCommandCaller('disallow_values', args)
+        api.runCommandCaller('disallow_values', vtqArguments)
     )
 }
 
