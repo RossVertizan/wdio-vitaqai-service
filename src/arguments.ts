@@ -33,7 +33,7 @@ export function validateArguments(functionName: string,
  * Get the number of non-optionel arguments from the argumentsDescription object
  * @param argumentsDescription  -the arguments description object passed in
  */
-function countNonOptionalArguments(argumentsDescription: {}) {
+export function countNonOptionalArguments(argumentsDescription: {}) {
     let key: string;
     let count: number = 0;
     let keys = Object.keys(argumentsDescription)
@@ -50,8 +50,15 @@ function countNonOptionalArguments(argumentsDescription: {}) {
  * Count how many arguments we received
  * @param argumentsObject - the Javascript arguments object
  */
-function countArgumentsReceived(argumentsObject: any []) {
-    return argumentsObject.length
+export function countArgumentsReceived(argumentsObject: any []) {
+    let numberReceivedArguments = 0;
+    // Go through the arguments and only count those that are NOT undefined
+    for (let index = 0; index < argumentsObject.length; index += 1) {
+        if (typeof argumentsObject[index] !== "undefined") {
+            numberReceivedArguments += 1
+        }
+    }
+    return numberReceivedArguments
 }
 
 /**
@@ -60,7 +67,7 @@ function countArgumentsReceived(argumentsObject: any []) {
  * @param argumentsDescription - object with the names of the arguments, ? at end indicates optional
  * @param argumentsObject - the arguments object that was passed
  */
-function checkArgumentTypes(functionName: string,
+export function checkArgumentTypes(functionName: string,
                             argumentsDescription: { [p: string]: string },
                             argumentsObject: any []) {
     let descriptionKey: string;
@@ -71,7 +78,13 @@ function checkArgumentTypes(functionName: string,
         descriptionKey = descriptionKeys[index];
         descriptionType = argumentsDescription[descriptionKey];
         passedValue = argumentsObject[index]
-        if (descriptionType === "array") {
+        if (typeof passedValue === "undefined") {
+            // Check for undefined arguments of required arguments
+            if (!descriptionKey.endsWith("?")) {
+                throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is a required argument but is undefined`)
+            }
+        } else if (descriptionType === "array") {
+            // array is not a standard typeof type, so check it with Array.isArray
             if (!Array.isArray(passedValue)) {
                 throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is expected to be of type ${descriptionType}`)
             }

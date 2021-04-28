@@ -168,7 +168,7 @@ export function clearCallCount(actionName: string, tree: boolean,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: clearCallCount: actionName, tree', actionName, tree);
-    let argumentsDescription = {"actionName": "string", "tree": "boolean"}
+    let argumentsDescription = {"actionName": "string", "tree?": "boolean"}
     validateArguments('clearCallCount', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>

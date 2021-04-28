@@ -51,6 +51,7 @@ action_methods:
         - name: tree
           type: boolean
           description: clear call counts on all next actions
+          optional: true
       return:
         - type: None
 

@@ -21,7 +21,13 @@ Before publishing, the code needs to be built. To do this go to the webdriverio-
 ```node
 npm run build
 ```
-when it has built successfully it can then be committed
+It is actually easiest to set:
+```node
+npm run watch
+```
+and take advantage of incremental builds.
+
+When it has built successfully it can then be committed
 
 then published to the registry
 ```node
