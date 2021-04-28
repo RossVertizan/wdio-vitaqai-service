@@ -207,7 +207,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     requestData(variableName: string) {
         // @ts-ignore
-        return this.vitaqFunctions.requestDataCaller(variableName, this._browser, this._api)
+        return this.vitaqFunctions.requestData(variableName, this._browser, this._api)
     }
 
     /**
@@ -216,7 +216,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     recordCoverage(variablesArray: []) {
         // @ts-ignore
-        return this.vitaqFunctions.recordCoverageCaller(variablesArray, this._browser, this._api)
+        return this.vitaqFunctions.recordCoverage(variablesArray, this._browser, this._api)
     }
 
     /**
@@ -226,7 +226,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     sendDataToVitaq(variableName: string, value: any) {
         // @ts-ignore
-        return this.vitaqFunctions.sendDataToVitaqCaller(variableName, value, this._browser, this._api)
+        return this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api)
     }
 
     /**
@@ -235,7 +235,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     readDataFromVitaq(variableName: string) {
         // @ts-ignore
-        return this.vitaqFunctions.readDataFromVitaqCaller(variableName, this._browser, this._api)
+        return this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
     }
 
     /**
@@ -248,7 +248,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     createVitaqLogEntry(message: string | {}, format: string) {
         // @ts-ignore
-        return this.vitaqFunctions.createVitaqLogEntryCaller(message, format, this._browser, this._api)
+        return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api)
     }
 
     // -------------------------------------------------------------------------

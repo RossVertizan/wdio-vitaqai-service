@@ -129,7 +129,7 @@ export function abort(browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
     args = validateArguments('abort', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
-        api.runCommandCaller('abort', args)
+        api.runCommandCaller('abort')
     )
 }
 
