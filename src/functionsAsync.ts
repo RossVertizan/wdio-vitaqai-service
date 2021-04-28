@@ -438,13 +438,13 @@ export async function setMaxActionDepth(actionName: string, depth: number = 1000
  * @param browser
  * @param api
  */
-export async function allowList(variableName: string, list: [],
+export async function allowList(variableName: string, list: []|{},
                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                                 api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowList: variableName, list', variableName, list);
-    let argumentsDescription = {"variableName": "string", "list": "array"}
+    let argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowList', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_list', args)
@@ -457,13 +457,13 @@ export async function allowList(variableName: string, list: [],
  * @param browser
  * @param api
  */
-export async function allowOnlyList(variableName: string, list: [],
+export async function allowOnlyList(variableName: string, list: []|{},
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyList: variableName, list', variableName, list);
-    let argumentsDescription = {"variableName": "string", "list": "array"}
+    let argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowOnlyList', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_only_list', args)

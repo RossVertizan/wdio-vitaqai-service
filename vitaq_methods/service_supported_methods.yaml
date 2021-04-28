@@ -498,7 +498,7 @@ data_methods:
            type: string
            description: name of the variable
          - name: list
-           type: array
+           type: object
            description: The list to be used for selecting from
        return:
          - type: None
@@ -512,7 +512,7 @@ data_methods:
            type: string
            description: name of the variable
          - name: list
-           type: array
+           type: object
            description: The list to add to the existing list
        return:
          - type: None

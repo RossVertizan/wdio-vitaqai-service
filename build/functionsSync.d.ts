@@ -178,7 +178,7 @@ export declare function setMaxActionDepth(actionName: string, depth: number | un
  * @param browser
  * @param api
  */
-export declare function allowList(variableName: string, list: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowList(variableName: string, list: [] | {}, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
 /**
  * Specify the ONLY list to select from in a list variable
  * @param variableName - name of the variable
@@ -186,7 +186,7 @@ export declare function allowList(variableName: string, list: [], browser: Brows
  * @param browser
  * @param api
  */
-export declare function allowOnlyList(variableName: string, list: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowOnlyList(variableName: string, list: [] | {}, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
 /**
  * Allow ONLY the defined range to be the allowable range for the integer variable
  * @param variableName - name of the variable
