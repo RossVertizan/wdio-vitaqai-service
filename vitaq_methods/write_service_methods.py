@@ -93,7 +93,7 @@ def write_sync_body(outfile, in1, in2, in3, method, use_name):
     outfile.write(");\n")
     write_argument_check(outfile, in2, method, use_name)
     outfile.write("{}// @ts-ignore\n".format(in2))
-    outfile.write("{}return this._browser.call(() =>\n".format(in2))
+    outfile.write("{}return browser.call(() =>\n".format(in2))
     outfile.write("{}api.runCommandCaller('{}', args)\n".format(in3, name))
     outfile.write("{})\n".format(in2))
     outfile.write("{}{}\n\n".format(in1, "}"))
@@ -142,7 +142,7 @@ def write_service_entry(outfile, in1, in2, method, use_name):
         for param in method["parameters"]:
             if counter > 0:
                 outfile.write(", ")
-            outfile.write("{}: {}".format(param["name"], param["type"]))
+            outfile.write("{}".format(param["name"]))
             counter += 1
     if counter > 0:
         outfile.write(", this._browser, this._api)\n")
@@ -217,7 +217,7 @@ with open("outfile_async.txt", 'w') as outfile:
                 write_header(outfile, in1, method)
 
                 # Write the write_signature
-                write_signature(outfile, in1, method, use_name)
+                write_async_signature(outfile, in1, method, use_name)
 
                 # Write the sync body
                 write_async_body(outfile, in1, in2, in3, method, use_name)

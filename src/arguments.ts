@@ -71,7 +71,11 @@ function checkArgumentTypes(functionName: string,
         descriptionKey = descriptionKeys[index];
         descriptionType = argumentsDescription[descriptionKey];
         passedValue = argumentsObject[index]
-        if (typeof passedValue !== descriptionType){
+        if (descriptionType === "array") {
+            if (!Array.isArray(passedValue)) {
+                throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is expected to be of type ${descriptionType}`)
+            }
+        } else if (typeof passedValue !== descriptionType){
             throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is expected to be of type ${descriptionType}`)
         } else if (descriptionType === "string") {
             // While we are here check for empty strings

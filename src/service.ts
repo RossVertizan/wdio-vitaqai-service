@@ -135,6 +135,69 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         );
     }
 
+    // // -------------------------------------------------------------------------
+    // // VITAQ CONTROL METHODS
+    // // -------------------------------------------------------------------------
+    // /**
+    //  * Get Vitaq to generate a new value for the variable and then get it
+    //  * @param variableName - name of the variable
+    //  */
+    // requestData(variableName: string) {
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.requestDataCaller(variableName)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get Vitaq to record coverage for the variables in the array
+    //  * @param variablesArray - array of variables to record coverage for
+    //  */
+    // recordCoverage(variablesArray: []) {
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.recordCoverageCaller(variablesArray)
+    //     )
+    // }
+    //
+    // /**
+    //  * Send data to Vitaq and record it on the named variable
+    //  * @param variableName - name of the variable
+    //  * @param value - value to store
+    //  */
+    // sendDataToVitaq(variableName: string, value: any) {
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.sendDataToVitaqCaller(variableName, value)
+    //     )
+    // }
+    //
+    // /**
+    //  * Read data from a variable in Vitaq
+    //  * @param variableName - name of the variable to read
+    //  */
+    // readDataFromVitaq(variableName: string) {
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.readDataFromVitaqCaller(variableName)
+    //     )
+    // }
+    //
+    // /**
+    //  * Create an entry in the Vitaq log
+    //  * @param message - message/data to put into the log
+    //  * @param format - format of the message/data, can be "text" (default) or "json"
+    //  *
+    //  * When using the JSON option the JSON data needs to be stringified using the
+    //  * JSON.stringify() method
+    //  */
+    // createVitaqLogEntry(message: string | {}, format: string) {
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.createVitaqLogEntryCaller(message, format)
+    //     )
+    // }
+
     // -------------------------------------------------------------------------
     // VITAQ CONTROL METHODS
     // -------------------------------------------------------------------------
@@ -144,9 +207,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     requestData(variableName: string) {
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.requestDataCaller(variableName)
-        )
+        return this.vitaqFunctions.requestDataCaller(variableName, this._browser, this._api)
     }
 
     /**
@@ -155,9 +216,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     recordCoverage(variablesArray: []) {
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.recordCoverageCaller(variablesArray)
-        )
+        return this.vitaqFunctions.recordCoverageCaller(variablesArray, this._browser, this._api)
     }
 
     /**
@@ -167,9 +226,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     sendDataToVitaq(variableName: string, value: any) {
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.sendDataToVitaqCaller(variableName, value)
-        )
+        return this.vitaqFunctions.sendDataToVitaqCaller(variableName, value, this._browser, this._api)
     }
 
     /**
@@ -178,9 +235,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     readDataFromVitaq(variableName: string) {
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.readDataFromVitaqCaller(variableName)
-        )
+        return this.vitaqFunctions.readDataFromVitaqCaller(variableName, this._browser, this._api)
     }
 
     /**
@@ -193,9 +248,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     createVitaqLogEntry(message: string | {}, format: string) {
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.createVitaqLogEntryCaller(message, format)
-        )
+        return this.vitaqFunctions.createVitaqLogEntryCaller(message, format, this._browser, this._api)
     }
 
     // -------------------------------------------------------------------------
@@ -227,522 +280,715 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         return this.createVitaqLogEntry(message, format)
     }
 
+// =============================================================================
+// Action Methods
+// =============================================================================
 
-    // -------------------------------------------------------------------------
-    // STANDARD VITAQ METHODS
-    // -------------------------------------------------------------------------
-    /**
-     * Abort the action causing it to not select a next action
-     */
     abort() {
-        log.debug('VitaqService: abort: ');
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('abort', {'0': 'currentAction'})
-        )
+        return this.vitaqFunctions.abort(this._browser, this._api)
     }
 
-    /**
-     * Add an action that can be called after this one
-     * @param actionName - name of the action
-     * @param nextAction - name of the action that could be called next
-     * @param weight - Weight for the selection of the next action
-     */
     addNext(actionName: string, nextAction: string, weight: number = 1) {
-        log.debug('VitaqService: addNext: actionName, nextAction, weight', actionName, nextAction, weight);
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('add_next', arguments)
-        )
+        return this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api)
     }
 
-    /**
-     * Specify a list to add to the existing list in a list variable
-     * @param variableName - name of the variable
-     * @param list - The list to add to the existing list
-     */
-    allowList(variableName: string, list: []) {
-        log.debug('VitaqService: allowList: variableName, list', variableName, list);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_list', arguments)
-        )
-    }
-
-    /**
-     * Specify the ONLY list to select from in a list variable
-     * @param variableName - name of the variable
-     * @param list - The list to be used for selecting from
-     */
-    allowOnlyList(variableName: string, list: []) {
-        log.debug('VitaqService: allowOnlyList: variableName, list', variableName, list);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_only_list', arguments)
-        )
-    }
-
-    /**
-     * Allow ONLY the defined range to be the allowable range for the integer variable
-     * @param variableName - name of the variable
-     * @param low - Lower limit of the range
-     * @param high - Upper limit of the range
-     */
-    allowOnlyRange(variableName: string, low: number, high: number) {
-        log.debug('VitaqService: allowOnlyRange: variableName, low, high', variableName, low, high);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_only_range', arguments)
-        )
-    }
-
-    /**
-     * Allow ONLY the defined value to be the allowable value for the integer variable
-     * @param variableName - name of the variable
-     * @param value - The value to be allowed
-     */
-    allowOnlyValue(variableName: string, value: number) {
-        log.debug('VitaqService: allowOnlyValue: variableName, value', variableName, value);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_only_value', arguments)
-        )
-    }
-
-    /**
-     * Allow ONLY the passed list of values as the allowable values for the integer variable
-     * @param variableName - name of the variable
-     * @param valueList - list of values that should be allowed
-     */
-    allowOnlyValues(variableName: string, valueList: []) {
-        log.debug('VitaqService: allowOnlyValues: variableName, valueList', variableName, valueList);
-        // @ts-ignore
-        let vtqArguments = {'0': variableName, '1': valueList.length}
-        for (let index = 0; index < valueList.length; index += 1) {
-            let key = index + 2
-            // @ts-ignore
-            vtqArguments[key.toString()] = valueList[index]
-        }
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_only_values', vtqArguments)
-        )
-    }
-
-    /**
-     * Add the defined range to the allowable values for the integer variable
-     * @param variableName - name of the variable
-     * @param low - Lower limit of the range
-     * @param high - Upper limit of the range
-     */
-    allowRange(variableName: string, low: number, high: number) {
-        log.debug('VitaqService: allowRange: variableName, low, high', variableName, low, high);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_range', arguments)
-        )
-    }
-
-    /**
-     * Add the defined value to the allowable values for the integer variable
-     * @param variableName - name of the variable
-     * @param value - The value to be allowed
-     */
-    allowValue(variableName: string, value: number) {
-        log.debug('VitaqService: allowValue: variableName, value', variableName, value);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_value', arguments)
-        )
-    }
-
-    /**
-     * Add the passed list of values to the allowable values for the integer variable
-     * @param variableName - name of the variable
-     * @param valueList - list of values that should be allowed
-     */
-    allowValues(variableName: string, valueList: []) {
-        log.debug('VitaqService: allowValues: variableName, valueList', variableName, valueList);
-        // @ts-ignore
-        let vtqArguments = {'0': variableName, '1': valueList.length}
-        for (let index = 0; index < valueList.length; index += 1) {
-            let key = index + 2
-            // @ts-ignore
-            vtqArguments[key.toString()] = valueList[index]
-        }
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('allow_values', vtqArguments)
-        )
-    }
-
-    /**
-     * Set the call_count back to zero
-     * @param actionName - name of the action
-     * @param tree - clear call counts on all next actions
-     */
     clearCallCount(actionName: string, tree: boolean) {
-        log.debug('VitaqService: clearCallCount: actionName, tree', actionName, tree);
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('clear_call_count', arguments)
-        )
+        return this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api)
     }
 
-    /**
-     * Remove the defined range from the allowable values for the integer variable
-     * @param variableName - name of the variable
-     * @param low - Lower limit of the range
-     * @param high - Upper limit of the range
-     */
-    disallowRange(variableName: string, low: number, high: number) {
-        log.debug('VitaqService: disallowRange: variableName, low, high', variableName, low, high);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('disallow_range', arguments)
-        )
-    }
-
-    /**
-     * Remove the defined value from the allowable values for the integer variable
-     * @param variableName - name of the variable
-     * @param value - The value to be removed
-     */
-    disallowValue(variableName: string, value: number) {
-        log.debug('VitaqService: disallowValue: variableName, value', variableName, value);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('disallow_value', arguments)
-        )
-    }
-
-    /**
-     * Remove the passed list of values from the allowable values for the integer variable
-     * @param variableName - name of the variable
-     * @param valueList - list of values that should be removed
-     */
-    disallowValues(variableName: string, valueList: []) {
-        log.debug('VitaqService: disallowValues: variableName, valueList', variableName, valueList);
-        // @ts-ignore
-        let vtqArguments = {'0': variableName, '1': valueList.length}
-        for (let index = 0; index < valueList.length; index += 1) {
-            let key = index + 2
-            // @ts-ignore
-            vtqArguments[key.toString()] = valueList[index]
-        }
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('disallow_values', vtqArguments)
-        )
-    }
-
-    /**
-     * Get a string listing all of the possible next actions
-     * @param actionName - name of the action
-     */
     displayNextActions(actionName: string) {
-        log.debug('VitaqService: displayNextActions: actionName', actionName);
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('display_next_sequences', arguments)
-        )
+        return this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
     }
 
-    /**
-     * Specify that values should not be repeated
-     * @param variableName - name of the variable
-     * @param value - true prevents values from being repeated
-     */
-    doNotRepeat(variableName: string, value: boolean) {
-        log.debug('VitaqService: doNotRepeat: variableName, value', variableName, value);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('do_not_repeat', arguments)
-        )
-    }
-
-    /**
-     * get Vitaq to generate a new value for the variable
-     * @param variableName - name of the variable
-     */
-    gen(variableName: string) {
-        log.debug('VitaqService: gen: variableName', variableName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('gen', arguments)
-        )
-    }
-
-    /**
-     * get Vitaq to generate a new value for the variable and then get it
-     * @param variableName - name of the variable
-     */
-    getGen(variableName: string) {
-        log.debug('VitaqService: getGen: variableName', variableName);
-        // @ts-ignore
-        this._browser.call(() =>
-            this._api.runCommandCaller('gen', arguments)
-        )
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_value', arguments)
-        )
-    }
-
-    /**
-     * Get the current call count for this action
-     * @param actionName - name of the action
-     */
     getCallCount(actionName: string) {
-        log.debug('VitaqService: getCallCount: actionName', actionName);
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_call_count', arguments)
-        )
+        return this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
     }
 
-    /**
-     * Get the maximum number of times this action can be called
-     * @param actionName - name of the action
-     */
     getCallLimit(actionName: string) {
-        log.debug('VitaqService: getCallLimit: actionName', actionName);
         // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_call_limit', arguments)
-        )
+        return this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
     }
-
-    /**
-     * Get the current status of do not repeat
-     * @param variableName - name of the variable
-     */
-    getDoNotRepeat(variableName: string) {
-        log.debug('VitaqService: getDoNotRepeat: variableName', variableName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_do_not_repeat', arguments)
-        )
-    }
-
 
     getEnabled(actionName: string) {
         // @ts-ignore
         return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
     }
 
+    getId(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getId(actionName, this._browser, this._api)
+    }
+
+    nextActions(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
+    }
+
+    numberActiveNextActions(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
+    }
+
+    numberNextActions(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
+    }
+
+    removeAllNext(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.removeAllNext(actionName, this._browser, this._api)
+    }
+
+    removeFromCallers(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.removeFromCallers(actionName, this._browser, this._api)
+    }
+
+    removeNext(actionName: string, nextAction: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.removeNext(actionName, nextAction, this._browser, this._api)
+    }
+
+    setCallLimit(actionName: string, limit: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.setCallLimit(actionName, limit, this._browser, this._api)
+    }
+
+    setEnabled(actionName: string, enabled: boolean) {
+        // @ts-ignore
+        return this.vitaqFunctions.setEnabled(actionName, enabled, this._browser, this._api)
+    }
+
+    setExhaustive(actionName: string, exhaustive: boolean) {
+        // @ts-ignore
+        return this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api)
+    }
+
+    setMaxActionDepth(actionName: string, depth: number = 1000) {
+        // @ts-ignore
+        return this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api)
+    }
+
+// =============================================================================
+// Data Methods
+// =============================================================================
+
+    allowList(variableName: string, list: []) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowList(variableName, list, this._browser, this._api)
+    }
+
+    allowOnlyList(variableName: string, list: []) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyList(variableName, list, this._browser, this._api)
+    }
+
+    allowOnlyRange(variableName: string, low: number, high: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api)
+    }
+
+    allowOnlyValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyValue(variableName, value, this._browser, this._api)
+    }
+
+    allowOnlyValues(variableName: string, valueList: []) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyValues(variableName, valueList, this._browser, this._api)
+    }
+
+    allowRange(variableName: string, low: number, high: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowRange(variableName, low, high, this._browser, this._api)
+    }
+
+    allowValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowValue(variableName, value, this._browser, this._api)
+    }
+
+    allowValues(variableName: string, valueList: []) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowValues(variableName, valueList, this._browser, this._api)
+    }
+
+    disallowRange(variableName: string, low: number, high: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.disallowRange(variableName, low, high, this._browser, this._api)
+    }
+
+    disallowValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.disallowValue(variableName, value, this._browser, this._api)
+    }
+
+    disallowValues(variableName: string, valueList: []) {
+        // @ts-ignore
+        return this.vitaqFunctions.disallowValues(variableName, valueList, this._browser, this._api)
+    }
+
+    doNotRepeat(variableName: string, value: boolean) {
+        // @ts-ignore
+        return this.vitaqFunctions.doNotRepeat(variableName, value, this._browser, this._api)
+    }
+
+    gen(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.gen(variableName, this._browser, this._api)
+    }
+
+    getDoNotRepeat(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
+    }
+
+    getSeed(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
+    }
+
+    getValue(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getValue(variableName, this._browser, this._api)
+    }
+
+    resetRanges(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.resetRanges(variableName, this._browser, this._api)
+    }
+
+    setSeed(variableName: string, seed: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.setSeed(variableName, seed, this._browser, this._api)
+    }
+
+    setValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.setValue(variableName, value, this._browser, this._api)
+    }
+
+
+    // // -------------------------------------------------------------------------
+    // // STANDARD VITAQ METHODS
+    // // -------------------------------------------------------------------------
     // /**
-    //  * Query if the action is enabled
-    //  * @param actionName - name of the action
+    //  * Abort the action causing it to not select a next action
     //  */
-    // getEnabled(actionName: string) {
-    //     log.debug('VitaqService: getEnabled: actionName', actionName);
-    //     let argumentsDescription = {"actionName": "string"}
-    //     validateArguments("getEnabled", argumentsDescription, arguments);
+    // abort() {
+    //     log.debug('VitaqService: abort: ');
     //     // @ts-ignore
     //     return this._browser.call(() =>
-    //         this._api.runCommandCaller('get_enabled', arguments)
+    //         this._api.runCommandCaller('abort', {'0': 'currentAction'})
     //     )
     // }
-
-    /**
-     * Get a unique ID for this action
-     * @param actionName - name of the action
-     */
-    getId(actionName: string) {
-        log.debug('VitaqService: getId: actionName', actionName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_id', arguments)
-        )
-    }
-
-    /**
-     * Get the starting seed being used
-     * @param variableName - name of the variable
-     */
-    getSeed(variableName: string) {
-        log.debug('VitaqService: getSeed: variableName', variableName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_seed', arguments)
-        )
-    }
-
-    /**
-     * Get the current value of the variable
-     * @param variableName - name of the variable
-     */
-    getValue(variableName: string) {
-        log.debug('VitaqService: getValue: variableName', variableName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('get_value', arguments)
-        )
-    }
-
-    /**
-     * Get all of the possible next actions
-     * @param actionName - name of the action
-     */
-    nextActions(actionName: string) {
-        log.debug('VitaqService: nextActions: actionName', actionName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('next_sequences', arguments)
-        )
-    }
-
-    /**
-     * Return the number of active next actions
-     * @param actionName - name of the action
-     */
-    numberActiveNextActions(actionName: string) {
-        log.debug('VitaqService: numberActiveNextActions: actionName', actionName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('number_active_next_sequences', arguments)
-        )
-    }
-
-    /**
-     * Return the number of possible next actions
-     * @param actionName - name of the action
-     */
-    numberNextActions(actionName: string) {
-        log.debug('VitaqService: numberNextActions: actionName', actionName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('number_next_sequences', arguments)
-        )
-    }
-
-    /**
-     * Remova all actions in the next action list
-     * @param actionName - name of the action
-     */
-    removeAllNext(actionName: string) {
-        log.debug('VitaqService: removeAllNext: actionName', actionName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('remove_all_next', arguments)
-        )
-    }
-
-    /**
-     * Remove this action from all callers lists
-     * @param actionName - name of the action
-     */
-    removeFromCallers(actionName: string) {
-        log.debug('VitaqService: removeFromCallers: actionName', actionName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('remove_from_callers', arguments)
-        )
-    }
-
-    /**
-     * Remove an existing next action from the list of next actions
-     * @param actionName - name of the action
-     * @param nextAction - name of the action to remove
-     */
-    removeNext(actionName: string, nextAction: string) {
-        log.debug('VitaqService: removeNext: actionName, nextAction', actionName, nextAction);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('remove_next', arguments)
-        )
-    }
-
-    /**
-     * Remove all constraints on values
-     * @param variableName - name of the variable
-     */
-    resetRanges(variableName: string) {
-        log.debug('VitaqService: resetRanges: variableName', variableName);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('reset_ranges', arguments)
-        )
-    }
-
-    /**
-     * Set the maximum number of calls for this action
-     * @param actionName - name of the action
-     * @param limit - the call limit to set
-     */
-    setCallLimit(actionName: string, limit: number) {
-        log.debug('VitaqService: setCallLimit: actionName, limit', actionName, limit);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('set_call_limit', arguments)
-        )
-    }
-
-    /**
-     * Vitaq command to enable/disable actions
-     * @param actionName - name of the action to enable/disable
-     * @param enabled - true sets enabled, false sets disabled
-     */
-    setEnabled(actionName: string, enabled: boolean) {
-        log.debug('VitaqService: setEnabled: actionName, enabled', actionName, enabled);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('set_enabled', arguments)
-        )
-    }
-
-    /**
-     * set or clear the exhaustive flag
-     * @param actionName - name of the action
-     * @param exhaustive - true sets exhaustive, false clears exhaustive
-     */
-    setExhaustive(actionName: string, exhaustive: boolean) {
-        log.debug('VitaqService: setExhaustive: actionName, exhaustive', actionName, exhaustive);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('set_exhaustive', arguments)
-        )
-    }
-
-    /**
-     * Set the maximum allowable recursive depth
-     * @param actionName - name of the action
-     * @param depth - Maximum allowable recursive depth
-     */
-    setMaxActionDepth(actionName: string, depth: number = 1000) {
-        log.debug('VitaqService: setMaxActionDepth: actionName, depth', actionName, depth);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('set_max_sequence_depth', arguments)
-        )
-    }
-
-    /**
-     * Set the seed to use
-     * @param variableName - name of the variable
-     * @param seed - Seed to use
-     */
-    setSeed(variableName: string, seed: number) {
-        log.debug('VitaqService: setSeed: variableName, seed', variableName, seed);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('set_seed', arguments)
-        )
-    }
-
-    /**
-     * Manually set a value for a variable
-     * @param variableName - name of the variable
-     * @param value - value to set
-     */
-    setValue(variableName: string, value: number) {
-        log.debug('VitaqService: setValue: variableName, value', variableName, value);
-        // @ts-ignore
-        return this._browser.call(() =>
-            this._api.runCommandCaller('set_value', arguments)
-        )
-    }
+    //
+    // /**
+    //  * Add an action that can be called after this one
+    //  * @param actionName - name of the action
+    //  * @param nextAction - name of the action that could be called next
+    //  * @param weight - Weight for the selection of the next action
+    //  */
+    // addNext(actionName: string, nextAction: string, weight: number = 1) {
+    //     log.debug('VitaqService: addNext: actionName, nextAction, weight', actionName, nextAction, weight);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('add_next', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Specify a list to add to the existing list in a list variable
+    //  * @param variableName - name of the variable
+    //  * @param list - The list to add to the existing list
+    //  */
+    // allowList(variableName: string, list: []) {
+    //     log.debug('VitaqService: allowList: variableName, list', variableName, list);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_list', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Specify the ONLY list to select from in a list variable
+    //  * @param variableName - name of the variable
+    //  * @param list - The list to be used for selecting from
+    //  */
+    // allowOnlyList(variableName: string, list: []) {
+    //     log.debug('VitaqService: allowOnlyList: variableName, list', variableName, list);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_only_list', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Allow ONLY the defined range to be the allowable range for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param low - Lower limit of the range
+    //  * @param high - Upper limit of the range
+    //  */
+    // allowOnlyRange(variableName: string, low: number, high: number) {
+    //     log.debug('VitaqService: allowOnlyRange: variableName, low, high', variableName, low, high);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_only_range', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Allow ONLY the defined value to be the allowable value for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param value - The value to be allowed
+    //  */
+    // allowOnlyValue(variableName: string, value: number) {
+    //     log.debug('VitaqService: allowOnlyValue: variableName, value', variableName, value);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_only_value', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Allow ONLY the passed list of values as the allowable values for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param valueList - list of values that should be allowed
+    //  */
+    // allowOnlyValues(variableName: string, valueList: []) {
+    //     log.debug('VitaqService: allowOnlyValues: variableName, valueList', variableName, valueList);
+    //     // @ts-ignore
+    //     let vtqArguments = {'0': variableName, '1': valueList.length}
+    //     for (let index = 0; index < valueList.length; index += 1) {
+    //         let key = index + 2
+    //         // @ts-ignore
+    //         vtqArguments[key.toString()] = valueList[index]
+    //     }
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_only_values', vtqArguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Add the defined range to the allowable values for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param low - Lower limit of the range
+    //  * @param high - Upper limit of the range
+    //  */
+    // allowRange(variableName: string, low: number, high: number) {
+    //     log.debug('VitaqService: allowRange: variableName, low, high', variableName, low, high);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_range', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Add the defined value to the allowable values for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param value - The value to be allowed
+    //  */
+    // allowValue(variableName: string, value: number) {
+    //     log.debug('VitaqService: allowValue: variableName, value', variableName, value);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_value', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Add the passed list of values to the allowable values for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param valueList - list of values that should be allowed
+    //  */
+    // allowValues(variableName: string, valueList: []) {
+    //     log.debug('VitaqService: allowValues: variableName, valueList', variableName, valueList);
+    //     // @ts-ignore
+    //     let vtqArguments = {'0': variableName, '1': valueList.length}
+    //     for (let index = 0; index < valueList.length; index += 1) {
+    //         let key = index + 2
+    //         // @ts-ignore
+    //         vtqArguments[key.toString()] = valueList[index]
+    //     }
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('allow_values', vtqArguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Set the call_count back to zero
+    //  * @param actionName - name of the action
+    //  * @param tree - clear call counts on all next actions
+    //  */
+    // clearCallCount(actionName: string, tree: boolean) {
+    //     log.debug('VitaqService: clearCallCount: actionName, tree', actionName, tree);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('clear_call_count', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Remove the defined range from the allowable values for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param low - Lower limit of the range
+    //  * @param high - Upper limit of the range
+    //  */
+    // disallowRange(variableName: string, low: number, high: number) {
+    //     log.debug('VitaqService: disallowRange: variableName, low, high', variableName, low, high);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('disallow_range', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Remove the defined value from the allowable values for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param value - The value to be removed
+    //  */
+    // disallowValue(variableName: string, value: number) {
+    //     log.debug('VitaqService: disallowValue: variableName, value', variableName, value);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('disallow_value', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Remove the passed list of values from the allowable values for the integer variable
+    //  * @param variableName - name of the variable
+    //  * @param valueList - list of values that should be removed
+    //  */
+    // disallowValues(variableName: string, valueList: []) {
+    //     log.debug('VitaqService: disallowValues: variableName, valueList', variableName, valueList);
+    //     // @ts-ignore
+    //     let vtqArguments = {'0': variableName, '1': valueList.length}
+    //     for (let index = 0; index < valueList.length; index += 1) {
+    //         let key = index + 2
+    //         // @ts-ignore
+    //         vtqArguments[key.toString()] = valueList[index]
+    //     }
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('disallow_values', vtqArguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get a string listing all of the possible next actions
+    //  * @param actionName - name of the action
+    //  */
+    // displayNextActions(actionName: string) {
+    //     log.debug('VitaqService: displayNextActions: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('display_next_sequences', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Specify that values should not be repeated
+    //  * @param variableName - name of the variable
+    //  * @param value - true prevents values from being repeated
+    //  */
+    // doNotRepeat(variableName: string, value: boolean) {
+    //     log.debug('VitaqService: doNotRepeat: variableName, value', variableName, value);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('do_not_repeat', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * get Vitaq to generate a new value for the variable
+    //  * @param variableName - name of the variable
+    //  */
+    // gen(variableName: string) {
+    //     log.debug('VitaqService: gen: variableName', variableName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('gen', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * get Vitaq to generate a new value for the variable and then get it
+    //  * @param variableName - name of the variable
+    //  */
+    // getGen(variableName: string) {
+    //     log.debug('VitaqService: getGen: variableName', variableName);
+    //     // @ts-ignore
+    //     this._browser.call(() =>
+    //         this._api.runCommandCaller('gen', arguments)
+    //     )
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_value', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get the current call count for this action
+    //  * @param actionName - name of the action
+    //  */
+    // getCallCount(actionName: string) {
+    //     log.debug('VitaqService: getCallCount: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_call_count', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get the maximum number of times this action can be called
+    //  * @param actionName - name of the action
+    //  */
+    // getCallLimit(actionName: string) {
+    //     log.debug('VitaqService: getCallLimit: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_call_limit', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get the current status of do not repeat
+    //  * @param variableName - name of the variable
+    //  */
+    // getDoNotRepeat(variableName: string) {
+    //     log.debug('VitaqService: getDoNotRepeat: variableName', variableName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_do_not_repeat', arguments)
+    //     )
+    // }
+    //
+    //
+    // // getEnabled(actionName: string) {
+    // //     // @ts-ignore
+    // //     return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
+    // // }
+    //
+    // // /**
+    // //  * Query if the action is enabled
+    // //  * @param actionName - name of the action
+    // //  */
+    // // getEnabled(actionName: string) {
+    // //     log.debug('VitaqService: getEnabled: actionName', actionName);
+    // //     let argumentsDescription = {"actionName": "string"}
+    // //     validateArguments("getEnabled", argumentsDescription, arguments);
+    // //     // @ts-ignore
+    // //     return this._browser.call(() =>
+    // //         this._api.runCommandCaller('get_enabled', arguments)
+    // //     )
+    // // }
+    //
+    // /**
+    //  * Get a unique ID for this action
+    //  * @param actionName - name of the action
+    //  */
+    // getId(actionName: string) {
+    //     log.debug('VitaqService: getId: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_id', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get the starting seed being used
+    //  * @param variableName - name of the variable
+    //  */
+    // getSeed(variableName: string) {
+    //     log.debug('VitaqService: getSeed: variableName', variableName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_seed', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get the current value of the variable
+    //  * @param variableName - name of the variable
+    //  */
+    // getValue(variableName: string) {
+    //     log.debug('VitaqService: getValue: variableName', variableName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('get_value', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Get all of the possible next actions
+    //  * @param actionName - name of the action
+    //  */
+    // nextActions(actionName: string) {
+    //     log.debug('VitaqService: nextActions: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('next_sequences', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Return the number of active next actions
+    //  * @param actionName - name of the action
+    //  */
+    // numberActiveNextActions(actionName: string) {
+    //     log.debug('VitaqService: numberActiveNextActions: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('number_active_next_sequences', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Return the number of possible next actions
+    //  * @param actionName - name of the action
+    //  */
+    // numberNextActions(actionName: string) {
+    //     log.debug('VitaqService: numberNextActions: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('number_next_sequences', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Remova all actions in the next action list
+    //  * @param actionName - name of the action
+    //  */
+    // removeAllNext(actionName: string) {
+    //     log.debug('VitaqService: removeAllNext: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('remove_all_next', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Remove this action from all callers lists
+    //  * @param actionName - name of the action
+    //  */
+    // removeFromCallers(actionName: string) {
+    //     log.debug('VitaqService: removeFromCallers: actionName', actionName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('remove_from_callers', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Remove an existing next action from the list of next actions
+    //  * @param actionName - name of the action
+    //  * @param nextAction - name of the action to remove
+    //  */
+    // removeNext(actionName: string, nextAction: string) {
+    //     log.debug('VitaqService: removeNext: actionName, nextAction', actionName, nextAction);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('remove_next', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Remove all constraints on values
+    //  * @param variableName - name of the variable
+    //  */
+    // resetRanges(variableName: string) {
+    //     log.debug('VitaqService: resetRanges: variableName', variableName);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('reset_ranges', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Set the maximum number of calls for this action
+    //  * @param actionName - name of the action
+    //  * @param limit - the call limit to set
+    //  */
+    // setCallLimit(actionName: string, limit: number) {
+    //     log.debug('VitaqService: setCallLimit: actionName, limit', actionName, limit);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('set_call_limit', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Vitaq command to enable/disable actions
+    //  * @param actionName - name of the action to enable/disable
+    //  * @param enabled - true sets enabled, false sets disabled
+    //  */
+    // setEnabled(actionName: string, enabled: boolean) {
+    //     log.debug('VitaqService: setEnabled: actionName, enabled', actionName, enabled);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('set_enabled', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * set or clear the exhaustive flag
+    //  * @param actionName - name of the action
+    //  * @param exhaustive - true sets exhaustive, false clears exhaustive
+    //  */
+    // setExhaustive(actionName: string, exhaustive: boolean) {
+    //     log.debug('VitaqService: setExhaustive: actionName, exhaustive', actionName, exhaustive);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('set_exhaustive', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Set the maximum allowable recursive depth
+    //  * @param actionName - name of the action
+    //  * @param depth - Maximum allowable recursive depth
+    //  */
+    // setMaxActionDepth(actionName: string, depth: number = 1000) {
+    //     log.debug('VitaqService: setMaxActionDepth: actionName, depth', actionName, depth);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('set_max_sequence_depth', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Set the seed to use
+    //  * @param variableName - name of the variable
+    //  * @param seed - Seed to use
+    //  */
+    // setSeed(variableName: string, seed: number) {
+    //     log.debug('VitaqService: setSeed: variableName, seed', variableName, seed);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('set_seed', arguments)
+    //     )
+    // }
+    //
+    // /**
+    //  * Manually set a value for a variable
+    //  * @param variableName - name of the variable
+    //  * @param value - value to set
+    //  */
+    // setValue(variableName: string, value: number) {
+    //     log.debug('VitaqService: setValue: variableName, value', variableName, value);
+    //     // @ts-ignore
+    //     return this._browser.call(() =>
+    //         this._api.runCommandCaller('set_value', arguments)
+    //     )
+    // }
 
 
     // /**
