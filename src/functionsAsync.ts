@@ -110,7 +110,7 @@ export async function abort(browser: Browser<'async'> | MultiRemoteBrowser<'asyn
     let argumentsDescription = {}
     args = validateArguments('abort', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('abort')
+    return await api.runCommandCaller('abort', args)
 }
 
 /**
