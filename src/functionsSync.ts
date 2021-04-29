@@ -36,7 +36,11 @@ const log = logger('@wdio/vitaq-service')
  */
 export function sleep(ms: number,
                       browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
-    log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
+    let args: any [] = Array.from(arguments);
+    args.splice(-1, 1);
+    log.debug("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
+    let argumentsDescription = {"ms": "number"}
+    validateArguments('sleep', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         new Promise(resolve => setTimeout(resolve, ms))
@@ -56,6 +60,11 @@ export function sleep(ms: number,
 export function requestData(variableName: string,
                             browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                             api: VitaqAiApi) {
+    let args: any [] = Array.from(arguments);
+    args.splice(-2, 2);
+    log.debug("VitaqService: requestData: variableName ", variableName);
+    let argumentsDescription = {"variableName": "string"}
+    validateArguments('requestData', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.requestDataCaller(variableName)
@@ -71,6 +80,11 @@ export function requestData(variableName: string,
 export function recordCoverage(variablesArray: [],
                                browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                                api: VitaqAiApi) {
+    let args: any [] = Array.from(arguments);
+    args.splice(-2, 2);
+    log.debug("VitaqService: recordCoverage: variablesArray ", variablesArray);
+    let argumentsDescription = {"variablesArray": "array"}
+    validateArguments('recordCoverage', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.recordCoverageCaller(variablesArray)
@@ -87,6 +101,11 @@ export function recordCoverage(variablesArray: [],
 export function sendDataToVitaq(variableName: string, value: any,
                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                                 api: VitaqAiApi) {
+    let args: any [] = Array.from(arguments);
+    args.splice(-2, 2);
+    log.debug("VitaqService: sendDataToVitaq: variableName value", variableName, value);
+    let argumentsDescription = {"variableName": "string", "value": "any"}
+    validateArguments('sendDataToVitaq', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.sendDataToVitaqCaller(variableName, value)
@@ -102,6 +121,11 @@ export function sendDataToVitaq(variableName: string, value: any,
 export function readDataFromVitaq(variableName: string,
                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                                   api: VitaqAiApi) {
+    let args: any [] = Array.from(arguments);
+    args.splice(-2, 2);
+    log.debug("VitaqService: readDataFromVitaq: variableName ", variableName);
+    let argumentsDescription = {"variableName": "string"}
+    validateArguments('readDataFromVitaq', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.readDataFromVitaqCaller(variableName)
@@ -118,9 +142,14 @@ export function readDataFromVitaq(variableName: string,
  * @param browser
  * @param api
  */
-export function createVitaqLogEntry(message: string | {}, format: string,
+export function createVitaqLogEntry(message: string, format: string,
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                                     api: VitaqAiApi) {
+    let args: any [] = Array.from(arguments);
+    args.splice(-2, 2);
+    log.debug("VitaqService: createVitaqLogEntry: message format", message, format);
+    let argumentsDescription = {"message": "string", "format?": "string"}
+    validateArguments('createVitaqLogEntry', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.createVitaqLogEntryCaller(message, format)

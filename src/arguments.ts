@@ -81,7 +81,9 @@ export function checkArgumentTypes(functionName: string,
         descriptionKey = descriptionKeys[index];
         descriptionType = argumentsDescription[descriptionKey];
         passedValue = argumentsObject[index]
-        if (typeof passedValue === "undefined") {
+        if (descriptionType === "any") {
+            // Can't check type of any
+        } else if (typeof passedValue === "undefined") {
             // Check for undefined arguments of required arguments
             if (!descriptionKey.endsWith("?")) {
                 throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is a required argument but is undefined`)
