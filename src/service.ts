@@ -123,16 +123,12 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     }
 
     /**
-     * Create an async sleep statement to test the sync capabilities in our test files
+     * Provide a simple sleep command
      * @param duration
-     * @returns {null|*}
      */
     sleep(ms: number) {
-        log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
         // @ts-ignore
-        return global.browser.call(() =>
-            new Promise(resolve => setTimeout(resolve, ms))
-        );
+        return this.vitaqFunctions.sleep(ms, this._browser)
     }
 
     // // -------------------------------------------------------------------------

@@ -27,6 +27,18 @@ const log = logger('@wdio/vitaq-service')
 //     return await api.runCommandCaller('get_enabled', args)
 // }
 
+/**
+ * Provide a simple sleep command
+ * @param ms
+ * @param browser
+ */
+export async function sleep(ms: number,
+                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
+    log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
+    // @ts-ignore
+    return await new Promise(resolve => setTimeout(resolve, ms))
+}
+
 // =============================================================================
 // VITAQ CONTROL METHODS
 // =============================================================================

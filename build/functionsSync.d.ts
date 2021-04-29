@@ -1,6 +1,12 @@
 import VitaqAiApi from 'vitaqai_api';
 import type { Browser, MultiRemoteBrowser } from 'webdriverio';
 /**
+ * Provide a simple sleep command
+ * @param ms
+ * @param browser
+ */
+export declare function sleep(ms: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>): unknown;
+/**
  * Get Vitaq to generate a new value for the variable and then get it
  * @param variableName - name of the variable
  * @param browser

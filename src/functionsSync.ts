@@ -29,6 +29,20 @@ const log = logger('@wdio/vitaq-service')
 //     )
 // }
 
+/**
+ * Provide a simple sleep command
+ * @param ms
+ * @param browser
+ */
+export function sleep(ms: number,
+                      browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
+    log.info("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
+    // @ts-ignore
+    return browser.call(() =>
+        new Promise(resolve => setTimeout(resolve, ms))
+    );
+}
+
 
 // =============================================================================
 // VITAQ CONTROL METHODS
