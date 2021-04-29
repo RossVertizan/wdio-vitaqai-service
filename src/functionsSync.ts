@@ -120,12 +120,13 @@ export function createVitaqLogEntry(message: string | {}, format: string,
 /**
  * Abort the action causing it to not select a next action
  */
-export function abort(browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+export function abort(actionName: string,
+                      browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                       api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: abort: ', );
-    let argumentsDescription = {}
+    log.debug('VitaqService: abort: actionName', actionName);
+    let argumentsDescription = {"actionName": "string"}
     args = validateArguments('abort', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>

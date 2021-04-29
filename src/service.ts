@@ -284,9 +284,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 // Action Methods
 // =============================================================================
 
-    abort() {
+    abort(actionName: string) {
         // @ts-ignore
-        return this.vitaqFunctions.abort(this._browser, this._api)
+        return this.vitaqFunctions.abort(actionName, this._browser, this._api)
     }
 
     addNext(actionName: string, nextAction: string, weight: number = 1) {

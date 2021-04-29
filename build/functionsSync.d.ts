@@ -43,7 +43,7 @@ export declare function createVitaqLogEntry(message: string | {}, format: string
 /**
  * Abort the action causing it to not select a next action
  */
-export declare function abort(browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function abort(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
 /**
  * Add an action that can be called after this one
  * @param actionName - name of the action

@@ -6,7 +6,10 @@ action_methods:
     abort:
       description: Abort the action causing it to not select a next action
       include: true
-      parameters: []
+      parameters:
+          -   name: actionName
+              type: string
+              description: name of the action
       return:
         - type: None
 
