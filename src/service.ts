@@ -4,7 +4,8 @@ const log = logger('@wdio/vitaq-service')
 
 // Packages
 // @ts-ignore
-import VitaqAiApi from 'vitaqai_api'
+import { VitaqAiApi } from 'vitaqai_api'
+console.log("This is VitaqAiApi: ", VitaqAiApi)
 
 // Type import
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'
@@ -28,25 +29,31 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         capabilities: Capabilities.RemoteCapability,
         config: Options.Testrunner
     ) {
-        log.debug("serviceOptions: ", serviceOptions);
-        log.debug("capabilities: ", capabilities);
-        log.debug("config: ", config);
-        this._options = { ...DEFAULT_OPTIONS, ...serviceOptions };
-        // Import either the Sync or Async versions of the functions
-        if (this._options.useSync) {
+        try {
+            log.debug("serviceOptions: ", serviceOptions);
+            log.debug("capabilities: ", capabilities);
+            log.debug("config: ", config);
+            this._options = {...DEFAULT_OPTIONS, ...serviceOptions};
+            // Import either the Sync or Async versions of the functions
+            if (this._options.useSync) {
+                // @ts-ignore
+                this.vitaqFunctions = require('./functionsSync')
+            } else {
+                // @ts-ignore
+                this.vitaqFunctions = require('./functionsAsync')
+            }
+            this._capabilities = capabilities;
+            this._config = config;
+            this._api = new VitaqAiApi(this._options)
+            this._api.startPython()
             // @ts-ignore
-            this.vitaqFunctions = require('./functionsSync')
-        } else {
-            // @ts-ignore
-            this.vitaqFunctions = require('./functionsAsync')
+            global.vitaq = this;
+            this._counter = 0;
+        } catch (error) {
+            console.error("Error: Vitaq Service failed to initialise")
+            console.error(error)
+            throw new Error("Vitaq Service failed to initialise");
         }
-        this._capabilities = capabilities;
-        this._config = config;
-        this._api = new VitaqAiApi(this._options)
-        this._api.startPython()
-        // @ts-ignore
-        global.vitaq = this;
-        this._counter = 0;
     }
 
     async nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
@@ -54,7 +61,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         let result: boolean = true;
         let returnSuite: MochaSuite;
         if (typeof this._options.verbosityLevel !== 'undefined'
-            &&this._options.verbosityLevel > 50) {
+            && this._options.verbosityLevel > 50) {
             log.info("VitaqService: nextActionSelector: suite: ", suite)
         }
 
@@ -63,7 +70,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             // log.info("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
             // @ts-ignore
             if (typeof this._options.verbosityLevel !== 'undefined'
-                &&this._options.verbosityLevel > 50) {
+                && this._options.verbosityLevel > 50) {
                 log.info("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
                 log.info("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
             }
