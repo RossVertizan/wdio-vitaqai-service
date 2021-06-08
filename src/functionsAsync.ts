@@ -291,7 +291,7 @@ export async function getId(actionName: string,
  * @param browser
  * @param api
  */
-export function getPrevious(actionName: string, steps: number,
+export async function getPrevious(actionName: string, steps: number,
                             browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
