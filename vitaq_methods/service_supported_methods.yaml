@@ -116,6 +116,19 @@ action_methods:
          - type: string
 
     # get_previous - advanced usage - leave for now
+    # decided we should put it in after all - maybe not expose it in documentation
+    get_previous:
+        altname: get_previous
+        description: Get the name of the action that was executed before the current one
+        parameters:
+            -   name: actionName
+                type: string
+                description: name of the action
+            -   name: steps
+                type: number
+                description: how many steps to go back
+            return:
+                -   type: string
 
     # get_progress_on_complete - advanced usage - leave for now
 

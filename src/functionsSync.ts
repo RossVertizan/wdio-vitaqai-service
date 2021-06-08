@@ -213,7 +213,7 @@ export function clearCallCount(actionName: string, tree: boolean,
     args.splice(-2, 2);
     log.debug('VitaqService: clearCallCount: actionName, tree', actionName, tree);
     let argumentsDescription = {"actionName": "string", "tree?": "boolean"}
-    args = args = validateArguments('clearCallCount', argumentsDescription, args);
+    args = validateArguments('clearCallCount', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('clear_call_count', args)
@@ -233,7 +233,7 @@ export function displayNextActions(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: displayNextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    args = args = validateArguments('displayNextActions', argumentsDescription, args);
+    args = validateArguments('displayNextActions', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('display_next_sequences', args)
@@ -253,7 +253,7 @@ export function getCallCount(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getCallCount: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    args = args = validateArguments('getCallCount', argumentsDescription, args);
+    args = validateArguments('getCallCount', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_call_count', args)
@@ -273,7 +273,7 @@ export function getCallLimit(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getCallLimit: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    args = args = validateArguments('getCallLimit', argumentsDescription, args);
+    args = validateArguments('getCallLimit', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_call_limit', args)
@@ -293,7 +293,7 @@ export function getEnabled(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getEnabled: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    args = args = validateArguments('getEnabled', argumentsDescription, args);
+    args = validateArguments('getEnabled', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_enabled', args)
@@ -313,12 +313,34 @@ export function getId(actionName: string,
     args.splice(-2, 2);
     log.debug('VitaqService: getId: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
-    args = args = validateArguments('getId', argumentsDescription, args);
+    args = validateArguments('getId', argumentsDescription, args);
     // @ts-ignore
     return browser.call(() =>
         api.runCommandCaller('get_id', args)
     )
 }
+
+/**
+ * Get the action run previously
+ * @param actionName - name of the action
+ * @param steps - how many steps to go back
+ * @param browser
+ * @param api
+ */
+export function getPrevious(actionName: string, steps: number,
+                      browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                      api: VitaqAiApi) {
+    let args: any [] = Array.from(arguments);
+    args.splice(-2, 2);
+    log.debug('VitaqService: getPrevious: actionName, steps', actionName, steps);
+    let argumentsDescription = {"actionName": "string", "steps": "number"}
+    args = validateArguments('getId', argumentsDescription, args);
+    // @ts-ignore
+    return browser.call(() =>
+        api.runCommandCaller('get_previous', args)
+    )
+}
+
 
 /**
  * Get all of the possible next actions
