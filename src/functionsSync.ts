@@ -330,15 +330,17 @@ export function getId(actionName: string,
 export function getPrevious(actionName: string, steps: number,
                       browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                       api: VitaqAiApi) {
+    let result: string;
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: getPrevious: actionName, steps', actionName, steps);
     let argumentsDescription = {"actionName": "string", "steps": "number"}
     args = validateArguments('getId', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    result = browser.call(() =>
         api.runCommandCaller('get_previous', args)
     )
+    return JSON.parse(result).name
 }
 
 
