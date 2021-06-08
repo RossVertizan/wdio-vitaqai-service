@@ -1,6 +1,6 @@
 {
   "name": "@wdio/vitaqai-service",
-  "version": "1.0.39",
+  "version": "1.0.40",
   "description": "A WebdriverIO service that will provide an interface to Vitaq running in the cloud",
   "author": "Ross Addinall <ross@vertizan.com>",
   "homepage": "https://bitbucket.org/RossVertizan/wdio-vitaqai-service",
