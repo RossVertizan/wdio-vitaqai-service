@@ -1,3 +1,7 @@
+//==============================================================================
+// (c) Vertizan Limited 2011-2021
+//==============================================================================
+
 export interface VitaqServiceOptions {
 
     /**
@@ -91,3 +95,7 @@ type MochaFunc = (this: MochaContext, done: MochaDone) => void;
  * Async callback function used for tests and hooks.
  */
 type MochaAsyncFunc = (this: MochaContext) => PromiseLike<any>;
+
+// =============================================================================
+// END OF FILE
+// =============================================================================

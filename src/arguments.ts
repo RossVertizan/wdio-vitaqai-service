@@ -2,7 +2,6 @@
 // (c) Vertizan Limited 2011-2021
 //==============================================================================
 
-
 import { VitaqServiceError } from "./VitaqServiceError"
 
 /**

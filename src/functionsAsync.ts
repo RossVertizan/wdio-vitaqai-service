@@ -1,3 +1,6 @@
+//==============================================================================
+// (c) Vertizan Limited 2011-2021
+//==============================================================================
 import {validateArguments} from "./arguments";
 
 // Type import
@@ -9,23 +12,6 @@ import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 const logger = require('@wdio/logger').default;
 const log = logger('@wdio/vitaq-service')
 
-// /**
-//  * Query if the action is enabled
-//  * @param actionName - name of the action
-//  * @param browser
-//  * @param api
-//  */
-// export async function getEnabled(actionName: string,
-//                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> ,
-//                            api: VitaqAiApi) {
-//     let args: any [] = Array.from(arguments);
-//     args.splice(-2, 2)
-//     log.debug('VitaqService: getEnabled: actionName', actionName);
-//     let argumentsDescription = {"actionName": "string"}
-//     args = validateArguments("getEnabled", argumentsDescription, args);
-//     // @ts-ignore
-//     return await api.runCommandCaller('get_enabled', args)
-// }
 
 /**
  * Provide a simple sleep command
@@ -865,3 +851,6 @@ export async function setValue(variableName: string, value: number,
     return await api.runCommandCaller('set_value', args)
 }
 
+// =============================================================================
+// END OF FILE
+// =============================================================================

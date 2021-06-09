@@ -1,1 +1,1 @@
-{"version":3,"file":"launcher.d.ts","sourceRoot":"","sources":["../src/launcher.js"],"names":[],"mappings":"AAeA;IACI,0DAGC;IAFG,aAAsB;IAI1B;;OAEG;IACH,yDA0DC;IAED,gDA2BC;IAED;;OAEG;IACH,mBAOC;CACJ"}
+{"version":3,"file":"launcher.d.ts","sourceRoot":"","sources":["../src/launcher.js"],"names":[],"mappings":"AAOA;IACI,0DAEC;IADG,aAAsB;IAG1B;;OAEG;IACH,yDAEC;IAED,gDAEC;IAED;;OAEG;IACH,mBAEC;CACJ"}
