@@ -1,7 +1,7 @@
 ![vitaq logo](https://vitaq.io/wp-content/uploads/2020/10/Vitaq-new-logo-small.png)
 
 
-# WDIO WitaqAI Service
+# WDIO VitaqAI Service
 
 **A plugin service for WebdriverIO to allow the use of VitaqAI**
 
