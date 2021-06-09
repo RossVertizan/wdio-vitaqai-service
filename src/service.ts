@@ -322,7 +322,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
     }
 
-    getPrevious(actionName: string, steps: number) {
+    getPrevious(actionName: string, steps: number = 1) {
         // @ts-ignore
         return this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
     }
