@@ -29,10 +29,15 @@ and take advantage of incremental builds.
 
 When it has built successfully it can then be committed
 
-then published to the registry
+then published to the registry:
 ```node
 npm publish --registry http://localhost:4873
 ```
+Can also publish to the cloud repository:
+```node
+npm publish --registry http://pkgs.vitaq.online
+```
+
 after publishing update the version number for any further changes
 ```node
 npm version <version number>
