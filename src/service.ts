@@ -47,7 +47,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._capabilities = capabilities;
             this._config = config;
             this._api = new VitaqAiApi(this._options)
-            this._api.startPython()
             // @ts-ignore
             global.vitaq = this;
             this._counter = 0;
@@ -65,6 +64,19 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         if (typeof this._options.verbosityLevel !== 'undefined'
             && this._options.verbosityLevel > 50) {
             log.info("VitaqService: nextActionSelector: suite: ", suite)
+        }
+
+        // Check to see if the VitaqAI_API has established a Session with the Python job
+        if (this._api.sessionEstablished === "not_tried") {
+            await this._api.startPython()
+        } else if (this._api.sessionEstablished === "failed") {
+            console.error("Error: Failed to establish session with Vitaq in the cloud")
+            console.info("Info: Closing test because of error above")
+            return null
+        } else if (this._api.sessionEstablished === "trying") {
+            console.error("Error: Still trying to establish session with Vitaq in the cloud")
+            console.info("Info: Closing test because of error above")
+            return null
         }
 
         // Get the result (pass/fail) off the _runnable
@@ -112,6 +124,36 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         }
     }
 
+
+
+    // -------------------------------------------------------------------------
+    /**
+     * waitForSession - Wait for an established session with the Python job
+     * @param delay - delay in checking
+     * @param timeout - timeout
+     */
+    waitForSession(delay=100, timeout=2000) {
+        return new Promise((resolve, reject) => {
+            let timeoutCounter = 0;
+            let intervalId = setInterval(() => {
+
+                // Increment the timeoutCounter for a crude timeout
+                timeoutCounter += delay;
+                // console.log('VitaqAiApi: waitForNextAction: this.nextTestAction: ', this.nextTestAction)
+
+                if (this._api.sessionEstablished === "HaveNext") {
+                    clearInterval(intervalId)
+                    resolve(this.nextTestAction.actionName)
+                } else if (timeoutCounter > timeout) {
+                    console.error('service: waitForSession: Did not get next action in timeout period')
+                    clearInterval(intervalId)
+                    reject("Timed Out")
+                }
+            }, delay)
+        });
+    }
+
+    // -------------------------------------------------------------------------
     /**
      *
      * @param suite - The root suite that we will look through to find the sub-suite
