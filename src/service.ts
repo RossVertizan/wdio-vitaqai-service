@@ -67,8 +67,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         }
 
         // Check to see if the VitaqAI_API has established a Session with the Python job
-        if (this._api.sessionEstablished === "not_tried") {
-            await this._api.startPython()
+        if (this._api.sessionEstablished === "success") {
+            // Do nothing and drop through to the next part of the code
+        } else if (this._api.sessionEstablished === "not_tried") {
+            await this.waitForSession()
         } else if (this._api.sessionEstablished === "failed") {
             console.error("Error: Failed to establish session with Vitaq in the cloud")
             console.info("Info: Closing test because of error above")
@@ -135,17 +137,22 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     waitForSession(delay=100, timeout=2000) {
         return new Promise((resolve, reject) => {
             let timeoutCounter = 0;
-            let intervalId = setInterval(() => {
+            let intervalId = setInterval( async () => {
 
                 // Increment the timeoutCounter for a crude timeout
                 timeoutCounter += delay;
                 // console.log('VitaqAiApi: waitForNextAction: this.nextTestAction: ', this.nextTestAction)
 
-                if (this._api.sessionEstablished === "HaveNext") {
+                if (this._api.sessionEstablished === "not_tried") {
+                    await this._api.runPython()
+                } else if (this._api.sessionEstablished === "success") {
                     clearInterval(intervalId)
-                    resolve(this.nextTestAction.actionName)
+                    resolve(this._api.sessionEstablished)
+                } else if (this._api.sessionEstablished === "failed") {
+                    clearInterval(intervalId)
+                    reject(this._api.sessionEstablished)
                 } else if (timeoutCounter > timeout) {
-                    console.error('service: waitForSession: Did not get next action in timeout period')
+                    console.error('service: waitForSession: Did not establish session in timeout period')
                     clearInterval(intervalId)
                     reject("Timed Out")
                 }

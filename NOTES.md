@@ -17,6 +17,7 @@ git submodule add https://RossVertizan@bitbucket.org/RossVertizan/wdio-vitaqai-s
 ```
 
 ### How to publish
+#### Build
 Before publishing, the code needs to be built. To do this go to the webdriverio-vitaq-dev project (H:\Git\webdriverio-vitaq-dev) and run
 ```node
 npm run build
@@ -27,21 +28,27 @@ npm run watch
 ```
 and take advantage of incremental builds.
 
+#### Commit
 When it has built successfully it can then be committed
 
-then published to the registry:
+#### Tag
+Update the version number
+```node
+npm version <version number>
+```
+
+#### Publish
+Then publish to the registry:
 ```node
 npm publish --registry http://localhost:4873
 ```
 Can also publish to the cloud repository:
 ```node
-npm publish --registry http://pkgs.vitaq.online
+npm publish --registry https://pkgs.vitaq.online
 ```
 
-after publishing update the version number for any further changes
-```node
-npm version <version number>
-```
+
+
 
 ### How to install
 Installed as part of wdio-vitaq-mocha-framework:
