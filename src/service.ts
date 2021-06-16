@@ -8,7 +8,6 @@ const log = logger('@wdio/vitaq-service')
 // Packages
 // @ts-ignore
 import { VitaqAiApi } from 'vitaqai_api'
-console.log("This is VitaqAiApi: ", VitaqAiApi)
 
 // Type import
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'
@@ -66,20 +65,26 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             log.info("VitaqService: nextActionSelector: suite: ", suite)
         }
 
-        // Check to see if the VitaqAI_API has established a Session with the Python job
-        if (this._api.sessionEstablished === "success") {
-            // Do nothing and drop through to the next part of the code
-        } else if (this._api.sessionEstablished === "not_tried") {
-            await this.waitForSession()
-        } else if (this._api.sessionEstablished === "failed") {
-            console.error("Error: Failed to establish session with Vitaq in the cloud")
-            console.info("Info: Closing test because of error above")
-            return null
-        } else if (this._api.sessionEstablished === "trying") {
-            console.error("Error: Still trying to establish session with Vitaq in the cloud")
-            console.info("Info: Closing test because of error above")
-            return null
-        }
+        // Keep for now - session start moved to beforeSesssion
+        // // Check to see if the VitaqAI_API has established a Session with the Python job
+        // if (this._api.sessionEstablished === "success") {
+        //     // Do nothing and drop through to the next part of the code
+        // } else if (this._api.sessionEstablished === "not_tried") {
+        //     try {
+        //         await this.waitForSession();
+        //     } catch (error) {
+        //         console.error("Error: ", error)
+        //         return null
+        //     }
+        // } else if (this._api.sessionEstablished === "failed") {
+        //     console.error("Error: Failed to establish session with Vitaq in the cloud")
+        //     console.info("Info: Closing test because of error above")
+        //     return null
+        // } else if (this._api.sessionEstablished === "trying") {
+        //     console.error("Error: Still trying to establish session with Vitaq in the cloud")
+        //     console.info("Info: Closing test because of error above")
+        //     return null
+        // }
 
         // Get the result (pass/fail) off the _runnable
         if (typeof currentSuite !== "undefined") {
@@ -124,40 +129,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             // Need to return the suite object
             return this.getSuite(suite, nextAction);
         }
-    }
-
-
-
-    // -------------------------------------------------------------------------
-    /**
-     * waitForSession - Wait for an established session with the Python job
-     * @param delay - delay in checking
-     * @param timeout - timeout
-     */
-    waitForSession(delay=100, timeout=2000) {
-        return new Promise((resolve, reject) => {
-            let timeoutCounter = 0;
-            let intervalId = setInterval( async () => {
-
-                // Increment the timeoutCounter for a crude timeout
-                timeoutCounter += delay;
-                // console.log('VitaqAiApi: waitForNextAction: this.nextTestAction: ', this.nextTestAction)
-
-                if (this._api.sessionEstablished === "not_tried") {
-                    await this._api.runPython()
-                } else if (this._api.sessionEstablished === "success") {
-                    clearInterval(intervalId)
-                    resolve(this._api.sessionEstablished)
-                } else if (this._api.sessionEstablished === "failed") {
-                    clearInterval(intervalId)
-                    reject(this._api.sessionEstablished)
-                } else if (timeoutCounter > timeout) {
-                    console.error('service: waitForSession: Did not establish session in timeout period')
-                    clearInterval(intervalId)
-                    reject("Timed Out")
-                }
-            }, delay)
-        });
     }
 
     // -------------------------------------------------------------------------
@@ -471,25 +442,136 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     // =========================================================================
     // =========================================================================
-
-    /**
-     * gather information about runner
-     */
-    beforeSession (config: Options.Testrunner, capabilities: Capabilities.RemoteCapability) {
-        log.info("Running the service beforeSession method")
-
-        /**
-         * if no user and key is specified even though a sauce service was
-         * provided set user and key with values so that the session request
-         * will fail (not for RDC tho due to other auth mechansim)
-         */
+    onPrepare(config:any, capabilities:any) {
+        // Not seen
+        log.info("Running the vitaq-service onPrepare method");
     }
 
+    onWorkerStart(cid:any, caps:any, specs:any, args:any, execArgv:any) {
+        // Not seen
+        log.info("Running the vitaq-service onWorkerStart method");
+    }
+
+    async beforeSession (config: Options.Testrunner, capabilities: Capabilities.RemoteCapability) {
+        // Runs
+        log.info("Running the vitaq-service beforeSession method")
+
+        // Run up the Vitaq session
+        try {
+            await this.waitForSession();
+        } catch (error) {
+            console.error("Error: ", error)
+        }
+    }
+
+    // https://github.com/webdriverio/webdriverio/blob/master/examples/wdio.conf.js#L183-L326
+    // before: function (capabilities, specs, browser) {
     before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
+        // Runs
         this._browser = browser
-        log.info("Running the service before method")
-
+        log.info("Running the vitaq-service before method")
     }
+
+    beforeSuite(suite: Frameworks.Suite) {
+        // Runs
+        log.info("Running the vitaq-service beforeSuite method")
+    }
+
+    beforeHook(test:any, context:any, stepData:any, world:any) {
+        // Not seen
+        log.info("Running the vitaq-service beforeHook method");
+    }
+
+    afterHook(test: never, context: never, results: Frameworks.TestResult){
+        // Not seen
+        log.info("Running the vitaq-service afterHook method")
+    }
+
+    beforeTest(test: Frameworks.Test, context:any) {
+        // Runs
+        log.info("Running the vitaq-service beforeTest method")
+    }
+
+    beforeCommand(commandName:any, args:any) {
+        // Runs
+        log.info("Running the vitaq-service beforeCommand method")
+    }
+
+    afterCommand(commandName:any, args:any, result:any, error:any) {
+        // Runs
+        log.info("Running the vitaq-service afterCommand method")
+    }
+
+    afterTest(test: Frameworks.Test, context: unknown, results: Frameworks.TestResult) {
+        // Runs
+        log.info("Running the vitaq-service afterTest method")
+    }
+
+    afterSuite(suite: Frameworks.Suite) {
+        // Runs
+        log.info("Running the vitaq-service afterSuite method")
+    }
+
+    after(result: number) {
+        // Runs
+        log.info("Running the vitaq-service after method")
+    }
+
+    afterSession(config: Options.Testrunner, capabilities: Capabilities.RemoteCapability, specs:any) {
+        // Runs
+        log.info("Running the vitaq-service afterSession method")
+    }
+
+    onComplete(exitCode:any, config:any, capabilities:any, results:any) {
+        // Runs the launcher onComplete method - not this one!!
+        log.info("Running the vitaq-service onComplete method")
+    }
+
+    onReload(oldSessionId:any, newSessionId:any) {
+        log.info("Running the vitaq-service onReload method")
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * waitForSession - Wait for an established session with the Python job
+     * @param delay - delay in checking
+     * @param timeout - timeout
+     */
+    waitForSession(delay=100, timeout=20000) {
+        return new Promise((resolve, reject) => {
+            let timeoutCounter = 0;
+            let intervalId = setInterval( async () => {
+
+                // Increment the timeoutCounter for a crude timeout
+                timeoutCounter += delay;
+                // console.log('VitaqAiApi: waitForNextAction: this.nextTestAction: ', this.nextTestAction)
+
+                if (this._api.sessionEstablished === "not_tried") {
+                    await this._api.startPython()
+                } else if (this._api.sessionEstablished === "success") {
+                    clearInterval(intervalId)
+                    resolve(this._api.sessionEstablished)
+                } else if (this._api.sessionEstablished === "failed") {
+                    clearInterval(intervalId)
+                    reject(this._api.sessionEstablished)
+                } else if (timeoutCounter > timeout) {
+                    console.error('service: waitForSession: Did not establish session in timeout period')
+                    clearInterval(intervalId)
+                    reject("Timed Out")
+                }
+            }, delay)
+        });
+    }
+
+    // // Cucumber specific hooks
+    // // ======================================================================
+    // beforeFeature: function (uri, feature, scenarios) {}
+    // beforeScenario: function (uri, feature, scenario, sourceLocation) {}
+    // beforeStep: function ({ uri, feature, step }, context) {}
+    // afterStep: function ({ uri, feature, step }, context, { error, result, duration, passed, retries }) {}
+    // afterScenario: function (uri, feature, scenario, result, sourceLocation) {}
+    // afterFeature: function (uri, feature, scenarios) {}
+
 }
 
 // =============================================================================
