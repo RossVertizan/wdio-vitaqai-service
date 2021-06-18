@@ -45,6 +45,11 @@ export interface VitaqServiceOptions {
      * be reloaded
      */
     reloadSession?: boolean
+
+    /**
+     * Specify the name of the sequenec to run
+     */
+    sequence?: string
 }
 
 export interface MochaSuite {

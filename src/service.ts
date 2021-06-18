@@ -30,6 +30,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     private _suiteMap: {[key: string]:string[]}
     private _activeSuites: string[]
     private vitaqFunctions
+    private _sequenceName: string | undefined
 
 
     constructor(
@@ -41,21 +42,39 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             log.debug("serviceOptions: ", serviceOptions);
             log.debug("capabilities: ", capabilities);
             log.debug("config: ", config);
-            this._options = {...DEFAULT_OPTIONS, ...serviceOptions};
+            this._capabilities = capabilities;
+            this._config = config;
+
+            // Get the sequenceName
+            // - preferentially from the command line in config
+            // - then from the options (specified in wdio.conf.js file)
+            if (Object.prototype.hasOwnProperty.call(config, "sequence")) {
+                // @ts-ignore
+                this._sequenceName = config.sequence
+            } else if (Object.prototype.hasOwnProperty.call(serviceOptions, "sequence")) {
+                // @ts-ignore
+                this._sequenceName = serviceOptions.sequence
+            } else {
+                this._sequenceName = undefined
+            }
+            this._options = {...DEFAULT_OPTIONS, ...serviceOptions, sequence: this._sequenceName};
+
             // Import either the Sync or Async versions of the functions
             if (this._options.useSync) {
                 this.vitaqFunctions = require('./functionsSync')
             } else {
                 this.vitaqFunctions = require('./functionsAsync')
             }
-            this._capabilities = capabilities;
-            this._config = config;
+
             this._api = new VitaqAiApi(this._options)
             this._suiteMap = {};
             this._activeSuites = [];
             // @ts-ignore
             global.vitaq = this;
             this._counter = 0;
+
+
+
         } catch (error) {
             console.error("Error: Vitaq Service failed to initialise")
             console.error(error)
@@ -69,7 +88,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         let returnSuite: MochaSuite;
         if (typeof this._options.verbosityLevel !== 'undefined'
             && this._options.verbosityLevel > 50) {
-            log.info("VitaqService: nextActionSelector: suite: ", suite)
+            log.debug("VitaqService: nextActionSelector: suite: ", suite)
         }
 
         // Create the suite map if it has not been created
@@ -109,11 +128,11 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
         // Get the result (pass/fail) off the _runnable
         if (typeof currentSuite !== "undefined") {
-            // log.info("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
+            // log.debug("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
             if (typeof this._options.verbosityLevel !== 'undefined'
                 && this._options.verbosityLevel > 50) {
-                log.info("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
-                log.info("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
+                log.debug("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
+                log.debug("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
             }
             // Map the passed/failed result to true and false
             if (currentSuite.ctx._runnable.state === "passed") {
@@ -130,13 +149,13 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
         // Send the result and get the next action
         if (suite.root) {
-            // log.info("VitaqService: nextActionSelector: This is the root suite");
+            // log.debug("VitaqService: nextActionSelector: This is the root suite");
 
             if (typeof currentSuite === "undefined") {
-                log.info("VitaqService: nextActionSelector: currentSuite is undefined");
+                log.debug("VitaqService: nextActionSelector: currentSuite is undefined");
                 nextAction = await this._api.getNextTestActionCaller(undefined, result);
             } else {
-                log.info("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
+                log.debug("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
                 nextAction = await this._api.getNextTestActionCaller(currentSuite.title, result);
             }
 
@@ -176,7 +195,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             // @ts-ignore
             return this.getSuite(suite, this._activeSuites.shift());
         } else {
-            log.info("nextActionSelector: suite is not root: suite: ", suite)
+            log.debug("nextActionSelector: suite is not root: suite: ", suite)
         }
     }
 
@@ -222,8 +241,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param suite - the root suite
      */
     createSuiteMap(suite: MochaSuite): void {
-        // log.info("Running createSuiteMap")
-        // log.info("createSuiteMap: suites: ", suite.suites)
+        // log.debug("Running createSuiteMap")
+        // log.debug("createSuiteMap: suites: ", suite.suites)
         // Foreach suite, get the filename and title
         let subSuite;
         let title;
@@ -242,7 +261,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 this._suiteMap[filename] = [title]
             }
         }
-        // log.info("createSuiteMap: this._suiteMap: ", this._suiteMap)
+        // log.debug("createSuiteMap: this._suiteMap: ", this._suiteMap)
     }
 
     /**
@@ -496,7 +515,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     // =========================================================================
     async beforeSession (config: Options.Testrunner, capabilities: Capabilities.RemoteCapability) {
         // Runs
-        log.info("Running the vitaq-service beforeSession method")
+        log.debug("Running the vitaq-service beforeSession method")
 
         // Run up the Vitaq session
         try {
@@ -509,65 +528,54 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     // https://github.com/webdriverio/webdriverio/blob/master/examples/wdio.conf.js#L183-L326
     // before: function (capabilities, specs, browser) {
     before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
-        // Runs
         this._browser = browser
-        log.info("Running the vitaq-service before method")
+        log.debug("Running the vitaq-service before method")
     }
 
-    beforeSuite(suite: Frameworks.Suite) {
-        // Runs
-        log.info("Running the vitaq-service beforeSuite method")
-    }
+    // beforeSuite(suite: Frameworks.Suite) {
+    //     log.debug("Running the vitaq-service beforeSuite method")
+    // }
 
-    beforeHook(test:any, context:any, stepData:any, world:any) {
-        // Not seen
-        log.info("Running the vitaq-service beforeHook method");
-    }
+    // beforeHook(test:any, context:any, stepData:any, world:any) {
+    //     log.debug("Running the vitaq-service beforeHook method");
+    // }
 
-    afterHook(test: never, context: never, results: Frameworks.TestResult){
-        // Not seen
-        log.info("Running the vitaq-service afterHook method")
-    }
+    // afterHook(test: never, context: never, results: Frameworks.TestResult){
+    //     log.debug("Running the vitaq-service afterHook method")
+    // }
 
-    beforeTest(test: Frameworks.Test, context:any) {
-        // Runs
-        log.info("Running the vitaq-service beforeTest method")
-    }
+    // beforeTest(test: Frameworks.Test, context:any) {
+    //     log.debug("Running the vitaq-service beforeTest method")
+    // }
 
-    beforeCommand(commandName:any, args:any) {
-        // Runs
-        log.info("Running the vitaq-service beforeCommand method")
-    }
+    // beforeCommand(commandName:any, args:any) {
+    //     log.debug("Running the vitaq-service beforeCommand method")
+    // }
 
-    afterCommand(commandName:any, args:any, result:any, error:any) {
-        // Runs
-        log.info("Running the vitaq-service afterCommand method")
-    }
+    // afterCommand(commandName:any, args:any, result:any, error:any) {
+    //     log.debug("Running the vitaq-service afterCommand method")
+    // }
 
-    afterTest(test: Frameworks.Test, context: unknown, results: Frameworks.TestResult) {
-        // Runs
-        log.info("Running the vitaq-service afterTest method")
-    }
+    // afterTest(test: Frameworks.Test, context: unknown, results: Frameworks.TestResult) {
+    //     log.debug("Running the vitaq-service afterTest method")
+    // }
 
-    afterSuite(suite: Frameworks.Suite) {
-        // Runs
-        log.info("Running the vitaq-service afterSuite method")
-    }
+    // afterSuite(suite: Frameworks.Suite) {
+    //     log.debug("Running the vitaq-service afterSuite method")
+    // }
 
-    after(result: number) {
-        // Runs
-        log.info("Running the vitaq-service after method")
-    }
+    // after(result: number) {
+    //     log.debug("Running the vitaq-service after method")
+    // }
 
-    afterSession(config: Options.Testrunner, capabilities: Capabilities.RemoteCapability, specs:any) {
-        // Runs
-        log.info("Running the vitaq-service afterSession method")
-    }
+    // afterSession(config: Options.Testrunner, capabilities: Capabilities.RemoteCapability, specs:any) {
+    //     log.debug("Running the vitaq-service afterSession method")
+    // }
 
-    onReload(oldSessionId:any, newSessionId:any) {
-        // Runs on browser.reloadSession
-        log.info("Running the vitaq-service onReload method")
-    }
+    // onReload(oldSessionId:any, newSessionId:any) {
+    //     // Runs on browser.reloadSession
+    //     log.debug("Running the vitaq-service onReload method")
+    // }
 
     // -------------------------------------------------------------------------
     /**
