@@ -2,8 +2,11 @@
 // (c) Vertizan Limited 2011-2021
 //==============================================================================
 
+import stringify = Mocha.utils.stringify;
+
 const logger = require('@wdio/logger').default;
-const log = logger('@wdio/vitaq-service')
+const log = logger('@wdio/vitaq-service:service');
+const path = require("path");
 
 // Packages
 // @ts-ignore
@@ -24,6 +27,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     private _counter: number
     private _api: VitaqAiApi
     private _browser?: Browser<'async'> | MultiRemoteBrowser<'async'>
+    private _suiteMap: {[key: string]:string[]}
+    private _activeSuites: string[]
+    private vitaqFunctions
+
 
     constructor(
         serviceOptions: VitaqServiceOptions,
@@ -37,15 +44,15 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._options = {...DEFAULT_OPTIONS, ...serviceOptions};
             // Import either the Sync or Async versions of the functions
             if (this._options.useSync) {
-                // @ts-ignore
                 this.vitaqFunctions = require('./functionsSync')
             } else {
-                // @ts-ignore
                 this.vitaqFunctions = require('./functionsAsync')
             }
             this._capabilities = capabilities;
             this._config = config;
             this._api = new VitaqAiApi(this._options)
+            this._suiteMap = {};
+            this._activeSuites = [];
             // @ts-ignore
             global.vitaq = this;
             this._counter = 0;
@@ -64,6 +71,20 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             && this._options.verbosityLevel > 50) {
             log.info("VitaqService: nextActionSelector: suite: ", suite)
         }
+
+        // Create the suite map if it has not been created
+        if (Object.keys(this._suiteMap).length < 1) {
+            if (suite.root) {
+                this.createSuiteMap(suite)
+            }
+        }
+
+        // Check if there are any remaining activeSuites, if so use the next suite
+        if (this._activeSuites.length > 0){
+            // @ts-ignore
+            return this.getSuite(suite, this._activeSuites.shift());
+        }
+
 
         // Keep for now - session start moved to beforeSesssion
         // // Check to see if the VitaqAI_API has established a Session with the Python job
@@ -89,7 +110,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         // Get the result (pass/fail) off the _runnable
         if (typeof currentSuite !== "undefined") {
             // log.info("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
-            // @ts-ignore
             if (typeof this._options.verbosityLevel !== 'undefined'
                 && this._options.verbosityLevel > 50) {
                 log.info("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
@@ -104,30 +124,59 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 // Didn't get either passed or failed
                 log.error('VitaqService: nextActionSelector: Unexpected value for state: ',
                     currentSuite.ctx._runnable.state)
-                result
+                result = false
             }
         }
 
         // Send the result and get the next action
         if (suite.root) {
-            log.info("VitaqService: nextActionSelector: This is the root suite");
+            // log.info("VitaqService: nextActionSelector: This is the root suite");
 
             if (typeof currentSuite === "undefined") {
                 log.info("VitaqService: nextActionSelector: currentSuite is undefined");
-                // @ts-ignore
-                // nextAction = global.browser.call(() =>
-                //     this._api.getNextTestActionCaller(undefined, true));
                 nextAction = await this._api.getNextTestActionCaller(undefined, result);
             } else {
-                // @ts-ignore
-                // i.getNextTestActionCaller(currentSuite.title, true));
                 log.info("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
                 nextAction = await this._api.getNextTestActionCaller(currentSuite.title, result);
             }
-            log.info("VitaqService: nextActionSelector: Returning nextAction: ", nextAction);
 
+            // Handle the special actions
+            const specialActions = ['--*setUp*--', '--*tearDown*--','--*EndSeed*--', '--*EndAll*--']
+            while (specialActions.indexOf(nextAction) > -1) {
+                if (nextAction === '--*setUp*--') {
+                    // Show which seed we are about to run
+                    let seed = await this.getSeed('top')
+                    log.info('='.repeat(80))
+                    log.info(`Running seed: ${seed}`)
+                    log.info('='.repeat(80))
+                    nextAction = await this._api.getNextTestActionCaller('--*setUp*--', true);
+                } else if (nextAction === '--*tearDown*--') {
+                    // Do nothing on tearDown - just go to the next action
+                    nextAction = await this._api.getNextTestActionCaller('--*tearDown*--', true);
+                } else if (nextAction === '--*EndSeed*--') {
+                    if (Object.prototype.hasOwnProperty.call(this._options, "reloadSession")
+                        && this._options.reloadSession) {
+                        // @ts-ignore
+                        await this._browser.reloadSession()
+                    }
+                    // Now get the next action
+                    nextAction = await this._api.getNextTestActionCaller('--*EndSeed*--', true);
+                } else if (nextAction === '--*EndAll*--') {
+                    // Just return null to indicate the test has finished
+                    return null
+                }
+            }
+
+            // Now handle the real nextAction
+            log.info("-".repeat(80));
+            log.info("Running next action: ", nextAction);
+            log.info("-".repeat(80));
             // Need to return the suite object
-            return this.getSuite(suite, nextAction);
+            this._activeSuites = this.getSuitesFromFile(nextAction);
+            // @ts-ignore
+            return this.getSuite(suite, this._activeSuites.shift());
+        } else {
+            log.info("nextActionSelector: suite is not root: suite: ", suite)
         }
     }
 
@@ -151,12 +200,56 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         return null;
     }
 
+    // -------------------------------------------------------------------------
+    /**
+     *
+     * @param fileName - Name of the file which contains the suites to run
+     * @returns {suites/null}
+     */
+    getSuitesFromFile(fileName: string) {
+        if (Object.prototype.hasOwnProperty.call(this._suiteMap, fileName)) {
+            return JSON.parse(JSON.stringify(this._suiteMap[fileName]))
+        }
+        console.error("Error: Was unable to find a file for test action: ", fileName);
+        console.warn(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
+        console.warn(`This will cause the test to end`);
+        return null;
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * createSuiteMap - Create the mapping of the filename to the suites
+     * @param suite - the root suite
+     */
+    createSuiteMap(suite: MochaSuite): void {
+        // log.info("Running createSuiteMap")
+        // log.info("createSuiteMap: suites: ", suite.suites)
+        // Foreach suite, get the filename and title
+        let subSuite;
+        let title;
+        let filename;
+        let filenameObj;
+        for (let index = 0; index < suite.suites.length; index += 1) {
+            subSuite = suite.suites[index];
+            title = subSuite.title;
+            filenameObj = path.parse(path.resolve(subSuite.file));
+            filename = filenameObj.name;
+
+            // Add to the suiteMap with file as the key and titles as an array
+            if (Object.keys(this._suiteMap).indexOf(filename) > -1) {
+                this._suiteMap[filename].push(title)
+            } else {
+                this._suiteMap[filename] = [title]
+            }
+        }
+        // log.info("createSuiteMap: this._suiteMap: ", this._suiteMap)
+    }
+
     /**
      * Provide a simple sleep command
      * @param duration
      */
     sleep(ms: number) {
-        // @ts-ignore
         return this.vitaqFunctions.sleep(ms, this._browser)
     }
 
@@ -168,7 +261,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param variableName - name of the variable
      */
     requestData(variableName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.requestData(variableName, this._browser, this._api)
     }
 
@@ -177,7 +269,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param variablesArray - array of variables to record coverage for
      */
     recordCoverage(variablesArray: []) {
-        // @ts-ignore
         return this.vitaqFunctions.recordCoverage(variablesArray, this._browser, this._api)
     }
 
@@ -187,7 +278,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param value - value to store
      */
     sendDataToVitaq(variableName: string, value: any) {
-        // @ts-ignore
         return this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api)
     }
 
@@ -196,7 +286,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param variableName - name of the variable to read
      */
     readDataFromVitaq(variableName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
     }
 
@@ -209,7 +298,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * JSON.stringify() method
      */
     createVitaqLogEntry(message: string | {}, format: string) {
-        // @ts-ignore
         return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api)
     }
 
@@ -247,97 +335,78 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 // =============================================================================
 
     abort(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.abort(actionName, this._browser, this._api)
     }
 
     addNext(actionName: string, nextAction: string, weight: number = 1) {
-        // @ts-ignore
         return this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api)
     }
 
     clearCallCount(actionName: string, tree: boolean) {
-        // @ts-ignore
         return this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api)
     }
 
     displayNextActions(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
     }
 
     getCallCount(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
     }
 
     getCallLimit(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
     }
 
     getEnabled(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
     }
 
     getPrevious(actionName: string, steps: number = 1) {
-        // @ts-ignore
         return this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
     }
 
     getId(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.getId(actionName, this._browser, this._api)
     }
 
     nextActions(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
     }
 
     numberActiveNextActions(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
     }
 
     numberNextActions(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
     }
 
     removeAllNext(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.removeAllNext(actionName, this._browser, this._api)
     }
 
     removeFromCallers(actionName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.removeFromCallers(actionName, this._browser, this._api)
     }
 
     removeNext(actionName: string, nextAction: string) {
-        // @ts-ignore
         return this.vitaqFunctions.removeNext(actionName, nextAction, this._browser, this._api)
     }
 
     setCallLimit(actionName: string, limit: number) {
-        // @ts-ignore
         return this.vitaqFunctions.setCallLimit(actionName, limit, this._browser, this._api)
     }
 
     setEnabled(actionName: string, enabled: boolean) {
-        // @ts-ignore
         return this.vitaqFunctions.setEnabled(actionName, enabled, this._browser, this._api)
     }
 
     setExhaustive(actionName: string, exhaustive: boolean) {
-        // @ts-ignore
         return this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api)
     }
 
     setMaxActionDepth(actionName: string, depth: number = 1000) {
-        // @ts-ignore
         return this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api)
     }
 
@@ -346,112 +415,85 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 // =============================================================================
 
     allowList(variableName: string, list: []) {
-        // @ts-ignore
         return this.vitaqFunctions.allowList(variableName, list, this._browser, this._api)
     }
 
     allowOnlyList(variableName: string, list: []) {
-        // @ts-ignore
         return this.vitaqFunctions.allowOnlyList(variableName, list, this._browser, this._api)
     }
 
     allowOnlyRange(variableName: string, low: number, high: number) {
-        // @ts-ignore
         return this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api)
     }
 
     allowOnlyValue(variableName: string, value: number) {
-        // @ts-ignore
         return this.vitaqFunctions.allowOnlyValue(variableName, value, this._browser, this._api)
     }
 
     allowOnlyValues(variableName: string, valueList: []) {
-        // @ts-ignore
         return this.vitaqFunctions.allowOnlyValues(variableName, valueList, this._browser, this._api)
     }
 
     allowRange(variableName: string, low: number, high: number) {
-        // @ts-ignore
         return this.vitaqFunctions.allowRange(variableName, low, high, this._browser, this._api)
     }
 
     allowValue(variableName: string, value: number) {
-        // @ts-ignore
         return this.vitaqFunctions.allowValue(variableName, value, this._browser, this._api)
     }
 
     allowValues(variableName: string, valueList: []) {
-        // @ts-ignore
         return this.vitaqFunctions.allowValues(variableName, valueList, this._browser, this._api)
     }
 
     disallowRange(variableName: string, low: number, high: number) {
-        // @ts-ignore
         return this.vitaqFunctions.disallowRange(variableName, low, high, this._browser, this._api)
     }
 
     disallowValue(variableName: string, value: number) {
-        // @ts-ignore
         return this.vitaqFunctions.disallowValue(variableName, value, this._browser, this._api)
     }
 
     disallowValues(variableName: string, valueList: []) {
-        // @ts-ignore
         return this.vitaqFunctions.disallowValues(variableName, valueList, this._browser, this._api)
     }
 
     doNotRepeat(variableName: string, value: boolean) {
-        // @ts-ignore
         return this.vitaqFunctions.doNotRepeat(variableName, value, this._browser, this._api)
     }
 
     gen(variableName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.gen(variableName, this._browser, this._api)
     }
 
     getDoNotRepeat(variableName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
     }
 
     getSeed(variableName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
     }
 
     getValue(variableName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.getValue(variableName, this._browser, this._api)
     }
 
     resetRanges(variableName: string) {
-        // @ts-ignore
         return this.vitaqFunctions.resetRanges(variableName, this._browser, this._api)
     }
 
     setSeed(variableName: string, seed: number) {
-        // @ts-ignore
         return this.vitaqFunctions.setSeed(variableName, seed, this._browser, this._api)
     }
 
     setValue(variableName: string, value: number) {
-        // @ts-ignore
         return this.vitaqFunctions.setValue(variableName, value, this._browser, this._api)
     }
 
     // =========================================================================
+    // HOOKS
+    //   Note: onPrepare, onWorkerStart and onComplete all run from the launcher
     // =========================================================================
-    onPrepare(config:any, capabilities:any) {
-        // Not seen
-        log.info("Running the vitaq-service onPrepare method");
-    }
-
-    onWorkerStart(cid:any, caps:any, specs:any, args:any, execArgv:any) {
-        // Not seen
-        log.info("Running the vitaq-service onWorkerStart method");
-    }
-
     async beforeSession (config: Options.Testrunner, capabilities: Capabilities.RemoteCapability) {
         // Runs
         log.info("Running the vitaq-service beforeSession method")
@@ -522,12 +564,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         log.info("Running the vitaq-service afterSession method")
     }
 
-    onComplete(exitCode:any, config:any, capabilities:any, results:any) {
-        // Runs the launcher onComplete method - not this one!!
-        log.info("Running the vitaq-service onComplete method")
-    }
-
     onReload(oldSessionId:any, newSessionId:any) {
+        // Runs on browser.reloadSession
         log.info("Running the vitaq-service onReload method")
     }
 

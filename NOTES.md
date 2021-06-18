@@ -59,6 +59,10 @@ or manually with:
 ```node
 npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873 --save-dev
 ```
+Or from the cloud:
+```node
+npm install @wdio/vitaqai-service@<version> --registry https://pkgs.vitaq.online
+```
 
 ## Development Notes
 

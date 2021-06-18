@@ -35,9 +35,16 @@ export interface VitaqServiceOptions {
     verbosityLevel?: number
 
     /**
-     * Specify if we shoul duse sync or async mode
+     * Specify if we should use sync or async mode
      */
     useSync?: boolean
+
+    /**
+     * Specify if the browser session should be reloaded prior to the next seed,
+     * at the expense of a longer test time.  Applications that store state should
+     * be reloaded
+     */
+    reloadSession?: boolean
 }
 
 export interface MochaSuite {
