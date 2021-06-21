@@ -31,6 +31,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     private _activeSuites: string[]
     private vitaqFunctions
     private _sequenceName: string | undefined
+    private nextAction: string
+    private currentState: string
 
 
     constructor(
@@ -72,8 +74,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             // @ts-ignore
             global.vitaq = this;
             this._counter = 0;
-
-
+            this.nextAction = "";
+            this.currentState = "passed";
 
         } catch (error) {
             console.error("Error: Vitaq Service failed to initialise")
@@ -83,7 +85,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     }
 
     async nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
-        let nextAction: string;
         let result: boolean = true;
         let returnSuite: MochaSuite;
         if (typeof this._options.verbosityLevel !== 'undefined'
@@ -95,6 +96,15 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         if (Object.keys(this._suiteMap).length < 1) {
             if (suite.root) {
                 this.createSuiteMap(suite)
+            }
+        }
+
+        // Accumulate the result first so we have one place that tracks the result
+        // even if we have multiple suites in a file
+        // - it starts as passed and can only ever go to failed
+        if (typeof currentSuite !== "undefined") {
+            if (currentSuite.ctx._runnable.state === "failed") {
+                this.currentState = "failed"
             }
         }
 
@@ -131,19 +141,17 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             // log.debug("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
             if (typeof this._options.verbosityLevel !== 'undefined'
                 && this._options.verbosityLevel > 50) {
-                log.debug("VitaqService: nextActionSelector: currentSuite: ", currentSuite)
-                log.debug("VitaqService: nextActionSelector: state: ", currentSuite.ctx._runnable.state);
+                log.debug("nextActionSelector: currentSuite: ", currentSuite)
+                log.debug("nextActionSelector: state: ", currentSuite.ctx._runnable.state);
             }
             // Map the passed/failed result to true and false
-            if (currentSuite.ctx._runnable.state === "passed") {
+            log.info(`RESULT Test action ${this.nextAction} ${this.currentState}`)
+            if (this.currentState === "passed") {
                 result = true;
-            } else if (currentSuite.ctx._runnable.state === "failed") {
+            } else if (this.currentState === "failed") {
                 result = false;
             } else {
-                // Didn't get either passed or failed
-                log.error('VitaqService: nextActionSelector: Unexpected value for state: ',
-                    currentSuite.ctx._runnable.state)
-                result = false
+                log.error("ERROR: Unexpected value for currentState")
             }
         }
 
@@ -153,49 +161,48 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
             if (typeof currentSuite === "undefined") {
                 log.debug("VitaqService: nextActionSelector: currentSuite is undefined");
-                nextAction = await this._api.getNextTestActionCaller(undefined, result);
+                this.nextAction = await this._api.getNextTestActionCaller(undefined, result);
+                this.currentState = "passed"
             } else {
                 log.debug("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
-                nextAction = await this._api.getNextTestActionCaller(currentSuite.title, result);
+                this.nextAction = await this._api.getNextTestActionCaller(currentSuite.title, result);
+                this.currentState = "passed"
             }
 
             // Handle the special actions
             const specialActions = ['--*setUp*--', '--*tearDown*--','--*EndSeed*--', '--*EndAll*--']
-            while (specialActions.indexOf(nextAction) > -1) {
-                if (nextAction === '--*setUp*--') {
+            while (specialActions.indexOf(this.nextAction) > -1) {
+                if (this.nextAction === '--*setUp*--') {
                     // Show which seed we are about to run
                     let seed = await this.getSeed('top')
-                    log.info('='.repeat(80))
-                    log.info(`Running seed: ${seed}`)
-                    log.info('='.repeat(80))
-                    nextAction = await this._api.getNextTestActionCaller('--*setUp*--', true);
-                } else if (nextAction === '--*tearDown*--') {
+                    log.info(`COMMAND ======   Running seed: ${seed}   ======`)
+                    this.nextAction = await this._api.getNextTestActionCaller('--*setUp*--', true);
+                    this.currentState = "passed"
+                } else if (this.nextAction === '--*tearDown*--') {
                     // Do nothing on tearDown - just go to the next action
-                    nextAction = await this._api.getNextTestActionCaller('--*tearDown*--', true);
-                } else if (nextAction === '--*EndSeed*--') {
+                    this.nextAction = await this._api.getNextTestActionCaller('--*tearDown*--', true);
+                    this.currentState = "passed"
+                } else if (this.nextAction === '--*EndSeed*--') {
                     if (Object.prototype.hasOwnProperty.call(this._options, "reloadSession")
                         && this._options.reloadSession) {
                         // @ts-ignore
                         await this._browser.reloadSession()
                     }
                     // Now get the next action
-                    nextAction = await this._api.getNextTestActionCaller('--*EndSeed*--', true);
-                } else if (nextAction === '--*EndAll*--') {
+                    this.nextAction = await this._api.getNextTestActionCaller('--*EndSeed*--', true);
+                    this.currentState = "passed"
+                } else if (this.nextAction === '--*EndAll*--') {
                     // Just return null to indicate the test has finished
                     return null
                 }
             }
 
             // Now handle the real nextAction
-            log.info("-".repeat(80));
-            log.info("Running next action: ", nextAction);
-            log.info("-".repeat(80));
+            log.info(`COMMAND: ------   Running next action: ${this.nextAction}   ------`);
             // Need to return the suite object
-            this._activeSuites = this.getSuitesFromFile(nextAction);
+            this._activeSuites = this.getSuitesFromFile(this.nextAction);
             // @ts-ignore
             return this.getSuite(suite, this._activeSuites.shift());
-        } else {
-            log.debug("nextActionSelector: suite is not root: suite: ", suite)
         }
     }
 

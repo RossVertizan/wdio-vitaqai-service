@@ -35,6 +35,7 @@ When it has built successfully it can then be committed
 Update the version number
 ```node
 npm version <version number>
+git push
 ```
 
 #### Publish
