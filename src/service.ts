@@ -47,6 +47,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._capabilities = capabilities;
             this._config = config;
 
+            // Convert command line booleans
+            this.convertBooleanCommandLineArgs(this._config,
+                ['useSync', 'reloadSession', 'useCoverage', 'hitOnError', 'useAI', 'aiRandomSeed'])
+
             // Compile the options
             // - preferentially from the command line in config
             // - then from the serviceOptions (specified in wdio.conf.js file)
@@ -247,9 +251,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * Get Vitaq to generate a new value for the variable and then get it
      * @param variableName - name of the variable
      */
-    requestData(variableName: string) {
+    async requestData(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.requestData(variableName, this._browser, this._api)
+        let result = await this.vitaqFunctions.requestData(variableName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
@@ -277,9 +281,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * Read data from a variable in Vitaq
      * @param variableName - name of the variable to read
      */
-    readDataFromVitaq(variableName: string) {
+    async readDataFromVitaq(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
+        let result = await this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
@@ -320,9 +324,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     }
 
     // readDataFromVitaq
-    read(variableName: string) {
+    async read(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
+        let result = await this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
@@ -352,65 +356,65 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api)
     }
 
-    displayNextActions(actionName: string) {
+    async displayNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    getCallCount(actionName: string) {
+    async getCallCount(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    getCallLimit(actionName: string) {
+    async getCallLimit(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    getEnabled(actionName: string) {
+    async getEnabled(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    getPrevious(actionName: string, steps: number = 1) {
+    async getPrevious(actionName: string, steps: number = 1) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
+        let result = await this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    getId(actionName: string) {
+    async getId(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getId(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.getId(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    nextActions(actionName: string) {
+    async nextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    numberActiveNextActions(actionName: string) {
+    async numberActiveNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    numberNextActions(actionName: string) {
+    async numberNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
+        let result = await this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
@@ -466,7 +470,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     allowOnlyRange(variableName: string, low: number, high: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api)
+        this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api)
     }
 
     allowOnlyValue(variableName: string, value: number) {
@@ -519,23 +523,23 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         this.vitaqFunctions.gen(variableName, this._browser, this._api)
     }
 
-    getDoNotRepeat(variableName: string) {
+    async getDoNotRepeat(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
+        let result = await this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    getSeed(variableName: string) {
+    async getSeed(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
+        let result = await this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
 
-    getValue(variableName: string) {
+    async getValue(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = this.vitaqFunctions.getValue(variableName, this._browser, this._api)
+        let result = await this.vitaqFunctions.getValue(variableName, this._browser, this._api)
         log.info(`  -> ${result}`)
         return result
     }
@@ -682,6 +686,45 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             argString += argumentsObject[index]
         }
         return argString
+    }
+
+    /**
+     * convertBooleanCommandLineArgs - takes a dictionary like object and converts
+     * the provided boolean keys to true or false
+     * @param object - the dictionary (i.e. key/value) like object
+     * @param booleanKeys - the keys with Boolean values
+     */
+    convertBooleanCommandLineArgs(object: {[key: string]:any}, booleanKeys: string[]) {
+        let key: string;
+        for (let index = 0; index < booleanKeys.length; index += 1) {
+            key = booleanKeys[index]
+            if (Object.prototype.hasOwnProperty.call(object, key)) {
+                object[key] = this.isTrue(object[key])
+            }
+        }
+
+    }
+
+    /**
+     * isTrue - take any string that looks as though the intention was "true"
+     * and make it into boolean true
+     * @param value
+     */
+    isTrue(value: string | undefined){
+        if (typeof(value) === 'string'){
+            value = value.trim().toLowerCase();
+        } else if (typeof(value) === 'undefined'){
+            return value
+        }
+        switch(value){
+            case "true":
+            case "1":
+            case "on":
+            case "yes":
+                return true;
+            default:
+                return false;
+        }
     }
 }
 
