@@ -18,7 +18,7 @@ import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 
 // Default options
 import { VitaqServiceOptions, MochaSuite } from './types'
-import { DEFAULT_OPTIONS } from './constants'
+const { DEFAULT_OPTIONS } = require("./defaults")
 
 module.exports = class VitaqService implements Services.ServiceInstance {
     private _options: VitaqServiceOptions
@@ -47,19 +47,11 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._capabilities = capabilities;
             this._config = config;
 
-            // Get the sequenceName
+            // Compile the options
             // - preferentially from the command line in config
-            // - then from the options (specified in wdio.conf.js file)
-            if (Object.prototype.hasOwnProperty.call(config, "sequence")) {
-                // @ts-ignore
-                this._sequenceName = config.sequence
-            } else if (Object.prototype.hasOwnProperty.call(serviceOptions, "sequence")) {
-                // @ts-ignore
-                this._sequenceName = serviceOptions.sequence
-            } else {
-                this._sequenceName = undefined
-            }
-            this._options = {...DEFAULT_OPTIONS, ...serviceOptions, sequence: this._sequenceName};
+            // - then from the serviceOptions (specified in wdio.conf.js file)
+            // - then from the defaults
+            this._options = {...DEFAULT_OPTIONS, ...serviceOptions, ...this._config};
 
             // Import either the Sync or Async versions of the functions
             if (this._options.useSync) {
@@ -87,10 +79,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     async nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
         let result: boolean = true;
         let returnSuite: MochaSuite;
-        if (typeof this._options.verbosityLevel !== 'undefined'
-            && this._options.verbosityLevel > 50) {
-            log.debug("VitaqService: nextActionSelector: suite: ", suite)
-        }
 
         // Create the suite map if it has not been created
         if (Object.keys(this._suiteMap).length < 1) {
@@ -114,36 +102,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             return this.getSuite(suite, this._activeSuites.shift());
         }
 
-
-        // Keep for now - session start moved to beforeSesssion
-        // // Check to see if the VitaqAI_API has established a Session with the Python job
-        // if (this._api.sessionEstablished === "success") {
-        //     // Do nothing and drop through to the next part of the code
-        // } else if (this._api.sessionEstablished === "not_tried") {
-        //     try {
-        //         await this.waitForSession();
-        //     } catch (error) {
-        //         console.error("Error: ", error)
-        //         return null
-        //     }
-        // } else if (this._api.sessionEstablished === "failed") {
-        //     console.error("Error: Failed to establish session with Vitaq in the cloud")
-        //     console.info("Info: Closing test because of error above")
-        //     return null
-        // } else if (this._api.sessionEstablished === "trying") {
-        //     console.error("Error: Still trying to establish session with Vitaq in the cloud")
-        //     console.info("Info: Closing test because of error above")
-        //     return null
-        // }
-
         // Get the result (pass/fail) off the _runnable
         if (typeof currentSuite !== "undefined") {
-            // log.debug("VitaqService: nextActionSelector: _runnable: ", currentSuite.ctx._runnable)
-            if (typeof this._options.verbosityLevel !== 'undefined'
-                && this._options.verbosityLevel > 50) {
-                log.debug("nextActionSelector: currentSuite: ", currentSuite)
-                log.debug("nextActionSelector: state: ", currentSuite.ctx._runnable.state);
-            }
             // Map the passed/failed result to true and false
             log.info(`>>>>>   Test action ${this.nextAction} ${this.currentState}`)
             if (this.currentState === "passed") {
@@ -174,7 +134,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             while (specialActions.indexOf(this.nextAction) > -1) {
                 if (this.nextAction === '--*setUp*--') {
                     // Show which seed we are about to run
-                    let seed = await this.getSeed('top')
+                    let seed = await this.vitaqFunctions.getSeed('top', this._browser, this._api)
                     log.info(`====================   Running seed: ${seed}   ====================`)
                     this.nextAction = await this._api.getNextTestActionCaller('--*setUp*--', true);
                     this.currentState = "passed"
@@ -198,7 +158,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }
 
             // Now handle the real nextAction
-            log.info(`--------------------   Running action: ${this.nextAction}   --------------------`);
+            log.info(`--------------------   Running test action: ${this.nextAction}   --------------------`);
             // Need to return the suite object
             this._activeSuites = this.getSuitesFromFile(this.nextAction);
             // @ts-ignore
@@ -277,7 +237,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     sleep(ms: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.sleep(ms, this._browser)
+        this.vitaqFunctions.sleep(ms, this._browser)
     }
 
     // -------------------------------------------------------------------------
@@ -289,7 +249,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     requestData(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.requestData(variableName, this._browser, this._api)
+        let result = this.vitaqFunctions.requestData(variableName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     /**
@@ -298,7 +260,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     recordCoverage(variablesArray: []) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.recordCoverage(variablesArray, this._browser, this._api)
+        this.vitaqFunctions.recordCoverage(variablesArray, this._browser, this._api)
     }
 
     /**
@@ -308,7 +270,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     sendDataToVitaq(variableName: string, value: any) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api)
+        this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api)
     }
 
     /**
@@ -317,7 +279,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     readDataFromVitaq(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
+        let result = this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     /**
@@ -330,7 +294,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     createVitaqLogEntry(message: string | {}, format: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api)
+        this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api)
     }
 
     // -------------------------------------------------------------------------
@@ -341,30 +305,32 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     // recordCoverage
     record(variablesArray: []) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.recordCoverage(variablesArray)
+        this.vitaqFunctions.recordCoverage(variablesArray, this._browser, this._api)
     }
 
     // sendDataToVitaq
     writeDataToVitaq(variableName: string, value: any) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.sendDataToVitaq(variableName, value)
+        this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api)
     }
 
     write(variableName: string, value: any) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.sendDataToVitaq(variableName, value)
+        this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api)
     }
 
     // readDataFromVitaq
     read(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.readDataFromVitaq(variableName)
+        let result = this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     // createVitaqLogEntry
     log(message: string | {}, format: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.createVitaqLogEntry(message, format)
+        this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api)
     }
 
 // =============================================================================
@@ -373,97 +339,115 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     abort(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.abort(actionName, this._browser, this._api)
+        this.vitaqFunctions.abort(actionName, this._browser, this._api)
     }
 
     addNext(actionName: string, nextAction: string, weight: number = 1) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api)
+        this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api)
     }
 
     clearCallCount(actionName: string, tree: boolean) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api)
+        this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api)
     }
 
     displayNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     getCallCount(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     getCallLimit(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     getEnabled(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     getPrevious(actionName: string, steps: number = 1) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
+        let result = this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     getId(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getId(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.getId(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     nextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     numberActiveNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     numberNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
+        let result = this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     removeAllNext(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.removeAllNext(actionName, this._browser, this._api)
+        this.vitaqFunctions.removeAllNext(actionName, this._browser, this._api)
     }
 
     removeFromCallers(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.removeFromCallers(actionName, this._browser, this._api)
+        this.vitaqFunctions.removeFromCallers(actionName, this._browser, this._api)
     }
 
     removeNext(actionName: string, nextAction: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.removeNext(actionName, nextAction, this._browser, this._api)
+        this.vitaqFunctions.removeNext(actionName, nextAction, this._browser, this._api)
     }
 
     setCallLimit(actionName: string, limit: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.setCallLimit(actionName, limit, this._browser, this._api)
+        this.vitaqFunctions.setCallLimit(actionName, limit, this._browser, this._api)
     }
 
     setEnabled(actionName: string, enabled: boolean) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.setEnabled(actionName, enabled, this._browser, this._api)
+        this.vitaqFunctions.setEnabled(actionName, enabled, this._browser, this._api)
     }
 
     setExhaustive(actionName: string, exhaustive: boolean) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api)
+        this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api)
     }
 
     setMaxActionDepth(actionName: string, depth: number = 1000) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api)
+        this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api)
     }
 
 // =============================================================================
@@ -472,97 +456,103 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     allowList(variableName: string, list: []) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowList(variableName, list, this._browser, this._api)
+        this.vitaqFunctions.allowList(variableName, list, this._browser, this._api)
     }
 
     allowOnlyList(variableName: string, list: []) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowOnlyList(variableName, list, this._browser, this._api)
+        this.vitaqFunctions.allowOnlyList(variableName, list, this._browser, this._api)
     }
 
     allowOnlyRange(variableName: string, low: number, high: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api)
+        let result = this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api)
     }
 
     allowOnlyValue(variableName: string, value: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowOnlyValue(variableName, value, this._browser, this._api)
+        this.vitaqFunctions.allowOnlyValue(variableName, value, this._browser, this._api)
     }
 
     allowOnlyValues(variableName: string, valueList: []) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowOnlyValues(variableName, valueList, this._browser, this._api)
+        this.vitaqFunctions.allowOnlyValues(variableName, valueList, this._browser, this._api)
     }
 
     allowRange(variableName: string, low: number, high: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowRange(variableName, low, high, this._browser, this._api)
+        this.vitaqFunctions.allowRange(variableName, low, high, this._browser, this._api)
     }
 
     allowValue(variableName: string, value: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowValue(variableName, value, this._browser, this._api)
+        this.vitaqFunctions.allowValue(variableName, value, this._browser, this._api)
     }
 
     allowValues(variableName: string, valueList: []) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.allowValues(variableName, valueList, this._browser, this._api)
+        this.vitaqFunctions.allowValues(variableName, valueList, this._browser, this._api)
     }
 
     disallowRange(variableName: string, low: number, high: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.disallowRange(variableName, low, high, this._browser, this._api)
+        this.vitaqFunctions.disallowRange(variableName, low, high, this._browser, this._api)
     }
 
     disallowValue(variableName: string, value: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.disallowValue(variableName, value, this._browser, this._api)
+        this.vitaqFunctions.disallowValue(variableName, value, this._browser, this._api)
     }
 
     disallowValues(variableName: string, valueList: []) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.disallowValues(variableName, valueList, this._browser, this._api)
+        this.vitaqFunctions.disallowValues(variableName, valueList, this._browser, this._api)
     }
 
     doNotRepeat(variableName: string, value: boolean) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.doNotRepeat(variableName, value, this._browser, this._api)
+        this.vitaqFunctions.doNotRepeat(variableName, value, this._browser, this._api)
     }
 
     gen(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.gen(variableName, this._browser, this._api)
+        this.vitaqFunctions.gen(variableName, this._browser, this._api)
     }
 
     getDoNotRepeat(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
+        let result = this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     getSeed(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
+        let result = this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     getValue(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.getValue(variableName, this._browser, this._api)
+        let result = this.vitaqFunctions.getValue(variableName, this._browser, this._api)
+        log.info(`  -> ${result}`)
+        return result
     }
 
     resetRanges(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.resetRanges(variableName, this._browser, this._api)
+        this.vitaqFunctions.resetRanges(variableName, this._browser, this._api)
     }
 
     setSeed(variableName: string, seed: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.setSeed(variableName, seed, this._browser, this._api)
+        this.vitaqFunctions.setSeed(variableName, seed, this._browser, this._api)
     }
 
     setValue(variableName: string, value: number) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        return this.vitaqFunctions.setValue(variableName, value, this._browser, this._api)
+        this.vitaqFunctions.setValue(variableName, value, this._browser, this._api)
     }
 
     // =========================================================================

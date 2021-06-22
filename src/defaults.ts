@@ -4,7 +4,14 @@
 import type { VitaqServiceOptions } from './types'
 
 export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
-    url: ""
+    url: "https://vitaq.online",
+    userName: undefined,
+    userAPIKey: undefined,
+    testActivityName: undefined,
+    projectName: undefined,
+    useSync: false,
+    reloadSession: false,
+    sequence: undefined,
 }
 
 // =============================================================================
