@@ -21,11 +21,11 @@ export function sleep(ms: number,
                       browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
     let args: any [] = Array.from(arguments);
     args.splice(-1, 1);
-    log.debug("VitaqService: sleep: Sleeping for %s seconds", ms/1000);
+    log.debug("sleep: Sleeping for %s seconds", ms/1000);
     let argumentsDescription = {"ms": "number"}
     validateArguments('sleep', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         new Promise(resolve => setTimeout(resolve, ms))
     );
 }
@@ -48,9 +48,11 @@ export function requestData(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     validateArguments('requestData', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.requestDataCaller(variableName)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -68,7 +70,7 @@ export function recordCoverage(variablesArray: [],
     let argumentsDescription = {"variablesArray": "array"}
     validateArguments('recordCoverage', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.recordCoverageCaller(variablesArray)
     )
 }
@@ -89,7 +91,7 @@ export function sendDataToVitaq(variableName: string, value: any,
     let argumentsDescription = {"variableName": "string", "value": "any"}
     validateArguments('sendDataToVitaq', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.sendDataToVitaqCaller(variableName, value)
     )
 }
@@ -109,9 +111,11 @@ export function readDataFromVitaq(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     validateArguments('readDataFromVitaq', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.readDataFromVitaqCaller(variableName)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -133,7 +137,7 @@ export function createVitaqLogEntry(message: string, format: string,
     let argumentsDescription = {"message": "string", "format?": "string"}
     validateArguments('createVitaqLogEntry', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.createVitaqLogEntryCaller(message, format)
     )
 }
@@ -154,7 +158,7 @@ export function abort(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('abort', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('abort', args)
     )
 }
@@ -176,7 +180,7 @@ export function addNext(actionName: string, nextAction: string, weight: number =
     let argumentsDescription = {"actionName": "string", "nextAction": "string", "weight": "number"}
     args = validateArguments('addNext', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('add_next', args)
     )
 }
@@ -197,7 +201,7 @@ export function clearCallCount(actionName: string, tree: boolean,
     let argumentsDescription = {"actionName": "string", "tree?": "boolean"}
     args = validateArguments('clearCallCount', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('clear_call_count', args)
     )
 }
@@ -217,9 +221,11 @@ export function displayNextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('displayNextActions', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('display_next_sequences', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -237,9 +243,11 @@ export function getCallCount(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallCount', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('get_call_count', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -257,9 +265,11 @@ export function getCallLimit(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallLimit', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('get_call_limit', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -277,9 +287,11 @@ export function getEnabled(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getEnabled', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('get_enabled', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -297,9 +309,11 @@ export function getId(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getId', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('get_id', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -322,7 +336,9 @@ export function getPrevious(actionName: string, steps: number,
     result = browser.call(() =>
         api.runCommandCaller('get_previous', args)
     )
-    return JSON.parse(result).name
+    result = JSON.parse(result).name
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -340,9 +356,11 @@ export function nextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('nextActions', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('next_sequences', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -360,9 +378,11 @@ export function numberActiveNextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberActiveNextActions', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('number_active_next_sequences', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -380,9 +400,11 @@ export function numberNextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberNextActions', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('number_next_sequences', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -400,7 +422,7 @@ export function removeAllNext(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('removeAllNext', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('remove_all_next', args)
     )
 }
@@ -420,7 +442,7 @@ export function removeFromCallers(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('removeFromCallers', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('remove_from_callers', args)
     )
 }
@@ -441,7 +463,7 @@ export function removeNext(actionName: string, nextAction: string,
     let argumentsDescription = {"actionName": "string", "nextAction": "string"}
     args = validateArguments('removeNext', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('remove_next', args)
     )
 }
@@ -462,7 +484,7 @@ export function setCallLimit(actionName: string, limit: number,
     let argumentsDescription = {"actionName": "string", "limit": "number"}
     args = validateArguments('setCallLimit', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('set_call_limit', args)
     )
 }
@@ -483,7 +505,7 @@ export function setEnabled(actionName: string, enabled: boolean,
     let argumentsDescription = {"actionName": "string", "enabled": "boolean"}
     args = validateArguments('setEnabled', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('set_enabled', args)
     )
 }
@@ -504,7 +526,7 @@ export function setExhaustive(actionName: string, exhaustive: boolean,
     let argumentsDescription = {"actionName": "string", "exhaustive": "boolean"}
     args = validateArguments('setExhaustive', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('set_exhaustive', args)
     )
 }
@@ -525,7 +547,7 @@ export function setMaxActionDepth(actionName: string, depth: number = 1000,
     let argumentsDescription = {"actionName": "string", "depth": "number"}
     args = validateArguments('setMaxActionDepth', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('set_max_sequence_depth', args)
     )
 }
@@ -550,7 +572,7 @@ export function allowList(variableName: string, list: []|{},
     let argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowList', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_list', args)
     )
 }
@@ -571,7 +593,7 @@ export function allowOnlyList(variableName: string, list: []|{},
     let argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowOnlyList', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_only_list', args)
     )
 }
@@ -593,7 +615,7 @@ export function allowOnlyRange(variableName: string, low: number, high: number,
     let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
     args = validateArguments('allowOnlyRange', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_only_range', args)
     )
 }
@@ -614,7 +636,7 @@ export function allowOnlyValue(variableName: string, value: number,
     let argumentsDescription = {"variableName": "string", "value": "number"}
     args = validateArguments('allowOnlyValue', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_only_value', args)
     )
 }
@@ -639,7 +661,7 @@ export function allowOnlyValues(variableName: string, valueList: [],
         vtqArguments.push(valueList[index])
     }
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_only_values', vtqArguments)
     )
 }
@@ -661,7 +683,7 @@ export function allowRange(variableName: string, low: number, high: number,
     let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
     args = validateArguments('allowRange', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_range', args)
     )
 }
@@ -682,7 +704,7 @@ export function allowValue(variableName: string, value: number,
     let argumentsDescription = {"variableName": "string", "value": "number"}
     args = validateArguments('allowValue', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_value', args)
     )
 }
@@ -707,7 +729,7 @@ export function allowValues(variableName: string, valueList: [],
         vtqArguments.push(valueList[index])
     }
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('allow_values', vtqArguments)
     )
 }
@@ -729,7 +751,7 @@ export function disallowRange(variableName: string, low: number, high: number,
     let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
     args = validateArguments('disallowRange', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('disallow_range', args)
     )
 }
@@ -750,7 +772,7 @@ export function disallowValue(variableName: string, value: number,
     let argumentsDescription = {"variableName": "string", "value": "number"}
     args = validateArguments('disallowValue', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('disallow_value', args)
     )
 }
@@ -775,7 +797,7 @@ export function disallowValues(variableName: string, valueList: [],
         vtqArguments.push(valueList[index])
     }
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('disallow_values', vtqArguments)
     )
 }
@@ -796,7 +818,7 @@ export function doNotRepeat(variableName: string, value: boolean,
     let argumentsDescription = {"variableName": "string", "value": "boolean"}
     args = validateArguments('doNotRepeat', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('do_not_repeat', args)
     )
 }
@@ -816,7 +838,7 @@ export function gen(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('gen', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('gen', args)
     )
 }
@@ -836,9 +858,11 @@ export function getDoNotRepeat(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getDoNotRepeat', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('get_do_not_repeat', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -856,9 +880,11 @@ export function getSeed(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getSeed', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('get_seed', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -876,9 +902,11 @@ export function getValue(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getValue', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    let result = browser.call(() =>
         api.runCommandCaller('get_value', args)
     )
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -896,7 +924,7 @@ export function resetRanges(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('resetRanges', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('reset_ranges', args)
     )
 }
@@ -917,7 +945,7 @@ export function setSeed(variableName: string, seed: number,
     let argumentsDescription = {"variableName": "string", "seed": "number"}
     args = validateArguments('setSeed', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('set_seed', args)
     )
 }
@@ -938,7 +966,7 @@ export function setValue(variableName: string, value: number,
     let argumentsDescription = {"variableName": "string", "value": "number"}
     args = validateArguments('setValue', argumentsDescription, args);
     // @ts-ignore
-    return browser.call(() =>
+    browser.call(() =>
         api.runCommandCaller('set_value', args)
     )
 }

@@ -5,7 +5,7 @@ import type { Browser, MultiRemoteBrowser } from 'webdriverio';
  * @param ms
  * @param browser
  */
-export declare function sleep(ms: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>): unknown;
+export declare function sleep(ms: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>): void;
 /**
  * Get Vitaq to generate a new value for the variable and then get it
  * @param variableName - name of the variable
@@ -19,7 +19,7 @@ export declare function requestData(variableName: string, browser: Browser<'asyn
  * @param browser
  * @param api
  */
-export declare function recordCoverage(variablesArray: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function recordCoverage(variablesArray: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Send data to Vitaq and record it on the named variable
  * @param variableName - name of the variable
@@ -27,7 +27,7 @@ export declare function recordCoverage(variablesArray: [], browser: Browser<'asy
  * @param browser
  * @param api
  */
-export declare function sendDataToVitaq(variableName: string, value: any, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function sendDataToVitaq(variableName: string, value: any, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Read data from a variable in Vitaq
  * @param variableName - name of the variable to read
@@ -45,11 +45,11 @@ export declare function readDataFromVitaq(variableName: string, browser: Browser
  * @param browser
  * @param api
  */
-export declare function createVitaqLogEntry(message: string, format: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function createVitaqLogEntry(message: string, format: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Abort the action causing it to not select a next action
  */
-export declare function abort(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function abort(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Add an action that can be called after this one
  * @param actionName - name of the action
@@ -58,7 +58,7 @@ export declare function abort(actionName: string, browser: Browser<'async'> | Mu
  * @param browser
  * @param api
  */
-export declare function addNext(actionName: string, nextAction: string, weight: number | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function addNext(actionName: string, nextAction: string, weight: number | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Set the call_count back to zero
  * @param actionName - name of the action
@@ -66,7 +66,7 @@ export declare function addNext(actionName: string, nextAction: string, weight: 
  * @param browser
  * @param api
  */
-export declare function clearCallCount(actionName: string, tree: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function clearCallCount(actionName: string, tree: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Get a string listing all of the possible next actions
  * @param actionName - name of the action
@@ -109,7 +109,7 @@ export declare function getId(actionName: string, browser: Browser<'async'> | Mu
  * @param browser
  * @param api
  */
-export declare function getPrevious(actionName: string, steps: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): any;
+export declare function getPrevious(actionName: string, steps: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): string;
 /**
  * Get all of the possible next actions
  * @param actionName - name of the action
@@ -137,14 +137,14 @@ export declare function numberNextActions(actionName: string, browser: Browser<'
  * @param browser
  * @param api
  */
-export declare function removeAllNext(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function removeAllNext(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Remove this action from all callers lists
  * @param actionName - name of the action
  * @param browser
  * @param api
  */
-export declare function removeFromCallers(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function removeFromCallers(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Remove an existing next action from the list of next actions
  * @param actionName - name of the action
@@ -152,7 +152,7 @@ export declare function removeFromCallers(actionName: string, browser: Browser<'
  * @param browser
  * @param api
  */
-export declare function removeNext(actionName: string, nextAction: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function removeNext(actionName: string, nextAction: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Set the maximum number of calls for this action
  * @param actionName - name of the action
@@ -160,7 +160,7 @@ export declare function removeNext(actionName: string, nextAction: string, brows
  * @param browser
  * @param api
  */
-export declare function setCallLimit(actionName: string, limit: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function setCallLimit(actionName: string, limit: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Vitaq command to enable/disable actions
  * @param actionName - name of the action to enable/disable
@@ -168,7 +168,7 @@ export declare function setCallLimit(actionName: string, limit: number, browser:
  * @param browser
  * @param api
  */
-export declare function setEnabled(actionName: string, enabled: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function setEnabled(actionName: string, enabled: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * set or clear the exhaustive flag
  * @param actionName - name of the action
@@ -176,7 +176,7 @@ export declare function setEnabled(actionName: string, enabled: boolean, browser
  * @param browser
  * @param api
  */
-export declare function setExhaustive(actionName: string, exhaustive: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function setExhaustive(actionName: string, exhaustive: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Set the maximum allowable recursive depth
  * @param actionName - name of the action
@@ -184,7 +184,7 @@ export declare function setExhaustive(actionName: string, exhaustive: boolean, b
  * @param browser
  * @param api
  */
-export declare function setMaxActionDepth(actionName: string, depth: number | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function setMaxActionDepth(actionName: string, depth: number | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Specify a list to add to the existing list in a list variable
  * @param variableName - name of the variable
@@ -192,7 +192,7 @@ export declare function setMaxActionDepth(actionName: string, depth: number | un
  * @param browser
  * @param api
  */
-export declare function allowList(variableName: string, list: [] | {}, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowList(variableName: string, list: [] | {}, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Specify the ONLY list to select from in a list variable
  * @param variableName - name of the variable
@@ -200,7 +200,7 @@ export declare function allowList(variableName: string, list: [] | {}, browser: 
  * @param browser
  * @param api
  */
-export declare function allowOnlyList(variableName: string, list: [] | {}, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowOnlyList(variableName: string, list: [] | {}, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Allow ONLY the defined range to be the allowable range for the integer variable
  * @param variableName - name of the variable
@@ -209,7 +209,7 @@ export declare function allowOnlyList(variableName: string, list: [] | {}, brows
  * @param browser
  * @param api
  */
-export declare function allowOnlyRange(variableName: string, low: number, high: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowOnlyRange(variableName: string, low: number, high: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Allow ONLY the defined value to be the allowable value for the integer variable
  * @param variableName - name of the variable
@@ -217,7 +217,7 @@ export declare function allowOnlyRange(variableName: string, low: number, high: 
  * @param browser
  * @param api
  */
-export declare function allowOnlyValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowOnlyValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Allow ONLY the passed list of values as the allowable values for the integer variable
  * @param variableName - name of the variable
@@ -225,7 +225,7 @@ export declare function allowOnlyValue(variableName: string, value: number, brow
  * @param browser
  * @param api
  */
-export declare function allowOnlyValues(variableName: string, valueList: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowOnlyValues(variableName: string, valueList: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Add the defined range to the allowable values for the integer variable
  * @param variableName - name of the variable
@@ -234,7 +234,7 @@ export declare function allowOnlyValues(variableName: string, valueList: [], bro
  * @param browser
  * @param api
  */
-export declare function allowRange(variableName: string, low: number, high: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowRange(variableName: string, low: number, high: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Add the defined value to the allowable values for the integer variable
  * @param variableName - name of the variable
@@ -242,7 +242,7 @@ export declare function allowRange(variableName: string, low: number, high: numb
  * @param browser
  * @param api
  */
-export declare function allowValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Add the passed list of values to the allowable values for the integer variable
  * @param variableName - name of the variable
@@ -250,7 +250,7 @@ export declare function allowValue(variableName: string, value: number, browser:
  * @param browser
  * @param api
  */
-export declare function allowValues(variableName: string, valueList: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function allowValues(variableName: string, valueList: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Remove the defined range from the allowable values for the integer variable
  * @param variableName - name of the variable
@@ -259,7 +259,7 @@ export declare function allowValues(variableName: string, valueList: [], browser
  * @param browser
  * @param api
  */
-export declare function disallowRange(variableName: string, low: number, high: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function disallowRange(variableName: string, low: number, high: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Remove the defined value from the allowable values for the integer variable
  * @param variableName - name of the variable
@@ -267,7 +267,7 @@ export declare function disallowRange(variableName: string, low: number, high: n
  * @param browser
  * @param api
  */
-export declare function disallowValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function disallowValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Remove the passed list of values from the allowable values for the integer variable
  * @param variableName - name of the variable
@@ -275,7 +275,7 @@ export declare function disallowValue(variableName: string, value: number, brows
  * @param browser
  * @param api
  */
-export declare function disallowValues(variableName: string, valueList: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function disallowValues(variableName: string, valueList: [], browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Specify that values should not be repeated
  * @param variableName - name of the variable
@@ -283,14 +283,14 @@ export declare function disallowValues(variableName: string, valueList: [], brow
  * @param browser
  * @param api
  */
-export declare function doNotRepeat(variableName: string, value: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function doNotRepeat(variableName: string, value: boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * get Vitaq to generate a new value for the variable
  * @param variableName - name of the variable
  * @param browser
  * @param api
  */
-export declare function gen(variableName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function gen(variableName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Get the current status of do not repeat
  * @param variableName - name of the variable
@@ -318,7 +318,7 @@ export declare function getValue(variableName: string, browser: Browser<'async'>
  * @param browser
  * @param api
  */
-export declare function resetRanges(variableName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function resetRanges(variableName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Set the seed to use
  * @param variableName - name of the variable
@@ -326,7 +326,7 @@ export declare function resetRanges(variableName: string, browser: Browser<'asyn
  * @param browser
  * @param api
  */
-export declare function setSeed(variableName: string, seed: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function setSeed(variableName: string, seed: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 /**
  * Manually set a value for a variable
  * @param variableName - name of the variable
@@ -334,5 +334,5 @@ export declare function setSeed(variableName: string, seed: number, browser: Bro
  * @param browser
  * @param api
  */
-export declare function setValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): unknown;
+export declare function setValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): void;
 //# sourceMappingURL=functionsSync.d.ts.map

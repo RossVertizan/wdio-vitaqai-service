@@ -40,7 +40,7 @@ export interface VitaqServiceOptions {
      * Specify the seed to use
      * No default value, if not specified in WDIO environment comes from VitaqUI settings
      */
-    seed?: bigint;
+    seed?: string;
     /**
      * Specify the name of the sequence to run
      * Defaults to undefined

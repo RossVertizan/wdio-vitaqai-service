@@ -109,7 +109,7 @@ export declare function getId(actionName: string, browser: Browser<'async'> | Mu
  * @param browser
  * @param api
  */
-export declare function getPrevious(actionName: string, steps: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
+export declare function getPrevious(actionName: string, steps: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<string>;
 /**
  * Get all of the possible next actions
  * @param actionName - name of the action

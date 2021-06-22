@@ -33,6 +33,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     private _sequenceName: string | undefined
     private nextAction: string
     private currentState: string
+    private sessionReloadNeeded: boolean
 
 
     constructor(
@@ -72,6 +73,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._counter = 0;
             this.nextAction = "";
             this.currentState = "passed";
+            this.sessionReloadNeeded = false;
 
         } catch (error) {
             console.error("Error: Vitaq Service failed to initialise")
@@ -137,25 +139,37 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             const specialActions = ['--*setUp*--', '--*tearDown*--','--*EndSeed*--', '--*EndAll*--']
             while (specialActions.indexOf(this.nextAction) > -1) {
                 if (this.nextAction === '--*setUp*--') {
+                    // Do a session reload if one is needed
+                    if (this.sessionReloadNeeded) {
+                        // @ts-ignore
+                        await this._browser.reloadSession()
+                    }
                     // Show which seed we are about to run
                     let seed = await this.vitaqFunctions.getSeed('top', this._browser, this._api)
                     log.info(`====================   Running seed: ${seed}   ====================`)
                     this.nextAction = await this._api.getNextTestActionCaller('--*setUp*--', true);
                     this.currentState = "passed"
-                } else if (this.nextAction === '--*tearDown*--') {
+                }
+
+                else if (this.nextAction === '--*tearDown*--') {
                     // Do nothing on tearDown - just go to the next action
                     this.nextAction = await this._api.getNextTestActionCaller('--*tearDown*--', true);
                     this.currentState = "passed"
-                } else if (this.nextAction === '--*EndSeed*--') {
+                }
+
+                else if (this.nextAction === '--*EndSeed*--') {
                     if (Object.prototype.hasOwnProperty.call(this._options, "reloadSession")
                         && this._options.reloadSession) {
-                        // @ts-ignore
-                        await this._browser.reloadSession()
+                        // Record the need for a session reload
+                        // - avoids session reload on last seed
+                        this.sessionReloadNeeded = true
                     }
                     // Now get the next action
                     this.nextAction = await this._api.getNextTestActionCaller('--*EndSeed*--', true);
                     this.currentState = "passed"
-                } else if (this.nextAction === '--*EndAll*--') {
+                }
+
+                else if (this.nextAction === '--*EndAll*--') {
                     // Just return null to indicate the test has finished
                     return null
                 }
@@ -251,11 +265,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * Get Vitaq to generate a new value for the variable and then get it
      * @param variableName - name of the variable
      */
-    async requestData(variableName: string) {
+    requestData(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.requestData(variableName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.requestData(variableName, this._browser, this._api)
     }
 
     /**
@@ -281,11 +293,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * Read data from a variable in Vitaq
      * @param variableName - name of the variable to read
      */
-    async readDataFromVitaq(variableName: string) {
+    readDataFromVitaq(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
     }
 
     /**
@@ -324,11 +334,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     }
 
     // readDataFromVitaq
-    async read(variableName: string) {
+    read(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api)
     }
 
     // createVitaqLogEntry
@@ -356,67 +364,49 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api)
     }
 
-    async displayNextActions(actionName: string) {
+    displayNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
     }
 
-    async getCallCount(actionName: string) {
+    getCallCount(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
     }
 
-    async getCallLimit(actionName: string) {
+    getCallLimit(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
     }
 
-    async getEnabled(actionName: string) {
+    getEnabled(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
     }
 
-    async getPrevious(actionName: string, steps: number = 1) {
+    getPrevious(actionName: string, steps: number = 1) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api)
     }
 
-    async getId(actionName: string) {
+    getId(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getId(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getId(actionName, this._browser, this._api)
     }
 
-    async nextActions(actionName: string) {
+    nextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
     }
 
-    async numberActiveNextActions(actionName: string) {
+    numberActiveNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
     }
 
-    async numberNextActions(actionName: string) {
+    numberNextActions(actionName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
     }
 
     removeAllNext(actionName: string) {
@@ -523,25 +513,19 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         this.vitaqFunctions.gen(variableName, this._browser, this._api)
     }
 
-    async getDoNotRepeat(variableName: string) {
+    getDoNotRepeat(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
     }
 
-    async getSeed(variableName: string) {
+    getSeed(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
     }
 
-    async getValue(variableName: string) {
+    getValue(variableName: string) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
-        let result = await this.vitaqFunctions.getValue(variableName, this._browser, this._api)
-        log.info(`  -> ${result}`)
-        return result
+        return this.vitaqFunctions.getValue(variableName, this._browser, this._api)
     }
 
     resetRanges(variableName: string) {

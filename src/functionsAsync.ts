@@ -46,7 +46,9 @@ export async function requestData(variableName: string,
     log.debug("VitaqService: requestData: variableName ", variableName);
     let argumentsDescription = {"variableName": "string"}
     validateArguments('requestData', argumentsDescription, args);
-    return await api.requestDataCaller(variableName)
+    let result = await api.requestDataCaller(variableName)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -98,7 +100,9 @@ export async function readDataFromVitaq(variableName: string,
     log.debug("VitaqService: readDataFromVitaq: variableName ", variableName);
     let argumentsDescription = {"variableName": "string"}
     validateArguments('readDataFromVitaq', argumentsDescription, args);
-    return await api.readDataFromVitaqCaller(variableName)
+    let result = await api.readDataFromVitaqCaller(variableName)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -195,7 +199,9 @@ export async function displayNextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = args = validateArguments('displayNextActions', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('display_next_sequences', args)
+    let result = await api.runCommandCaller('display_next_sequences', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -213,7 +219,9 @@ export async function getCallCount(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallCount', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_call_count', args)
+    let result = await api.runCommandCaller('get_call_count', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -231,7 +239,9 @@ export async function getCallLimit(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallLimit', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_call_limit', args)
+    let result = await api.runCommandCaller('get_call_limit', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -249,7 +259,9 @@ export async function getEnabled(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getEnabled', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_enabled', args)
+    let result = await api.runCommandCaller('get_enabled', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -267,7 +279,9 @@ export async function getId(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getId', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_id', args)
+    let result = await api.runCommandCaller('get_id', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -288,7 +302,9 @@ export async function getPrevious(actionName: string, steps: number,
     args = validateArguments('getPrevious', argumentsDescription, args);
     // @ts-ignore
     result = await api.runCommandCaller('get_previous', args)
-    return JSON.parse(result).name
+    result = JSON.parse(result).name
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -306,7 +322,9 @@ export async function nextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('nextActions', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('next_sequences', args)
+    let result = await api.runCommandCaller('next_sequences', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -324,7 +342,9 @@ export async function numberActiveNextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberActiveNextActions', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('number_active_next_sequences', args)
+    let result = await api.runCommandCaller('number_active_next_sequences', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -342,7 +362,9 @@ export async function numberNextActions(actionName: string,
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberNextActions', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('number_next_sequences', args)
+    let result = await api.runCommandCaller('number_next_sequences', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -756,7 +778,9 @@ export async function getDoNotRepeat(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getDoNotRepeat', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_do_not_repeat', args)
+    let result = await api.runCommandCaller('get_do_not_repeat', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -774,7 +798,9 @@ export async function getSeed(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getSeed', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_seed', args)
+    let result = await api.runCommandCaller('get_seed', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
@@ -792,7 +818,9 @@ export async function getValue(variableName: string,
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getValue', argumentsDescription, args);
     // @ts-ignore
-    return await api.runCommandCaller('get_value', args)
+    let result = await api.runCommandCaller('get_value', args)
+    log.info(`   -> ${result}`)
+    return result
 }
 
 /**
