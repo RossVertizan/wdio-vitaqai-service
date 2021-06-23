@@ -209,7 +209,7 @@ export declare function allowOnlyList(variableName: string, list: [] | {}, brows
  * @param browser
  * @param api
  */
-export declare function allowOnlyRange(variableName: string, low: number, high: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
+export declare function allowOnlyRange(variableName: string, low: number | boolean, high: number | boolean, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
 /**
  * Allow ONLY the defined value to be the allowable value for the integer variable
  * @param variableName - name of the variable

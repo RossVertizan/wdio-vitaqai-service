@@ -612,7 +612,7 @@ export function allowOnlyRange(variableName: string, low: number, high: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
+    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowOnlyRange', argumentsDescription, args);
     // @ts-ignore
     browser.call(() =>
@@ -633,7 +633,7 @@ export function allowOnlyValue(variableName: string, value: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "number"}
+    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowOnlyValue', argumentsDescription, args);
     // @ts-ignore
     browser.call(() =>
@@ -680,7 +680,7 @@ export function allowRange(variableName: string, low: number, high: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
+    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowRange', argumentsDescription, args);
     // @ts-ignore
     browser.call(() =>
@@ -701,7 +701,7 @@ export function allowValue(variableName: string, value: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "number"}
+    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowValue', argumentsDescription, args);
     // @ts-ignore
     browser.call(() =>
@@ -748,7 +748,7 @@ export function disallowRange(variableName: string, low: number, high: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: disallowRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
+    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('disallowRange', argumentsDescription, args);
     // @ts-ignore
     browser.call(() =>
@@ -769,7 +769,7 @@ export function disallowValue(variableName: string, value: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: disallowValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "number"}
+    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('disallowValue', argumentsDescription, args);
     // @ts-ignore
     browser.call(() =>

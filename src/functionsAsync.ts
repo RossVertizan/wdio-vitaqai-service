@@ -548,13 +548,13 @@ export async function allowOnlyList(variableName: string, list: []|{},
  * @param browser
  * @param api
  */
-export async function allowOnlyRange(variableName: string, low: number, high: number,
+export async function allowOnlyRange(variableName: string, low: number | boolean, high: number | boolean,
                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                                      api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
+    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowOnlyRange', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_only_range', args)
@@ -573,7 +573,7 @@ export async function allowOnlyValue(variableName: string, value: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowOnlyValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "number"}
+    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowOnlyValue', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_only_value', args)
@@ -616,7 +616,7 @@ export async function allowRange(variableName: string, low: number, high: number
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
+    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowRange', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_range', args)
@@ -635,7 +635,7 @@ export async function allowValue(variableName: string, value: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: allowValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "number"}
+    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowValue', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_value', args)
@@ -678,7 +678,7 @@ export async function disallowRange(variableName: string, low: number, high: num
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: disallowRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "number", "high": "number"}
+    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('disallowRange', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('disallow_range', args)
@@ -697,7 +697,7 @@ export async function disallowValue(variableName: string, value: number,
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: disallowValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "number"}
+    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('disallowValue', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('disallow_value', args)

@@ -90,7 +90,11 @@ export function checkArgumentTypes(functionName: string,
         } else if (descriptionType === "array") {
             // array is not a standard typeof type, so check it with Array.isArray
             if (!Array.isArray(passedValue)) {
-                throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is expected to be of type ${descriptionType}`)
+                throw new VitaqServiceError(`Argument ${index + 1} of ${functionName} is expected to be of type ${descriptionType}`)
+            }
+        } else if (descriptionType === "numberOrBool") {
+            if (typeof passedValue !== "number" && typeof passedValue !== "boolean") {
+                throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is expected to be of type number or boolean`)
             }
         } else if (typeof passedValue !== descriptionType){
             throw new VitaqServiceError(`Argument ${index+1} of ${functionName} is expected to be of type ${descriptionType}`)
