@@ -334,5 +334,5 @@ export declare function setSeed(variableName: string, seed: number, browser: Bro
  * @param browser
  * @param api
  */
-export declare function setValue(variableName: string, value: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
+export declare function setValue(variableName: string, value: any, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
 //# sourceMappingURL=functionsAsync.d.ts.map

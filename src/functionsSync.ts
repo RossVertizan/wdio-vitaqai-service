@@ -957,13 +957,13 @@ export function setSeed(variableName: string, seed: number,
  * @param browser
  * @param api
  */
-export function setValue(variableName: string, value: number,
+export function setValue(variableName: string, value: any,
                          browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
                          api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('VitaqService: setValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "number"}
+    let argumentsDescription = {"variableName": "string", "value": "any"}
     args = validateArguments('setValue', argumentsDescription, args);
     // @ts-ignore
     browser.call(() =>

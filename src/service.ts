@@ -538,7 +538,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         return this.vitaqFunctions.setSeed(variableName, seed, this._browser, this._api)
     }
 
-    setValue(variableName: string, value: number) {
+    setValue(variableName: string, value: any) {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
         return this.vitaqFunctions.setValue(variableName, value, this._browser, this._api)
     }
