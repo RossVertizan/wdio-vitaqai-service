@@ -11,6 +11,8 @@ const path = require("path");
 // Packages
 // @ts-ignore
 import { VitaqAiApi } from 'vitaqai_api'
+import { SevereServiceError } from 'webdriverio'
+
 
 // Type import
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'
@@ -76,8 +78,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this.sessionReloadNeeded = false;
 
         } catch (error) {
-            console.error("Error: Vitaq Service failed to initialise")
-            console.error(error)
+            log.error("Error: Vitaq Service failed to initialise")
+            log.error(error)
             throw new Error("Vitaq Service failed to initialise");
         }
     }
@@ -198,9 +200,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 return subSuite;
             }
         }
-        console.error("Error: Was unable to find a test action script for: ", suiteName)
-        console.warn(`Make sure you have a test file with ${suiteName} as the text in the describe block`)
-        console.warn(`This will cause the test to end`)
+        log.error("Was unable to find a test action script for: ", suiteName)
+        log.info(`Make sure you have a test file with ${suiteName} as the text in the describe block`)
+        log.info(`This will cause the test to end`)
         return null;
     }
 
@@ -214,9 +216,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         if (Object.prototype.hasOwnProperty.call(this._suiteMap, fileName)) {
             return JSON.parse(JSON.stringify(this._suiteMap[fileName]))
         }
-        console.error("Error: Was unable to find a file for test action: ", fileName);
-        console.warn(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
-        console.warn(`This will cause the test to end`);
+        log.error("Was unable to find a file for test action: ", fileName);
+        log.info(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
+        log.info(`This will cause the test to end`);
         return null;
     }
 
@@ -556,7 +558,17 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         try {
             await this.waitForSession();
         } catch (error) {
-            console.error("Error: ", error)
+            if (error === "script_failed") {
+                log.error("Failed to create test script - there may be additional output above")
+                throw new SevereServiceError('Failed to create test script - there may be additional output above')
+            } else if (error === "failed") {
+                log.error("Failed to connect to Vitaq runner service - this may be a permissions problem")
+                throw new SevereServiceError('Failed to connect to Vitaq runner service - this may be a permissions problem')
+            } else if (error === "timeout") {
+                log.error("Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem")
+                throw new SevereServiceError('Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem')
+            }
+
         }
     }
 
@@ -625,7 +637,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
                 // Increment the timeoutCounter for a crude timeout
                 timeoutCounter += delay;
-                // console.log('VitaqAiApi: waitForNextAction: this.nextTestAction: ', this.nextTestAction)
+                // log.debug('VitaqAiApi: waitForNextAction: this.nextTestAction: ', this.nextTestAction)
 
                 if (this._api.sessionEstablished === "not_tried") {
                     await this._api.startPython()
@@ -636,9 +648,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                     clearInterval(intervalId)
                     reject(this._api.sessionEstablished)
                 } else if (timeoutCounter > timeout) {
-                    console.error('service: waitForSession: Did not establish session in timeout period')
+                    log.error('Did not establish session in timeout period')
                     clearInterval(intervalId)
-                    reject("Timed Out")
+                    reject("timeout")
                 }
             }, delay)
         });
