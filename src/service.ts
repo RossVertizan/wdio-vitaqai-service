@@ -36,7 +36,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     private nextAction: string
     private currentState: string
     private sessionReloadNeeded: boolean
-
+    private errorMessage: string
 
     constructor(
         serviceOptions: VitaqServiceOptions,
@@ -76,6 +76,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this.nextAction = "";
             this.currentState = "passed";
             this.sessionReloadNeeded = false;
+            this.errorMessage = "";
 
         } catch (error) {
             log.error("Error: Vitaq Service failed to initialise")
@@ -559,24 +560,31 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             await this.waitForSession();
         } catch (error) {
             if (error === "script_failed") {
-                log.error("Failed to create test script - there may be additional output above")
-                throw new SevereServiceError('Failed to create test script - there may be additional output above')
+                this.errorMessage = "Failed to create test script"
             } else if (error === "failed") {
-                log.error("Failed to connect to Vitaq runner service - this may be a permissions problem")
-                throw new SevereServiceError('Failed to connect to Vitaq runner service - this may be a permissions problem')
+                this.errorMessage = "Failed to connect to Vitaq runner service - this may be a permissions problem"
             } else if (error === "timeout") {
-                log.error("Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem")
-                throw new SevereServiceError('Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem')
+                this.errorMessage = "Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem"
             }
-
+            log.error(this.errorMessage)
         }
     }
 
     // https://github.com/webdriverio/webdriverio/blob/master/examples/wdio.conf.js#L183-L326
     // before: function (capabilities, specs, browser) {
-    before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
+    async before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
         this._browser = browser
         log.debug("Running the vitaq-service before method")
+        if (this.errorMessage !== "") {
+            log.error("An error with the following message has already been detected")
+            log.error(this.errorMessage)
+            log.error("Please review the previous output for more details")
+            await this._browser.deleteSession()
+            // @ts-ignore
+            delete this._browser.sessionId;
+            process.exit(1)
+        }
+
     }
 
     // beforeSuite(suite: Frameworks.Suite) {
@@ -644,6 +652,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 } else if (this._api.sessionEstablished === "success") {
                     clearInterval(intervalId)
                     resolve(this._api.sessionEstablished)
+                } else if (this._api.sessionEstablished === "script_failed") {
+                    clearInterval(intervalId)
+                    reject(this._api.sessionEstablished)
                 } else if (this._api.sessionEstablished === "failed") {
                     clearInterval(intervalId)
                     reject(this._api.sessionEstablished)
