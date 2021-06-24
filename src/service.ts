@@ -578,6 +578,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         if (this.errorMessage !== "") {
             log.error("An error with the following message has already been detected")
             log.error(this.errorMessage)
+            if (this._api.sessionEstablishedError !== "") {
+                log.error(this._api.sessionEstablishedError)
+            }
             log.error("Please review the previous output for more details")
             await this._browser.deleteSession()
             // @ts-ignore
