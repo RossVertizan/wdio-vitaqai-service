@@ -22,7 +22,7 @@ import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 import { VitaqServiceOptions, MochaSuite } from './types'
 const { DEFAULT_OPTIONS } = require("./defaults")
 
-module.exports = class VitaqService implements Services.ServiceInstance {
+exports.VitaqService = class VitaqService implements Services.ServiceInstance {
     private _options: VitaqServiceOptions
     private _capabilities: Capabilities.RemoteCapability
     private _config: Options.Testrunner
@@ -37,6 +37,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     private currentState: string
     private sessionReloadNeeded: boolean
     private errorMessage: string
+    private booleanOptions: string[]
+    private numericOptions: string[]
 
     constructor(
         serviceOptions: VitaqServiceOptions,
@@ -50,9 +52,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._capabilities = capabilities;
             this._config = config;
 
-            // Convert command line booleans
-            this.convertBooleanCommandLineArgs(this._config,
-                ['useSync', 'reloadSession', 'useCoverage', 'hitOnError', 'useAI', 'aiRandomSeed'])
 
             // Compile the options
             // - preferentially from the command line in config
@@ -66,6 +65,11 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             } else {
                 this.vitaqFunctions = require('./functionsAsync')
             }
+
+            // Process command line arguments
+            this.booleanOptions = ['useSync', 'reloadSession', 'useCoverage', 'hitOnError', 'useAI', 'aiRandomSeed']
+            this.numericOptions = ['aiVariability', 'aiVariabilityDecay', 'noProgressStop']
+            this.formatCommandLineArgs()
 
             this._api = new VitaqAiApi(this._options)
             this._suiteMap = {};
@@ -698,42 +702,119 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         return argString
     }
 
-    /**
-     * convertBooleanCommandLineArgs - takes a dictionary like object and converts
-     * the provided boolean keys to true or false
-     * @param object - the dictionary (i.e. key/value) like object
-     * @param booleanKeys - the keys with Boolean values
-     */
-    convertBooleanCommandLineArgs(object: {[key: string]:any}, booleanKeys: string[]) {
-        let key: string;
-        for (let index = 0; index < booleanKeys.length; index += 1) {
-            key = booleanKeys[index]
-            if (Object.prototype.hasOwnProperty.call(object, key)) {
-                object[key] = this.isTrue(object[key])
-            }
-        }
+    formatCommandLineArgs() {
+        // Start by checking what we have been passed
+        this.checkUserData(this._options)
 
+        // Start with converting Boolean like strings to booleans
+        this._options = this.convertBooleanCommandLineArgs(this._options)
     }
 
     /**
-     * isTrue - take any string that looks as though the intention was "true"
-     * and make it into boolean true
-     * @param value
+     * checkUserData - check the data supplied by the user
+     * @param options
      */
-    isTrue(value: string | undefined){
+    checkUserData(options: {[key: string]:any}) {
+        let key: string;
+
+        // Start out by checking the booleans
+        for (let index = 0; index < this.booleanOptions.length; index += 1) {
+            key = this.booleanOptions[index]
+            if (Object.prototype.hasOwnProperty.call(options, key)) {
+                if (this.convertToBool(options[key], true) === "not_bool") {
+                    log.error(`The value provided for ${key} cannot be evaluated to a boolean - please use "true" or "false"`)
+                    throw new SevereServiceError(`The value provided for ${key} cannot be evaluated to a boolean - please use "true" or "false"`)
+                }
+            }
+        }
+
+        // Check the numeric values
+        for (let index = 0; index < this.numericOptions.length; index += 1) {
+            key = this.numericOptions[index]
+            if (Object.prototype.hasOwnProperty.call(options, key)) {
+                let value = options[key]
+                if (isNaN(value) || isNaN(parseFloat(value))) {
+                    log.error(`The value provided for ${key} cannot be evaluated to a number - please enter a number, got ${value}`)
+                    throw new SevereServiceError(`The value provided for ${key} cannot be evaluated to a number - please enter a number, got ${value}`)
+                }
+                else if (key === 'aiVariability' || key === 'aiVariabilityDecay') {
+                    if (parseFloat(value) < 1 || parseFloat(value) > 10) {
+                        log.error(`The value provided for ${key} must be between 1 and 10, got ${value}`)
+                        throw new SevereServiceError(`The value provided for ${key} must be between 1 and 10, got ${value}`)
+                    }
+                }
+                else if (key === 'noProgressStop') {
+                    if (parseInt(value, 10) < 1 ) {
+                        log.error(`The value provided for ${key} must be greater than 1, got ${value}`)
+                        throw new SevereServiceError(`The value provided for ${key} must be greater than 1, got ${value}`)
+                    }
+                }
+            }
+        }
+
+        // Check the value of seed
+        if (Object.prototype.hasOwnProperty.call(options, 'seed')) {
+            let value = options['seed']
+            // Check that we only have 0-9, "," and "-"
+            if (!value.match(/^[0-9,-]*$/)) {
+                log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
+                throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
+            }
+            let entries = value.split(",")
+            for (let index=0; index < entries.length; index += 1) {
+                let entry = entries[index].trim()
+                if (!entry.match(/^[-]?[0-9]+$/) && !entry.match(/^[-]?[0-9]+-[-]?[0-9]+$/)) {
+                    log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
+                    throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
+                }
+            }
+        }
+    }
+
+    /**
+     * convertBooleanCommandLineArgs - takes a dictionary like object and converts
+     * the provided boolean keys to true or false
+     * @param options - the dictionary (i.e. key/value) like object
+     * @param booleanKeys - the keys with Boolean values
+     */
+    convertBooleanCommandLineArgs(options: {[key: string]:any}) {
+        let key: string;
+        for (let index = 0; index < this.booleanOptions.length; index += 1) {
+            key = this.booleanOptions[index]
+            if (Object.prototype.hasOwnProperty.call(options, key)) {
+                options[key] = this.convertToBool(options[key])
+            }
+        }
+        return options
+    }
+
+    /**
+     * convertToBool - take any string that looks as though the intention was "boolean"
+     * and make it into boolean true or false
+     * @param value - the value to convert
+     * @param check - optional check to see of this looks like a boolean
+     */
+    convertToBool(value: string | boolean | undefined , check: boolean = false){
         if (typeof(value) === 'string'){
             value = value.trim().toLowerCase();
         } else if (typeof(value) === 'undefined'){
             return value
         }
         switch(value){
+            case true:
             case "true":
             case "1":
             case "on":
             case "yes":
                 return true;
+            case false:
+            case "false":
+            case "0":
+            case "off":
+            case "no":
+                return false
             default:
-                return false;
+                return check ? "not_bool" : false;
         }
     }
 }

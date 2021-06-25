@@ -29,5 +29,8 @@
   ],
   "publishConfig": {
     "access": "restricted"
+  },
+  "devDependencies": {
+    "vitaqai_api": "^1.0.47"
   }
 }
