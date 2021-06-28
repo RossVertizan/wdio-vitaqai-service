@@ -259,6 +259,16 @@ describe('checkUserData', () => {
         }
         expect(result).not.toThrow(SevereServiceError);
     })
+    test('it should check that the seed parameter is valid - valid (number)', async () => {
+        options = {
+            'seed': 5,
+        }
+        const result = () => {
+            vs.checkUserData(options)
+        }
+        expect(result).not.toThrow(SevereServiceError);
+        expect(result).not.toThrow(TypeError);
+    })
     test('it should check that the seed parameter is valid - valid (negatives)', async () => {
         options = {
             'seed': "-1--9,10,11,12,13,14-25",

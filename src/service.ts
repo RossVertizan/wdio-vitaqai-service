@@ -69,9 +69,6 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
             // Process command line arguments
             this.booleanOptions = ['useSync', 'reloadSession', 'useCoverage', 'hitOnError', 'useAI', 'aiRandomSeed']
             this.numericOptions = ['aiVariability', 'aiVariabilityDecay', 'noProgressStop']
-            this.formatCommandLineArgs()
-
-            this._api = new VitaqAiApi(this._options)
             this._suiteMap = {};
             this._activeSuites = [];
             // @ts-ignore
@@ -561,6 +558,8 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
 
         // Run up the Vitaq session
         try {
+            this.formatCommandLineArgs()
+            this._api = new VitaqAiApi(this._options)
             await this.waitForSession();
         } catch (error) {
             if (error === "script_failed") {
@@ -569,6 +568,8 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
                 this.errorMessage = "Failed to connect to Vitaq runner service - this may be a permissions problem"
             } else if (error === "timeout") {
                 this.errorMessage = "Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem"
+            } else {
+                this.errorMessage = error.message
             }
             log.error(this.errorMessage)
         }
@@ -582,8 +583,8 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
         if (this.errorMessage !== "") {
             log.error("An error with the following message has already been detected")
             log.error(this.errorMessage)
-            if (this._api.sessionEstablishedError !== "") {
-                log.error(this._api.sessionEstablishedError)
+            if (Object.prototype.hasOwnProperty.call(this, "_api") && this._api.sessionEstablishedError !== "") {
+                log.error(this._api.sessionEstablishedError);
             }
             log.error("Please review the previous output for more details")
             await this._browser.deleteSession()
@@ -756,16 +757,18 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
         if (Object.prototype.hasOwnProperty.call(options, 'seed')) {
             let value = options['seed']
             // Check that we only have 0-9, "," and "-"
-            if (!value.match(/^[0-9,-]*$/)) {
-                log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
-                throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
-            }
-            let entries = value.split(",")
-            for (let index=0; index < entries.length; index += 1) {
-                let entry = entries[index].trim()
-                if (!entry.match(/^[-]?[0-9]+$/) && !entry.match(/^[-]?[0-9]+-[-]?[0-9]+$/)) {
-                    log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
-                    throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
+            if (typeof value === 'string') {
+                if (!value.match(/^[0-9,-]*$/)) {
+                    log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
+                    throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
+                }
+                let entries = value.split(",")
+                for (let index = 0; index < entries.length; index += 1) {
+                    let entry = entries[index].trim()
+                    if (!entry.match(/^[-]?[0-9]+$/) && !entry.match(/^[-]?[0-9]+-[-]?[0-9]+$/)) {
+                        log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
+                        throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
+                    }
                 }
             }
         }
