@@ -100,7 +100,7 @@ export interface VitaqServiceOptions {
     noProgressStop?: bigint
 
     /**
-     * Specify if thbe AI should use a random seed or start from 1
+     * Specify if the AI should use a random seed or start from 1
      * No default value, if not specified in WDIO environment comes from VitaqUI settings
      */
     aiRandomSeed?: boolean

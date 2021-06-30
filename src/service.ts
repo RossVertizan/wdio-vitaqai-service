@@ -22,7 +22,9 @@ import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 import { VitaqServiceOptions, MochaSuite } from './types'
 const { DEFAULT_OPTIONS } = require("./defaults")
 
-exports.VitaqService = class VitaqService implements Services.ServiceInstance {
+// TODO: Following line used for running tests - need to resolve this
+// exports.VitaqService = class VitaqService implements Services.ServiceInstance {
+module.exports = class VitaqService implements Services.ServiceInstance {
     private _options: VitaqServiceOptions
     private _capabilities: Capabilities.RemoteCapability
     private _config: Options.Testrunner
@@ -33,6 +35,11 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
     private _activeSuites: string[]
     private vitaqFunctions
     private _sequenceName: string | undefined
+    private nextActionJson: {
+        actionName: string;
+        message: string;
+        overrideAction: string;
+    }
     private nextAction: string
     private currentState: string
     private sessionReloadNeeded: boolean
@@ -75,14 +82,16 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
             global.vitaq = this;
             this._counter = 0;
             this.nextAction = "";
+            this.nextActionJson = {};
             this.currentState = "passed";
             this.sessionReloadNeeded = false;
             this.errorMessage = "";
 
         } catch (error) {
-            log.error("Error: Vitaq Service failed to initialise")
-            log.error(error)
-            throw new Error("Vitaq Service failed to initialise");
+            log.error("Error: Vitaq Service failed to initialise");
+            log.error(error);
+            // throw new Error("Vitaq Service failed to initialise");
+            throw error;
         }
     }
 
@@ -131,13 +140,20 @@ exports.VitaqService = class VitaqService implements Services.ServiceInstance {
 
             if (typeof currentSuite === "undefined") {
                 log.debug("VitaqService: nextActionSelector: currentSuite is undefined");
-                this.nextAction = await this._api.getNextTestActionCaller(undefined, result);
-                this.currentState = "passed"
+                this.nextActionJson = await this._api.getNextTestActionCaller(undefined, result);
             } else {
                 log.debug("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
-                this.nextAction = await this._api.getNextTestActionCaller(currentSuite.title, result);
-                this.currentState = "passed"
+                this.nextActionJson = await this._api.getNextTestActionCaller(currentSuite.title, result);
             }
+            this.nextAction = this.nextActionJson.actionName
+
+            // Handle any message sent
+            if (this.nextActionJson.message !== "") {
+                log.error(this.nextActionJson.message)
+            }
+
+            // Reset the current state to passed
+            this.currentState = "passed"
 
             // Handle the special actions
             const specialActions = ['--*setUp*--', '--*tearDown*--','--*EndSeed*--', '--*EndAll*--']
