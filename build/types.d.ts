@@ -63,13 +63,13 @@ export interface VitaqServiceOptions {
     useAI?: boolean;
     /**
      * A value for the starting variability to use for the AI, a number between
-     * 1 and 10.  Determines how much exploration is done.
+     * 0 and 1.  Determines how much exploration is done.
      * No default value, if not specified in WDIO environment comes from VitaqUI settings
      */
     aiVariability?: number;
     /**
      * A value to use for the decay of the variability, a number between
-     * 1 and 10.  Specifies how quickly we move from exploration to directed.
+     * 0 and 1.  Specifies how quickly we move from exploration to directed.
      * No default value, if not specified in WDIO environment comes from VitaqUI settings
      */
     aiVariabilityDecay?: number;
