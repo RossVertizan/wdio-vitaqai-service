@@ -115,6 +115,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }
         }
 
+        // Print messages from the queue
+        this.printMessages()
+
         // Check if there are any remaining activeSuites, if so use the next suite
         if (this._activeSuites.length > 0){
             // @ts-ignore
@@ -191,6 +194,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
             // Now handle the real nextAction
             log.info(`--------------------   Running test action: ${this.nextAction}   --------------------`);
+
+            // Print messages from the queue
+            this.printMessages()
+
             // Need to return the suite object
             this._activeSuites = this.getSuitesFromFile(this.nextAction);
             // @ts-ignore
@@ -200,21 +207,14 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     // -------------------------------------------------------------------------
     /**
-     * getNextAction - Wrapper for next action caller to handle additional data
-     * i.e. message and overrideAction
+     * getNextAction - Wrapper for next action caller
+     *  - originally to handle additional data i.e. message and overrideAction
      * @param lastActionName - the name of the lastAction
      * @param result - the result from the last action
      */
     async getNextAction(lastActionName: string | undefined, result: boolean) {
-        this.nextActionJson = await this._api.getNextTestActionCaller(lastActionName, result);
-        this.nextAction = this.nextActionJson.actionName
-
-        // Handle any message sent
-        if (this.nextActionJson.message !== "") {
-            log.error(this.nextActionJson.message)
-        }
+        this.nextAction = await this._api.getNextTestActionCaller(lastActionName, result);
     }
-
 
     // -------------------------------------------------------------------------
     /**
@@ -279,6 +279,24 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }
         }
         // log.debug("createSuiteMap: this._suiteMap: ", this._suiteMap)
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * printMessages - print all of the messages from the VitaqAI API messageQueue
+     */
+    printMessages(): void {
+        let message: string[];
+        while (this._api.socket.messageQueue.length() > 0) {
+            message = this._api.socket.messageQueue.shift();
+            if (message[0] === "info") {
+                log.info(message[1])
+            } else if (message[0] === "error") {
+                log.error(message[1])
+            } else {
+                log.info(message[1])
+            }
+        }
     }
 
     /**
