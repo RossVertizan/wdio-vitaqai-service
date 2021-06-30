@@ -140,16 +140,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
             if (typeof currentSuite === "undefined") {
                 log.debug("VitaqService: nextActionSelector: currentSuite is undefined");
-                this.nextActionJson = await this._api.getNextTestActionCaller(undefined, result);
+                await this.getNextAction(undefined, result);
             } else {
                 log.debug("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
-                this.nextActionJson = await this._api.getNextTestActionCaller(currentSuite.title, result);
-            }
-            this.nextAction = this.nextActionJson.actionName
-
-            // Handle any message sent
-            if (this.nextActionJson.message !== "") {
-                log.error(this.nextActionJson.message)
+                await this.getNextAction(currentSuite.title, result);
             }
 
             // Reset the current state to passed
@@ -167,13 +161,13 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                     // Show which seed we are about to run
                     let seed = await this.vitaqFunctions.getSeed('top', this._browser, this._api)
                     log.info(`====================   Running seed: ${seed}   ====================`)
-                    this.nextAction = await this._api.getNextTestActionCaller('--*setUp*--', true);
+                    await this.getNextAction('--*setUp*--', true);
                     this.currentState = "passed"
                 }
 
                 else if (this.nextAction === '--*tearDown*--') {
                     // Do nothing on tearDown - just go to the next action
-                    this.nextAction = await this._api.getNextTestActionCaller('--*tearDown*--', true);
+                    await this.getNextAction('--*tearDown*--', true);
                     this.currentState = "passed"
                 }
 
@@ -185,7 +179,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                         this.sessionReloadNeeded = true
                     }
                     // Now get the next action
-                    this.nextAction = await this._api.getNextTestActionCaller('--*EndSeed*--', true);
+                    await this.getNextAction('--*EndSeed*--', true);
                     this.currentState = "passed"
                 }
 
@@ -203,6 +197,24 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             return this.getSuite(suite, this._activeSuites.shift());
         }
     }
+
+    // -------------------------------------------------------------------------
+    /**
+     * getNextAction - Wrapper for next action caller to handle additional data
+     * i.e. message and overrideAction
+     * @param lastActionName - the name of the lastAction
+     * @param result - the result from the last action
+     */
+    async getNextAction(lastActionName: string | undefined, result: boolean) {
+        this.nextActionJson = await this._api.getNextTestActionCaller(lastActionName, result);
+        this.nextAction = this.nextActionJson.actionName
+
+        // Handle any message sent
+        if (this.nextActionJson.message !== "") {
+            log.error(this.nextActionJson.message)
+        }
+    }
+
 
     // -------------------------------------------------------------------------
     /**
