@@ -606,22 +606,38 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         log.info('Initialising the connection to Vitaq')
         log.debug("Running the vitaq-service beforeSession method")
 
-        // Run up the Vitaq session
+        // Get the Vitaq script
+        let scriptResult;
         try {
             this.formatCommandLineArgs()
             this._api = new VitaqAiApi(this._options)
-            await this.waitForSession();
+            scriptResult = await this.waitForScript();
         } catch (error) {
             if (error === "script_failed") {
                 this.errorMessage = "Failed to create test script"
-            } else if (error === "failed") {
-                this.errorMessage = "Failed to connect to Vitaq runner service - this may be a permissions problem"
             } else if (error === "timeout") {
-                this.errorMessage = "Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem"
+                this.errorMessage = "Failed to create test script in timeout period - there may be other output above"
             } else {
                 this.errorMessage = error.message
             }
             log.error(this.errorMessage)
+        }
+
+        // Run uo the Vitaq session
+        let sessionResult;
+        if (scriptResult === "script_success"){
+            try {
+                sessionResult = await this.waitForSession();
+            } catch (error) {
+                if (error === "failed") {
+                    this.errorMessage = "Failed to connect to Vitaq runner service - this may be a permissions problem";
+                } else if (error === "timeout") {
+                    this.errorMessage = "Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem";
+                } else {
+                    this.errorMessage = error.message
+                }
+                log.error(this.errorMessage)
+            }
         }
     }
 
@@ -692,6 +708,39 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     // -------------------------------------------------------------------------
     /**
+     * waitForScript - Wait for test activity script
+     * @param delay - delay in checking
+     * @param timeout - timeout
+     */
+    waitForScript(delay=100, timeout=20000) {
+        return new Promise((resolve, reject) => {
+            let timeoutCounter = 0;
+            let intervalId = setInterval( async () => {
+
+                // Increment the timeoutCounter for a crude timeout
+                timeoutCounter += delay;
+                // log.debug('waitForNextAction: this.nextTestAction: ', this.nextTestAction)
+
+                if (this._api.sessionEstablished === "not_tried") {
+                    await this._api.getTestScript()
+                } else if (this._api.sessionEstablished === "script_success") {
+                    log.info("Successfully generated Vitaq test script")
+                    clearInterval(intervalId)
+                    resolve(this._api.sessionEstablished)
+                } else if (this._api.sessionEstablished === "script_failed") {
+                    clearInterval(intervalId)
+                    reject(this._api.sessionEstablished)
+                } else if (timeoutCounter > timeout) {
+                    log.error('Did not generate script in timeout period')
+                    clearInterval(intervalId)
+                    reject("timeout")
+                }
+            }, delay)
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    /**
      * waitForSession - Wait for an established session with Vitaq
      * @param delay - delay in checking
      * @param timeout - timeout
@@ -705,18 +754,12 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 timeoutCounter += delay;
                 // log.debug('waitForNextAction: this.nextTestAction: ', this.nextTestAction)
 
-                if (this._api.sessionEstablished === "not_tried") {
-                    await this._api.getTestScript()
-                } else if (this._api.sessionEstablished === "script_success") {
-                    log.info("Succesfully generated Vitaq test script")
+                if (this._api.sessionEstablished === "script_success") {
                     await this._api.startVitaq()
                 } else if (this._api.sessionEstablished === "success") {
-                    log.info("Succesfully started Vitaq")
+                    log.info("Successfully started Vitaq")
                     clearInterval(intervalId)
                     resolve(this._api.sessionEstablished)
-                } else if (this._api.sessionEstablished === "script_failed") {
-                    clearInterval(intervalId)
-                    reject(this._api.sessionEstablished)
                 } else if (this._api.sessionEstablished === "failed") {
                     clearInterval(intervalId)
                     reject(this._api.sessionEstablished)
@@ -728,42 +771,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }, delay)
         });
     }
-
-    // -------------------------------------------------------------------------
-    /**
-     * waitForScript - Wait to receive the test script from the API
-     * @param delay - delay in checking
-     * @param timeout - timeout
-     */
-    waitForScript(delay=100, timeout=10000) {
-        return new Promise((resolve, reject) => {
-            let timeoutCounter = 0;
-            let intervalId = setInterval( async () => {
-
-                // Increment the timeoutCounter for a crude timeout
-                timeoutCounter += delay;
-
-                if (this._api.sessionEstablished === "not_tried") {
-                    await this._api.startVitaq()
-                } else if (this._api.sessionEstablished === "success") {
-                    clearInterval(intervalId)
-                    resolve(this._api.sessionEstablished)
-                } else if (this._api.sessionEstablished === "script_failed") {
-                    clearInterval(intervalId)
-                    reject(this._api.sessionEstablished)
-                } else if (this._api.sessionEstablished === "failed") {
-                    clearInterval(intervalId)
-                    reject(this._api.sessionEstablished)
-                } else if (timeoutCounter > timeout) {
-                    log.error('Did not establish session in timeout period')
-                    clearInterval(intervalId)
-                    reject("timeout")
-                }
-            }, delay)
-        });
-    }
-
-
 
     // // Cucumber specific hooks
     // // ======================================================================
