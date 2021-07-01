@@ -287,7 +287,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     printMessages(): void {
         let message: string[];
-        while (this._api.socket.messageQueue.length() > 0) {
+        while (this._api.socket.messageQueue.length > 0) {
             message = this._api.socket.messageQueue.shift();
             if (message[0] === "info") {
                 log.info(message[1])
