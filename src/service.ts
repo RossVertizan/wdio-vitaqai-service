@@ -155,6 +155,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             // Handle the special actions
             const specialActions = ['--*setUp*--', '--*tearDown*--','--*EndSeed*--', '--*EndAll*--']
             while (specialActions.indexOf(this.nextAction) > -1) {
+
+                // Print messages from the queue
+                this.printMessages();
+
                 if (this.nextAction === '--*setUp*--') {
                     // Do a session reload if one is needed
                     if (this.sessionReloadNeeded) {
@@ -688,7 +692,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
     // -------------------------------------------------------------------------
     /**
-     * waitForSession - Wait for an established session with the Python job
+     * waitForSession - Wait for an established session with Vitaq
      * @param delay - delay in checking
      * @param timeout - timeout
      */
@@ -699,10 +703,48 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
                 // Increment the timeoutCounter for a crude timeout
                 timeoutCounter += delay;
-                // log.debug('VitaqAiApi: waitForNextAction: this.nextTestAction: ', this.nextTestAction)
+                // log.debug('waitForNextAction: this.nextTestAction: ', this.nextTestAction)
 
                 if (this._api.sessionEstablished === "not_tried") {
-                    await this._api.startPython()
+                    await this._api.getTestScript()
+                } else if (this._api.sessionEstablished === "script_success") {
+                    log.info("Succesfully generated Vitaq test script")
+                    await this._api.startVitaq()
+                } else if (this._api.sessionEstablished === "success") {
+                    log.info("Succesfully started Vitaq")
+                    clearInterval(intervalId)
+                    resolve(this._api.sessionEstablished)
+                } else if (this._api.sessionEstablished === "script_failed") {
+                    clearInterval(intervalId)
+                    reject(this._api.sessionEstablished)
+                } else if (this._api.sessionEstablished === "failed") {
+                    clearInterval(intervalId)
+                    reject(this._api.sessionEstablished)
+                } else if (timeoutCounter > timeout) {
+                    log.error('Did not establish session in timeout period')
+                    clearInterval(intervalId)
+                    reject("timeout")
+                }
+            }, delay)
+        });
+    }
+
+    // -------------------------------------------------------------------------
+    /**
+     * waitForScript - Wait to receive the test script from the API
+     * @param delay - delay in checking
+     * @param timeout - timeout
+     */
+    waitForScript(delay=100, timeout=10000) {
+        return new Promise((resolve, reject) => {
+            let timeoutCounter = 0;
+            let intervalId = setInterval( async () => {
+
+                // Increment the timeoutCounter for a crude timeout
+                timeoutCounter += delay;
+
+                if (this._api.sessionEstablished === "not_tried") {
+                    await this._api.startVitaq()
                 } else if (this._api.sessionEstablished === "success") {
                     clearInterval(intervalId)
                     resolve(this._api.sessionEstablished)
@@ -720,6 +762,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }, delay)
         });
     }
+
+
 
     // // Cucumber specific hooks
     // // ======================================================================
