@@ -95,6 +95,12 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         }
     }
 
+    // -------------------------------------------------------------------------
+    /**
+     * nextActionSelector - Go to Vitaq to select the next action
+     * @param suite
+     * @param currentSuite
+     */
     async nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
         let result: boolean = true;
         let returnSuite: MochaSuite;
@@ -141,12 +147,12 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         if (suite.root) {
             // log.debug("VitaqService: nextActionSelector: This is the root suite");
 
-            if (typeof currentSuite === "undefined") {
-                log.debug("VitaqService: nextActionSelector: currentSuite is undefined");
+            if (this.nextAction === "") {
+                log.debug("VitaqService: nextActionSelector: nextAction is undefined");
                 await this.getNextAction(undefined, result);
             } else {
-                log.debug("VitaqService: nextActionSelector: currentSuite is: ", currentSuite.title);
-                await this.getNextAction(currentSuite.title, result);
+                log.debug("VitaqService: nextActionSelector: nextAction is: ", this.nextAction);
+                await this.getNextAction(this.nextAction, result);
             }
 
             // Reset the current state to passed
