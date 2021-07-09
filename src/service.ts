@@ -629,7 +629,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             log.error(this.errorMessage)
         }
 
-        // Run uo the Vitaq session
+        // Run up the Vitaq session
         let sessionResult;
         if (scriptResult === "script_success"){
             try {
@@ -638,7 +638,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 if (error === "failed") {
                     this.errorMessage = "Failed to connect to Vitaq runner service - this may be a permissions problem";
                 } else if (error === "timeout") {
-                    this.errorMessage = "Failed to connect to Vitaq runner service in timeout period - this may be a connectivity problem";
+                    this.errorMessage = "Failed to connect to Vitaq runner service in timeout period - this may be a connectivity or authentication problem";
                 } else {
                     this.errorMessage = error.message
                 }

@@ -101,21 +101,19 @@ All implemented and passign correct usage tests
 
 ### Handling errors and exceptions
 1. vitaq.read("DoesNotExist") - causes error in Python code
-    - Need to modify Pythin interface code
+    - Need to modify Python interface code
     - Link the development code in with:
       ```shell
       cmd /c mklink /d lib Y:\git_xpose_cover_branch_4.0_release\bindings\python
       ```
 
 
+## Debugging
+To check that the server is responding to API calls
+```javascript
+this.runTestData = await got(`https://vitaq.online/api/health-check`);
+console.log(this.runTestData.body)
+```
+Need to work on this to make this a management utility
 
-### Other things to do
-1. Make all this work in K8S
-2. Check coverage is working - how to specify ?
-3. Check AI is working - need to make re-runs possible
-4. Enable sequence runs
-
-
-
-### Study of the Sauce Service
 

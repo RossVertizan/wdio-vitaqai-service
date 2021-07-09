@@ -520,7 +520,7 @@ module.exports = class VitaqService {
             }
             log.error(this.errorMessage);
         }
-        // Run uo the Vitaq session
+        // Run up the Vitaq session
         let sessionResult;
         if (scriptResult === "script_success") {
             try {
