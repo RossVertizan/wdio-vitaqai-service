@@ -1,6 +1,6 @@
 {
   "name": "@wdio/vitaqai-service",
-  "version": "1.0.71",
+  "version": "1.0.72",
   "description": "A plugin service for WebdriverIO to allow the use of VitaqAI",
   "author": "Ross Addinall <ross@vertizan.com>",
   "homepage": "https://bitbucket.org/RossVertizan/wdio-vitaqai-service",
