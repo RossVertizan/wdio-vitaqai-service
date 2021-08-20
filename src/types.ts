@@ -104,6 +104,15 @@ export interface VitaqServiceOptions {
      * No default value, if not specified in WDIO environment comes from VitaqUI settings
      */
     aiRandomSeed?: boolean
+
+    /**
+     * PRIVATE OPTION
+     * Stop on Vitaq errors - this is a private option to allow for negative
+     * testing of the solution where we DO NOT want to stop on errors from Vitaq
+     * as that is what we are testing.
+     * Defaults to true
+     */
+    _stopOnVitaqError?: boolean
 }
 
 export interface MochaSuite {

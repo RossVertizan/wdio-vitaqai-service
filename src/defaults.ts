@@ -12,6 +12,7 @@ export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
     useSync: false,
     reloadSession: false,
     sequence: undefined,
+    _stopOnVitaqError: true
 }
 
 // =============================================================================
