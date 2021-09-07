@@ -97,7 +97,7 @@ Three bits to the implementation:
 4. sendDataToVitaq/ writeDataToVitaq
 5. readDataFromVitaq
 6. createVitaqLogEntry
-All implemented and passign correct usage tests
+All implemented and passing correct usage tests
 
 ### Handling errors and exceptions
 1. vitaq.read("DoesNotExist") - causes error in Python code
@@ -106,6 +106,7 @@ All implemented and passign correct usage tests
       ```shell
       cmd /c mklink /d lib Y:\git_xpose_cover_branch_4.0_release\bindings\python
       ```
+Error now handled correctly
 
 
 ## Debugging

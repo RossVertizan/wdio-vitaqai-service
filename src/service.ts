@@ -258,6 +258,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         }
         log.error("Was unable to find a file for test action: ", fileName);
         log.info(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
+        log.info("The files that have been provided with defined tests are:");
+        log.info(this._suiteMap);
         log.info(`This will cause the test to end`);
         return null;
     }
