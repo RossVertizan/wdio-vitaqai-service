@@ -49,8 +49,6 @@ npm publish --registry https://pkgs.vitaq.online
 ```
 
 
-
-
 ### How to install
 Installed as part of wdio-vitaq-mocha-framework:
 ```node
