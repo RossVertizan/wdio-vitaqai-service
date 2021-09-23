@@ -240,8 +240,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 return subSuite;
             }
         }
-        log.error("Was unable to find a test action script for: ", suiteName)
-        log.info(`Make sure you have a test file with ${suiteName} as the text in the describe block`)
+        log.error(`Was unable to find ${suiteName} in ${suite.fullTitle()}`)
         log.info(`This will cause the test to end`)
         return null;
     }
@@ -261,7 +260,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         log.info("The files that have been provided with defined tests are:");
         log.info(this._suiteMap);
         log.info(`This will cause the test to end`);
-        return null;
+        this.deleteSession().then(() => {return null});
     }
 
     // -------------------------------------------------------------------------
@@ -310,6 +309,20 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }
         }
     }
+
+    // -------------------------------------------------------------------------
+    /**
+     * Delete the session
+     */
+    async deleteSession(): Promise<void> {
+        // @ts-ignore
+        await this._browser.deleteSession()
+        // @ts-ignore
+        delete this._browser.sessionId;
+        process.exit(1)
+    }
+
+
 
     /**
      * Provide a simple sleep command
