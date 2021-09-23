@@ -92,6 +92,13 @@ export interface VitaqServiceOptions {
      * Defaults to true
      */
     _stopOnVitaqError?: boolean;
+    /**
+     * PRIVATE OPTION
+     * Use a local Vitaq Runner - this is a private option for debugging purposes only
+     * and not available to customers
+     * Defaults to false
+     */
+    _local?: boolean;
 }
 export interface MochaSuite {
     ctx: MochaContext;
