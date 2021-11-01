@@ -18,6 +18,11 @@ import { SevereServiceError } from 'webdriverio'
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'
 import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 
+// Extend Options.Testrunner for Vitaq command line 'debug' option
+interface VtqTestRunner extends Options.Testrunner {
+    debug: boolean;
+}
+
 // Default options
 import { VitaqServiceOptions, MochaSuite } from './types'
 const { DEFAULT_OPTIONS } = require("./defaults")
@@ -27,7 +32,7 @@ const { DEFAULT_OPTIONS } = require("./defaults")
 module.exports = class VitaqService implements Services.ServiceInstance {
     private _options: VitaqServiceOptions
     private _capabilities: Capabilities.RemoteCapability
-    private _config: Options.Testrunner
+    private _config: VtqTestRunner
     private _counter: number
     private _api: VitaqAiApi
     private _browser?: Browser<'async'> | MultiRemoteBrowser<'async'>
@@ -50,7 +55,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     constructor(
         serviceOptions: VitaqServiceOptions,
         capabilities: Capabilities.RemoteCapability,
-        config: Options.Testrunner
+        config: VtqTestRunner
     ) {
         try {
             log.debug("serviceOptions: ", serviceOptions);
@@ -59,12 +64,27 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._capabilities = capabilities;
             this._config = config;
 
+            // Define the debug options
+            const debugOptions = {
+                authenticationTimeout: 60000,
+                nextActionTimeout: 3600000,
+                scriptTimeout: 60000,
+                sessionTimeout: 60000
+            }
 
             // Compile the options
             // - preferentially from the command line in config
             // - then from the serviceOptions (specified in wdio.conf.js file)
             // - then from the defaults
-            this._options = {...DEFAULT_OPTIONS, ...serviceOptions, ...this._config};
+            if (this._config.debug) {
+                // If we have been passed the debug option set true, then overwrite
+                // defaults with the debug defaults
+                this._options = {...DEFAULT_OPTIONS, ...debugOptions,
+                    ...serviceOptions, ...this._config};
+            } else {
+                this._options = {...DEFAULT_OPTIONS, ...serviceOptions,
+                    ...this._config};
+            }
 
             // Import either the Sync or Async versions of the functions
             if (this._options.useSync) {
@@ -632,7 +652,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         try {
             this.formatCommandLineArgs()
             this._api = new VitaqAiApi(this._options)
-            scriptResult = await this.waitForScript();
+            scriptResult = await this.waitForScript(this._options.scriptTimeout, 100);
         } catch (error) {
             if (error === "script_failed") {
                 this.errorMessage = "Failed to create test script"
@@ -648,7 +668,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         let sessionResult;
         if (scriptResult === "script_success"){
             try {
-                sessionResult = await this.waitForSession();
+                sessionResult = await this.waitForSession(this._options.sessionTimeout, 100);
             } catch (error) {
                 if (error === "failed") {
                     this.errorMessage = "Failed to connect to Vitaq runner service - this may be a permissions problem";
@@ -733,7 +753,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param delay - delay in checking
      * @param timeout - timeout
      */
-    waitForScript(delay=100, timeout=20000) {
+    waitForScript(timeout=20000, delay=100) {
         return new Promise((resolve, reject) => {
             let timeoutCounter = 0;
             let intervalId = setInterval( async () => {
@@ -766,7 +786,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      * @param delay - delay in checking
      * @param timeout - timeout
      */
-    waitForSession(delay=100, timeout=20000) {
+    waitForSession(timeout=20000, delay=100) {
         return new Promise((resolve, reject) => {
             let timeoutCounter = 0;
             let intervalId = setInterval( async () => {

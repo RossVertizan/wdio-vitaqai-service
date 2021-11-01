@@ -61,6 +61,37 @@ export interface VitaqServiceOptions {
     sequence?: string | undefined
 
     /**
+     * Specify the timeout to use for the authentication with the runner
+     * Defaults to 20000 ms (60000 ms in debug mode)
+     */
+    authenticationTimeout?: number
+
+    /**
+     * Specify the timeout to use when waiting for the next action frommthe Vitaq script
+     * Defaults to 10000 ms (3600000 ms (1 hour) in debug mode)
+     */
+    nextActionTimeout?: number
+
+    /**
+     * Specify the timeout to use when waiting for the Python script
+     * Defaults to 20000 ms (60000 ms in debug mode)
+     */
+    scriptTimeout?: number
+
+    /**
+     * Specify the timeout to use when waiting to connect with the runner
+     * Defaults to 20000 ms (60000 ms in debug mode)
+     */
+    sessionTimeout?: number
+
+    /**
+     * Specify if we should use the debug settings (the timeouts as shown above)
+     * This is simply a shorthand for changing all the timeouts to debug defaults
+     * Defaults to false
+     */
+    debug?: boolean
+
+    /**
      * Specify if we should use coverage
      * No default value, if not specified in WDIO environment comes from VitaqUI settings
      */
