@@ -64,7 +64,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this._capabilities = capabilities;
             this._config = config;
 
-            // Define the debug options
+            // Define the debug presets for various timeouts
             const debugOptions = {
                 authenticationTimeout: 60000,
                 nextActionTimeout: 3600000,
@@ -171,7 +171,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 log.debug("VitaqService: nextActionSelector: nextAction is undefined");
                 await this.getNextAction(undefined, result);
             } else {
-                log.debug("VitaqService: nextActionSelector: nextAction is: ", this.nextAction);
+                log.debug("VitaqService: nextActionSelector: Last action was: ", this.nextAction);
                 await this.getNextAction(this.nextAction, result);
             }
 
@@ -179,6 +179,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this.currentState = "passed"
 
             // Handle the special actions
+            // Need to update vitaq_runner if any specialActions added
             const specialActions = ['--*setUp*--', '--*tearDown*--','--*EndSeed*--', '--*EndAll*--']
             while (specialActions.indexOf(this.nextAction) > -1) {
 
@@ -223,6 +224,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }
 
             // Now handle the real nextAction
+            log.debug("VitaqService: nextActionSelector: Next action is: ", this.nextAction);
             log.info(`--------------------   Running test action: ${this.nextAction}   --------------------`);
 
             // Print messages from the queue
