@@ -218,8 +218,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 }
 
                 else if (this.nextAction === '--*EndAll*--') {
-                    // Just return null to indicate the test has finished
-                    return null
+                    // Send result back to the API and return the response (which is null)
+                    // ... to indicate that the test has finished
+                    return await this.getNextAction('--*EndAll*--', true);
                 }
             }
 
