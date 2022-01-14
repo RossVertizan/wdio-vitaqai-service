@@ -13,7 +13,6 @@ const path = require("path");
 import { VitaqAiApi } from 'vitaqai_api'
 import { SevereServiceError } from 'webdriverio'
 
-
 // Type import
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'
 import type { Browser, MultiRemoteBrowser } from 'webdriverio'
@@ -344,7 +343,6 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         delete this._browser.sessionId;
         process.exit(1)
     }
-
 
 
     /**

@@ -18,7 +18,8 @@ export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
     sessionTimeout: 20000,
     debug: false,
     _stopOnVitaqError: true,
-    _local: false
+    _local: false,
+    _noscriptwrite: false
 }
 
 // =============================================================================
