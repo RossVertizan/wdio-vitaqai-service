@@ -326,6 +326,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 log.info(message[1])
             } else if (message[0] === "error") {
                 log.error(message[1])
+            } else if (message[0] === "warning") {
+                log.warn(message[1])
             } else {
                 log.info(message[1])
             }
