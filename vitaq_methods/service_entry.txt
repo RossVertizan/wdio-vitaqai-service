@@ -1,0 +1,193 @@
+// =============================================================================
+// Action Methods
+// =============================================================================
+
+    abort() {
+        // @ts-ignore
+        return this.vitaqFunctions.abort(this._browser, this._api)
+    }
+
+    addNext(actionName: string, nextAction: string, weight: number = 1) {
+        // @ts-ignore
+        return this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api)
+    }
+
+    clearCallCount(actionName: string, tree: boolean) {
+        // @ts-ignore
+        return this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api)
+    }
+
+    displayNextActions(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api)
+    }
+
+    getCallCount(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getCallCount(actionName, this._browser, this._api)
+    }
+
+    getCallLimit(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api)
+    }
+
+    getEnabled(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api)
+    }
+
+    getId(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getId(actionName, this._browser, this._api)
+    }
+
+    nextActions(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.nextActions(actionName, this._browser, this._api)
+    }
+
+    numberActiveNextActions(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api)
+    }
+
+    numberNextActions(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api)
+    }
+
+    removeAllNext(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.removeAllNext(actionName, this._browser, this._api)
+    }
+
+    removeFromCallers(actionName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.removeFromCallers(actionName, this._browser, this._api)
+    }
+
+    removeNext(actionName: string, nextAction: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.removeNext(actionName, nextAction, this._browser, this._api)
+    }
+
+    setCallLimit(actionName: string, limit: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.setCallLimit(actionName, limit, this._browser, this._api)
+    }
+
+    setEnabled(actionName: string, enabled: boolean) {
+        // @ts-ignore
+        return this.vitaqFunctions.setEnabled(actionName, enabled, this._browser, this._api)
+    }
+
+    setExhaustive(actionName: string, exhaustive: boolean) {
+        // @ts-ignore
+        return this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api)
+    }
+
+    setMaxActionDepth(actionName: string, depth: number = 1000) {
+        // @ts-ignore
+        return this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api)
+    }
+
+// =============================================================================
+// Data Methods
+// =============================================================================
+
+    allowList(variableName: string, list: array) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowList(variableName, list, this._browser, this._api)
+    }
+
+    allowOnlyList(variableName: string, list: array) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyList(variableName, list, this._browser, this._api)
+    }
+
+    allowOnlyRange(variableName: string, low: number, high: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api)
+    }
+
+    allowOnlyValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyValue(variableName, value, this._browser, this._api)
+    }
+
+    allowOnlyValues(variableName: string, valueList: array) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowOnlyValues(variableName, valueList, this._browser, this._api)
+    }
+
+    allowRange(variableName: string, low: number, high: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowRange(variableName, low, high, this._browser, this._api)
+    }
+
+    allowValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowValue(variableName, value, this._browser, this._api)
+    }
+
+    allowValues(variableName: string, valueList: array) {
+        // @ts-ignore
+        return this.vitaqFunctions.allowValues(variableName, valueList, this._browser, this._api)
+    }
+
+    disallowRange(variableName: string, low: number, high: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.disallowRange(variableName, low, high, this._browser, this._api)
+    }
+
+    disallowValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.disallowValue(variableName, value, this._browser, this._api)
+    }
+
+    disallowValues(variableName: string, valueList: array) {
+        // @ts-ignore
+        return this.vitaqFunctions.disallowValues(variableName, valueList, this._browser, this._api)
+    }
+
+    doNotRepeat(variableName: string, value: boolean) {
+        // @ts-ignore
+        return this.vitaqFunctions.doNotRepeat(variableName, value, this._browser, this._api)
+    }
+
+    gen(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.gen(variableName, this._browser, this._api)
+    }
+
+    getDoNotRepeat(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api)
+    }
+
+    getSeed(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getSeed(variableName, this._browser, this._api)
+    }
+
+    getValue(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.getValue(variableName, this._browser, this._api)
+    }
+
+    resetRanges(variableName: string) {
+        // @ts-ignore
+        return this.vitaqFunctions.resetRanges(variableName, this._browser, this._api)
+    }
+
+    setSeed(variableName: string, seed: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.setSeed(variableName, seed, this._browser, this._api)
+    }
+
+    setValue(variableName: string, value: number) {
+        // @ts-ignore
+        return this.vitaqFunctions.setValue(variableName, value, this._browser, this._api)
+    }
+
