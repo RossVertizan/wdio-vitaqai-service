@@ -77,8 +77,7 @@ export default class VitaqLauncher {
             log.error("Vitaq requires that you group test specifications/scripts in the specs section of the wdio.conf file");
             log.error("This is done by enclosing the test specifications/scripts within square brackets");
             log.error("The specs section should look something like: 'specs: [ ['./test/actions/*.js'] ]");
-            log.error("For more information see: https://vitaq.online/documentation/gettingStarted#setting-up-webdriverio");
-            throw new SevereServiceError('Specs are not grouped');
+            everythingOK = false;
         }
 
         // ==== Check the options for required fields ====
@@ -89,7 +88,7 @@ export default class VitaqLauncher {
             optionsLookGood = false
         }
         if (typeof this._options.projectName === "undefined") {
-            log.error("projectName is not defined in the vitaqai options - t");
+            log.error("projectName is not defined in the vitaqai options");
             log.error("projectName is the name of the project which contains the test activity");
             optionsLookGood = false
         }
@@ -105,20 +104,20 @@ export default class VitaqLauncher {
         }
         if (!optionsLookGood) {
             log.error("Vitaq requires that you specify some options in the services section of the wdio.conf file");
-            log.error("For more information see: https://vitaq.online/documentation/gettingStarted#setting-up-webdriverio");
             everythingOK = false;
         }
 
         // ==== Check the framework in the config ====
         if (config.framework !== "vitaq-mocha") {
+            log.error(`Incorrect framework specified, expected vitaq-mocha but got ${config.framework}`)
             log.error("Vitaq uses a modified version of the Mocha testing framework")
             log.error("You need to install this modified framework and specify it in the framework section of the wdio.conf file")
-            log.error("For more information see: https://vitaq.online/documentation/gettingStarted#setting-up-webdriverio");
             everythingOK = false;
         }
 
         // Throw SevereServiceError is we detected any issues
         if (! everythingOK) {
+            log.error("For more information see: https://vitaq.online/documentation/gettingStarted#setting-up-webdriverio");
             throw new SevereServiceError('Errors detected in the configuration for running Vitaq');
         }
     }
