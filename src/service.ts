@@ -278,10 +278,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             return JSON.parse(JSON.stringify(this._suiteMap[fileName]))
         }
         log.error("Was unable to find a file for test action: ", fileName);
-        log.info(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
-        log.info("The files that have been provided with defined tests are:");
-        log.info(this._suiteMap);
-        log.info(`This will cause the test to end`);
+        log.error(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
+        log.error("The files that have been provided with defined tests are:");
+        log.error(this._suiteMap);
+        log.error(`This will cause the test to end`);
         this.deleteSession().then(() => {return null});
     }
 
@@ -656,7 +656,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this.formatCommandLineArgs()
             this._api = new VitaqAiApi(this._options)
             scriptResult = await this.waitForScript(this._options.scriptTimeout, 100);
-        } catch (error) {
+        } catch (error: any) {
             if (error === "script_failed") {
                 this.errorMessage = "Failed to create test script"
             } else if (error === "timeout") {
@@ -672,7 +672,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         if (scriptResult === "script_success"){
             try {
                 sessionResult = await this.waitForSession(this._options.sessionTimeout, 100);
-            } catch (error) {
+            } catch (error: any) {
                 if (error === "failed") {
                     this.errorMessage = "Failed to connect to Vitaq runner service - this may be a permissions problem";
                 } else if (error === "timeout") {
