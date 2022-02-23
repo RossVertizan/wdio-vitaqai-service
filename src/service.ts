@@ -164,13 +164,13 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
         // Send the result and get the next action
         if (suite.root) {
-            // log.debug("VitaqService: nextActionSelector: This is the root suite");
+            // log.debug("nextActionSelector: This is the root suite");
 
             if (this.nextAction === "") {
-                log.debug("VitaqService: nextActionSelector: nextAction is undefined");
+                log.debug("nextActionSelector: nextAction is undefined");
                 await this.getNextAction(undefined, result);
             } else {
-                log.debug("VitaqService: nextActionSelector: Last action was: ", this.nextAction);
+                log.debug("nextActionSelector: Last action was: ", this.nextAction);
                 await this.getNextAction(this.nextAction, result);
             }
 
@@ -224,7 +224,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }
 
             // Now handle the real nextAction
-            log.debug("VitaqService: nextActionSelector: Next action is: ", this.nextAction);
+            log.debug("nextActionSelector: Next action is: ", this.nextAction);
             log.info(`--------------------   Running test action: ${this.nextAction}   --------------------`);
 
             // Print messages from the queue

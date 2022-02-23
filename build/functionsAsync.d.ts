@@ -45,7 +45,7 @@ export declare function readDataFromVitaq(variableName: string, browser: Browser
  * @param browser
  * @param api
  */
-export declare function createVitaqLogEntry(message: string | {}, format: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
+export declare function createVitaqLogEntry(message: string | {}, format: string | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
 /**
  * Abort the action causing it to not select a next action
  */

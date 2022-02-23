@@ -44,7 +44,7 @@ export function requestData(variableName: string,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug("VitaqService: requestData: variableName ", variableName);
+    log.debug("requestData: variableName ", variableName);
     let argumentsDescription = {"variableName": "string"}
     validateArguments('requestData', argumentsDescription, args);
     // @ts-ignore
@@ -66,7 +66,7 @@ export function recordCoverage(variablesArray: [],
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug("VitaqService: recordCoverage: variablesArray ", variablesArray);
+    log.debug("recordCoverage: variablesArray ", variablesArray);
     let argumentsDescription = {"variablesArray": "array"}
     validateArguments('recordCoverage', argumentsDescription, args);
     // @ts-ignore
@@ -87,7 +87,7 @@ export function sendDataToVitaq(variableName: string, value: any,
                                 api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug("VitaqService: sendDataToVitaq: variableName value", variableName, value);
+    log.debug("sendDataToVitaq: variableName value", variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "any"}
     validateArguments('sendDataToVitaq', argumentsDescription, args);
     // @ts-ignore
@@ -107,7 +107,7 @@ export function readDataFromVitaq(variableName: string,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug("VitaqService: readDataFromVitaq: variableName ", variableName);
+    log.debug("readDataFromVitaq: variableName ", variableName);
     let argumentsDescription = {"variableName": "string"}
     validateArguments('readDataFromVitaq', argumentsDescription, args);
     // @ts-ignore
@@ -133,7 +133,7 @@ export function createVitaqLogEntry(message: string, format: string,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug("VitaqService: createVitaqLogEntry: message format", message, format);
+    log.debug("createVitaqLogEntry: message format", message, format);
     let argumentsDescription = {"message": "string", "format?": "string"}
     validateArguments('createVitaqLogEntry', argumentsDescription, args);
     // @ts-ignore
@@ -154,7 +154,7 @@ export function abort(actionName: string,
                       api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: abort: actionName', actionName);
+    log.debug('abort: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('abort', argumentsDescription, args);
     // @ts-ignore
@@ -176,7 +176,7 @@ export function addNext(actionName: string, nextAction: string, weight: number =
                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: addNext: actionName, nextAction, weight', actionName, nextAction, weight);
+    log.debug('addNext: actionName, nextAction, weight', actionName, nextAction, weight);
     let argumentsDescription = {"actionName": "string", "nextAction": "string", "weight": "number"}
     args = validateArguments('addNext', argumentsDescription, args);
     // @ts-ignore
@@ -197,7 +197,7 @@ export function clearCallCount(actionName: string, tree: boolean,
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: clearCallCount: actionName, tree', actionName, tree);
+    log.debug('clearCallCount: actionName, tree', actionName, tree);
     let argumentsDescription = {"actionName": "string", "tree?": "boolean"}
     args = validateArguments('clearCallCount', argumentsDescription, args);
     // @ts-ignore
@@ -217,7 +217,7 @@ export function displayNextActions(actionName: string,
                                    api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: displayNextActions: actionName', actionName);
+    log.debug('displayNextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('displayNextActions', argumentsDescription, args);
     // @ts-ignore
@@ -239,7 +239,7 @@ export function getCallCount(actionName: string,
                              api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getCallCount: actionName', actionName);
+    log.debug('getCallCount: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallCount', argumentsDescription, args);
     // @ts-ignore
@@ -261,7 +261,7 @@ export function getCallLimit(actionName: string,
                              api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getCallLimit: actionName', actionName);
+    log.debug('getCallLimit: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallLimit', argumentsDescription, args);
     // @ts-ignore
@@ -283,7 +283,7 @@ export function getEnabled(actionName: string,
                            api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getEnabled: actionName', actionName);
+    log.debug('getEnabled: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getEnabled', argumentsDescription, args);
     // @ts-ignore
@@ -305,7 +305,7 @@ export function getId(actionName: string,
                       api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getId: actionName', actionName);
+    log.debug('getId: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('getId', argumentsDescription, args);
     // @ts-ignore
@@ -329,7 +329,7 @@ export function getPrevious(actionName: string, steps: number,
     let result: string;
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getPrevious: actionName, steps', actionName, steps);
+    log.debug('getPrevious: actionName, steps', actionName, steps);
     let argumentsDescription = {"actionName": "string", "steps?": "number"}
     args = validateArguments('getPrevious', argumentsDescription, args);
     // @ts-ignore
@@ -352,7 +352,7 @@ export function nextActions(actionName: string,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: nextActions: actionName', actionName);
+    log.debug('nextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('nextActions', argumentsDescription, args);
     // @ts-ignore
@@ -374,7 +374,7 @@ export function numberActiveNextActions(actionName: string,
                                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: numberActiveNextActions: actionName', actionName);
+    log.debug('numberActiveNextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberActiveNextActions', argumentsDescription, args);
     // @ts-ignore
@@ -396,7 +396,7 @@ export function numberNextActions(actionName: string,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: numberNextActions: actionName', actionName);
+    log.debug('numberNextActions: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberNextActions', argumentsDescription, args);
     // @ts-ignore
@@ -418,7 +418,7 @@ export function removeAllNext(actionName: string,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: removeAllNext: actionName', actionName);
+    log.debug('removeAllNext: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('removeAllNext', argumentsDescription, args);
     // @ts-ignore
@@ -438,7 +438,7 @@ export function removeFromCallers(actionName: string,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: removeFromCallers: actionName', actionName);
+    log.debug('removeFromCallers: actionName', actionName);
     let argumentsDescription = {"actionName": "string"}
     args = validateArguments('removeFromCallers', argumentsDescription, args);
     // @ts-ignore
@@ -459,7 +459,7 @@ export function removeNext(actionName: string, nextAction: string,
                            api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: removeNext: actionName, nextAction', actionName, nextAction);
+    log.debug('removeNext: actionName, nextAction', actionName, nextAction);
     let argumentsDescription = {"actionName": "string", "nextAction": "string"}
     args = validateArguments('removeNext', argumentsDescription, args);
     // @ts-ignore
@@ -480,7 +480,7 @@ export function setCallLimit(actionName: string, limit: number,
                              api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: setCallLimit: actionName, limit', actionName, limit);
+    log.debug('setCallLimit: actionName, limit', actionName, limit);
     let argumentsDescription = {"actionName": "string", "limit": "number"}
     args = validateArguments('setCallLimit', argumentsDescription, args);
     // @ts-ignore
@@ -501,7 +501,7 @@ export function setEnabled(actionName: string, enabled: boolean,
                            api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: setEnabled: actionName, enabled', actionName, enabled);
+    log.debug('setEnabled: actionName, enabled', actionName, enabled);
     let argumentsDescription = {"actionName": "string", "enabled": "boolean"}
     args = validateArguments('setEnabled', argumentsDescription, args);
     // @ts-ignore
@@ -522,7 +522,7 @@ export function setExhaustive(actionName: string, exhaustive: boolean,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: setExhaustive: actionName, exhaustive', actionName, exhaustive);
+    log.debug('setExhaustive: actionName, exhaustive', actionName, exhaustive);
     let argumentsDescription = {"actionName": "string", "exhaustive": "boolean"}
     args = validateArguments('setExhaustive', argumentsDescription, args);
     // @ts-ignore
@@ -543,7 +543,7 @@ export function setMaxActionDepth(actionName: string, depth: number = 1000,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: setMaxActionDepth: actionName, depth', actionName, depth);
+    log.debug('setMaxActionDepth: actionName, depth', actionName, depth);
     let argumentsDescription = {"actionName": "string", "depth": "number"}
     args = validateArguments('setMaxActionDepth', argumentsDescription, args);
     // @ts-ignore
@@ -568,7 +568,7 @@ export function allowList(variableName: string, list: []|{},
                           api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowList: variableName, list', variableName, list);
+    log.debug('allowList: variableName, list', variableName, list);
     let argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowList', argumentsDescription, args);
     // @ts-ignore
@@ -589,7 +589,7 @@ export function allowOnlyList(variableName: string, list: []|{},
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowOnlyList: variableName, list', variableName, list);
+    log.debug('allowOnlyList: variableName, list', variableName, list);
     let argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowOnlyList', argumentsDescription, args);
     // @ts-ignore
@@ -611,7 +611,7 @@ export function allowOnlyRange(variableName: string, low: number, high: number,
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowOnlyRange: variableName, low, high', variableName, low, high);
+    log.debug('allowOnlyRange: variableName, low, high', variableName, low, high);
     let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowOnlyRange', argumentsDescription, args);
     // @ts-ignore
@@ -632,7 +632,7 @@ export function allowOnlyValue(variableName: string, value: number,
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowOnlyValue: variableName, value', variableName, value);
+    log.debug('allowOnlyValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowOnlyValue', argumentsDescription, args);
     // @ts-ignore
@@ -653,7 +653,7 @@ export function allowOnlyValues(variableName: string, valueList: [],
                                 api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowOnlyValues: variableName, valueList', variableName, valueList);
+    log.debug('allowOnlyValues: variableName, valueList', variableName, valueList);
     let argumentsDescription = {"variableName": "string", "valueList": "array"}
     args = validateArguments('allowOnlyValues', argumentsDescription, args);
     let vtqArguments = [variableName, valueList.length]
@@ -679,7 +679,7 @@ export function allowRange(variableName: string, low: number, high: number,
                            api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowRange: variableName, low, high', variableName, low, high);
+    log.debug('allowRange: variableName, low, high', variableName, low, high);
     let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowRange', argumentsDescription, args);
     // @ts-ignore
@@ -700,7 +700,7 @@ export function allowValue(variableName: string, value: number,
                            api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowValue: variableName, value', variableName, value);
+    log.debug('allowValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowValue', argumentsDescription, args);
     // @ts-ignore
@@ -721,7 +721,7 @@ export function allowValues(variableName: string, valueList: [],
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: allowValues: variableName, valueList', variableName, valueList);
+    log.debug('allowValues: variableName, valueList', variableName, valueList);
     let argumentsDescription = {"variableName": "string", "valueList": "array"}
     args = validateArguments('allowValues', argumentsDescription, args);
     let vtqArguments = [variableName, valueList.length]
@@ -747,7 +747,7 @@ export function disallowRange(variableName: string, low: number, high: number,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: disallowRange: variableName, low, high', variableName, low, high);
+    log.debug('disallowRange: variableName, low, high', variableName, low, high);
     let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('disallowRange', argumentsDescription, args);
     // @ts-ignore
@@ -768,7 +768,7 @@ export function disallowValue(variableName: string, value: number,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: disallowValue: variableName, value', variableName, value);
+    log.debug('disallowValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('disallowValue', argumentsDescription, args);
     // @ts-ignore
@@ -789,7 +789,7 @@ export function disallowValues(variableName: string, valueList: [],
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: disallowValues: variableName, valueList', variableName, valueList);
+    log.debug('disallowValues: variableName, valueList', variableName, valueList);
     let argumentsDescription = {"variableName": "string", "valueList": "array"}
     args = validateArguments('disallowValues', argumentsDescription, args);
     let vtqArguments = [variableName, valueList.length]
@@ -814,7 +814,7 @@ export function doNotRepeat(variableName: string, value: boolean,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: doNotRepeat: variableName, value', variableName, value);
+    log.debug('doNotRepeat: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "boolean"}
     args = validateArguments('doNotRepeat', argumentsDescription, args);
     // @ts-ignore
@@ -834,7 +834,7 @@ export function gen(variableName: string,
                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: gen: variableName', variableName);
+    log.debug('gen: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('gen', argumentsDescription, args);
     // @ts-ignore
@@ -854,7 +854,7 @@ export function getDoNotRepeat(variableName: string,
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getDoNotRepeat: variableName', variableName);
+    log.debug('getDoNotRepeat: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getDoNotRepeat', argumentsDescription, args);
     // @ts-ignore
@@ -876,7 +876,7 @@ export function getSeed(variableName: string,
                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getSeed: variableName', variableName);
+    log.debug('getSeed: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getSeed', argumentsDescription, args);
     // @ts-ignore
@@ -898,7 +898,7 @@ export function getValue(variableName: string,
                          api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: getValue: variableName', variableName);
+    log.debug('getValue: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('getValue', argumentsDescription, args);
     // @ts-ignore
@@ -920,7 +920,7 @@ export function resetRanges(variableName: string,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: resetRanges: variableName', variableName);
+    log.debug('resetRanges: variableName', variableName);
     let argumentsDescription = {"variableName": "string"}
     args = validateArguments('resetRanges', argumentsDescription, args);
     // @ts-ignore
@@ -941,7 +941,7 @@ export function setSeed(variableName: string, seed: number,
                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: setSeed: variableName, seed', variableName, seed);
+    log.debug('setSeed: variableName, seed', variableName, seed);
     let argumentsDescription = {"variableName": "string", "seed": "number"}
     args = validateArguments('setSeed', argumentsDescription, args);
     // @ts-ignore
@@ -962,7 +962,7 @@ export function setValue(variableName: string, value: any,
                          api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
-    log.debug('VitaqService: setValue: variableName, value', variableName, value);
+    log.debug('setValue: variableName, value', variableName, value);
     let argumentsDescription = {"variableName": "string", "value": "any"}
     args = validateArguments('setValue', argumentsDescription, args);
     // @ts-ignore
