@@ -691,6 +691,9 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         this._browser = browser
         log.debug("Running the vitaq-service before method")
         if (this.errorMessage !== "") {
+            // Make sure we are getting any other messages sent our way
+            // Print messages from the queue
+            this.printMessages()
             log.error("An error with the following message has already been detected")
             log.error(this.errorMessage)
             if (Object.prototype.hasOwnProperty.call(this, "_api") && this._api.sessionEstablishedError !== "") {
