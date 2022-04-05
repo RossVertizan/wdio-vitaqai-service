@@ -1,5 +1,5 @@
 {
-  "name": "@wdio/vitaqai-service",
+  "name": "wdio-vitaqai-service",
   "version": "1.1.1",
   "description": "A plugin service for WebdriverIO to allow the use of VitaqAI",
   "author": "Vertizan Support <support@vertizan.com>",
@@ -12,6 +12,7 @@
     "webdriver",
     "wdio",
     "wdio-service",
+    "wdio-plugin",
     "vitaqai"
   ],
   "bugs": {
@@ -23,9 +24,9 @@
     "README.md"
   ],
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
-  "devDependencies": {
-    "vitaqai_api": "^1.0.47"
+  "dependencies": {
+    "vitaqai_api": "^1.1.1"
   }
 }
