@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.launcher = void 0;
 //==============================================================================
-// (c) Vertizan Limited 2011-2021
+// (c) Vertizan Limited 2011-2022
 //==============================================================================
 const launcher_1 = __importDefault(require("./launcher"));
 const service_1 = __importDefault(require("./service"));

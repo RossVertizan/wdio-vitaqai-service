@@ -1,6 +1,6 @@
 "use strict";
 //==============================================================================
-// (c) Vertizan Limited 2011-2021
+// (c) Vertizan Limited 2011-2022
 //==============================================================================
 //https://javascript.info/custom-errors
 exports.VitaqServiceError = class VitaqServiceError extends Error {

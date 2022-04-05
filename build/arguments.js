@@ -1,6 +1,6 @@
 "use strict";
 //==============================================================================
-// (c) Vertizan Limited 2011-2021
+// (c) Vertizan Limited 2011-2022
 //==============================================================================
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkArgumentTypes = exports.countArgumentsReceived = exports.countNonOptionalArguments = exports.validateArguments = void 0;

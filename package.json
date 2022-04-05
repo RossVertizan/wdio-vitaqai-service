@@ -2,16 +2,11 @@
   "name": "@wdio/vitaqai-service",
   "version": "1.0.87",
   "description": "A plugin service for WebdriverIO to allow the use of VitaqAI",
-  "author": "Ross Addinall <ross@vertizan.com>",
-  "homepage": "https://bitbucket.org/RossVertizan/wdio-vitaqai-service",
+  "author": "Vertizan Support <support@vertizan.com>",
   "license": "MIT",
   "main": "./build/index",
   "engines": {
     "node": ">=12.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://bitbucket.org:RossVertizan/wdio-vitaqai-service.git"
   },
   "keywords": [
     "webdriver",
@@ -20,7 +15,7 @@
     "vitaqai"
   ],
   "bugs": {
-    "url": "https://bitbucket.org/RossVertizan/wdio-vitaqai-service"
+    "email": "support@vertizan.com"
   },
   "files": [
     "build/*",

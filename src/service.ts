@@ -1,5 +1,5 @@
 //==============================================================================
-// (c) Vertizan Limited 2011-2021
+// (c) Vertizan Limited 2011-2022
 //==============================================================================
 
 // import stringify = Mocha.utils.stringify;
@@ -744,9 +744,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     //     log.debug("Running the vitaq-service after method")
     // }
 
-    // afterSession(config: Options.Testrunner, capabilities: Capabilities.RemoteCapability, specs:any) {
-    //     log.debug("Running the vitaq-service afterSession method")
-    // }
+    async afterSession() {
+        log.debug("Running the vitaq-service afterSession method");
+        this._api.closeVitaq();
+    }
 
     // onReload(oldSessionId:any, newSessionId:any) {
     //     // Runs on browser.reloadSession
