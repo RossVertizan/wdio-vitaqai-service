@@ -27,6 +27,6 @@
     "access": "public"
   },
   "dependencies": {
-    "vitaqai_api": "^1.1.1"
+    "vitaqai-api": "^1.1.1"
   }
 }

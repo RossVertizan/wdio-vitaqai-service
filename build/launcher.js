@@ -87,8 +87,8 @@ class VitaqLauncher {
             everythingOK = false;
         }
         // ==== Check the framework in the config ====
-        if (config.framework !== "vitaq-mocha") {
-            log.error(`Incorrect framework specified, expected vitaq-mocha but got ${config.framework}`);
+        if (config.framework !== "vitaqai-mocha") {
+            log.error(`Incorrect framework specified, expected vitaqai-mocha but got ${config.framework}`);
             log.error("Vitaq uses a modified version of the Mocha testing framework");
             log.error("You need to install this modified framework and specify it in the framework section of the wdio.conf file");
             everythingOK = false;

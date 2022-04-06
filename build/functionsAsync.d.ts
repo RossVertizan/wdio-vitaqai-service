@@ -1,4 +1,4 @@
-import VitaqAiApi from 'vitaqai_api';
+import VitaqAiApi from 'vitaqai-api';
 import type { Browser, MultiRemoteBrowser } from 'webdriverio';
 /**
  * Provide a simple sleep command

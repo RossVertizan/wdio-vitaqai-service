@@ -10,7 +10,7 @@ const path = require("path");
 
 // Packages
 // @ts-ignore
-import { VitaqAiApi } from 'vitaqai_api'
+import { VitaqAiApi } from 'vitaqai-api'
 import { SevereServiceError } from 'webdriverio'
 
 // Type import

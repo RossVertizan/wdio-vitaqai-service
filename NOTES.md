@@ -50,22 +50,22 @@ npm publish --registry https://pkgs.vitaq.online
 
 
 ### How to install
-Installed as part of wdio-vitaq-mocha-framework:
+Installed as part of wdio-vitaqai-mocha-framework:
 ```node
-npm install @wdio/vitaq-mocha-framework@<version> --registry http://localhost:4873 --save-dev
+npm install wdio-vitaqai-mocha-framework@<version> --registry http://localhost:4873 --save-dev
 ```
 or manually with:
 ```node
-npm install @wdio/vitaqai-service@<version> --registry http://localhost:4873 --save-dev
-npm install @wdio/vitaqai-service@latest --registry http://localhost:4873 --save-dev
+npm install wdio-vitaqai-service@<version> --registry http://localhost:4873 --save-dev
+npm install wdio-vitaqai-service@latest --registry http://localhost:4873 --save-dev
 ```
 Or
 ```node
-npm update @wdio/vitaqai-service --registry http://localhost:4873 --save-dev
+npm update wdio-vitaqai-service --registry http://localhost:4873 --save-dev
 ```
 Or from the cloud:
 ```node
-npm install @wdio/vitaqai-service@<version> --registry https://pkgs.vitaq.online
+npm install wdio-vitaqai-service@<version> --registry https://pkgs.vitaq.online
 ```
 
 ## Development Notes
@@ -73,23 +73,23 @@ npm install @wdio/vitaqai-service@<version> --registry https://pkgs.vitaq.online
 ### Notes during selection of methods to expose
 
 1. Focussing on the methods associated with controlling the actions/next actions because we don't know how mch people will want to programmatically control the data generation.
-2. abort - need to find a way to pass the current action without the user having to do anything. Should be able to get this from the next action mechanism. Implemented in vitaqai_api convertArguments method
+2. abort - need to find a way to pass the current action without the user having to do anything. Should be able to get this from the next action mechanism. Implemented in vitaqai-api convertArguments method
 3. Need to handle default values in the writer - implemented with default in YAML
 4. Several methods need customising, see:
    ```yaml
    Need to modify template code to handle a list of values
    ```
 5. Need to remove the name sequence/sequences and replace it with action/actions - implemented with altname field in YAML
-6. add_next/remove_next need the action specified as the second argument to be prefixed with "top." - implemented in the convertArguments method in vitaqai_api.
-7. Need to convert boolean return values from Python  - implemented in vitaqai_api/convertReturn method
+6. add_next/remove_next need the action specified as the second argument to be prefixed with "top." - implemented in the convertArguments method in vitaqai-api.
+7. Need to convert boolean return values from Python  - implemented in vitaqai-api/convertReturn method
 8. Discovered bug in GenFromList - weights are incorrect if not initialised with weights.  A weights array is maintained which keeps a list of the weights, but this is not initialised if the starting description does not have weights.  This issue has now been fixed  - just need a new build of the C++ code.
 
 ### Client methods to port
 
 Need to have all of these methods supported from the Vitaq client
 Three bits to the implementation:
-1. In the socketClient.js (vitaqai_api)
-2. In index.js - a caller function (vitaqai_api)
+1. In the socketClient.js (vitaqai-api)
+2. In index.js - a caller function (vitaqai-api)
 3. In service.ts - the exposed method (wdio_vitaq_service)
 
 

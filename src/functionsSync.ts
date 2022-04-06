@@ -5,7 +5,7 @@ import {validateArguments} from "./arguments";
 
 // Type import
 // @ts-ignore
-import VitaqAiApi from 'vitaqai_api'
+import VitaqAiApi from 'vitaqai-api'
 import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 
 // import logger from '@wdio/logger'

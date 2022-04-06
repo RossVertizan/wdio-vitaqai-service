@@ -2,7 +2,7 @@
   "_args": [
     [
       "@types/mocha@8.2.1",
-      "H:\\Git\\webdriverio-vitaq-dev\\packages\\wdio-vitaq-mocha-framework"
+      "H:\\Git\\webdriverio-vitaq-dev\\packages\\wdio-vitaqai-mocha-framework"
     ]
   ],
   "_from": "@types/mocha@8.2.1",
@@ -27,7 +27,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/@types/mocha/-/mocha-8.2.1.tgz",
   "_spec": "8.2.1",
-  "_where": "H:\\Git\\webdriverio-vitaq-dev\\packages\\wdio-vitaq-mocha-framework",
+  "_where": "H:\\Git\\webdriverio-vitaq-dev\\packages\\wdio-vitaqai-mocha-framework",
   "bugs": {
     "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/issues"
   },

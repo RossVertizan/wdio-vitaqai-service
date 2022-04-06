@@ -2734,7 +2734,7 @@ interface BrowserMocha extends Mocha {
 
 // #endregion Browser augmentations
 
-declare module "vitaq-mocha" {
+declare module "vitaqai-mocha" {
     export = Mocha;
 }
 
