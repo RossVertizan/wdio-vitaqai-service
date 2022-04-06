@@ -9,7 +9,7 @@ const log = logger('@wdio/vitaq-service');
 const path = require("path");
 // Packages
 // @ts-ignore
-const vitaqai-api_1 = require("vitaqai-api");
+const vitaqai_api_1 = require("vitaqai-api");
 const webdriverio_1 = require("webdriverio");
 const { DEFAULT_OPTIONS } = require("./defaults");
 // TODO: Following line used for running tests - need to resolve this
@@ -539,7 +539,7 @@ module.exports = class VitaqService {
         let scriptResult;
         try {
             this.formatCommandLineArgs();
-            this._api = new vitaqai-api_1.VitaqAiApi(this._options);
+            this._api = new vitaqai_api_1.VitaqAiApi(this._options);
             scriptResult = await this.waitForScript(this._options.scriptTimeout, 100);
         }
         catch (error) {
