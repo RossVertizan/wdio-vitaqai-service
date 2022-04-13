@@ -3,7 +3,7 @@
 //==============================================================================
 
 import logger from '@wdio/logger'
-const log = logger('@wdio/vitaq-service')
+const log = logger('wdio-vitaqai-service')
 
 // Packages
 import { SevereServiceError } from 'webdriverio'

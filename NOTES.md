@@ -17,6 +17,15 @@ git submodule add https://RossVertizan@bitbucket.org/RossVertizan/wdio-vitaqai-s
 ```
 
 ### How to publish
+
+#### Dependencies
+This package has three dependencies that may also need to be updated, these are:
+1. vitaqai-api (Y:\vitaqai-api)
+2. wdio-vitaqai-mocha-framework (H:\Git\webdriverio-vitaq-dev\packages\wdio-vitaqai-mocha-framework)
+3. vitaqai-mocha (H:\Git\vitaqai-mocha)
+
+Check that these have all been published as necessary and their final versions inserted into the package.json of this package before going through the following steps.
+
 #### Build
 Before publishing, the code needs to be built. To do this go to the webdriverio-vitaq-dev project (H:\Git\webdriverio-vitaq-dev) and run
 ```node

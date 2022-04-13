@@ -5,7 +5,7 @@
 // import stringify = Mocha.utils.stringify;
 
 const logger = require('@wdio/logger').default;
-const log = logger('@wdio/vitaq-service');
+const log = logger('wdio-vitaqai-service');
 const path = require("path");
 
 // Packages

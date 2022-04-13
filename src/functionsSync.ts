@@ -10,7 +10,7 @@ import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 
 // import logger from '@wdio/logger'
 const logger = require('@wdio/logger').default;
-const log = logger('@wdio/vitaq-service')
+const log = logger('wdio-vitaqai-service')
 
 /**
  * Provide a simple sleep command
