@@ -1,7 +1,7 @@
 export interface VitaqServiceOptions {
     /**
      * Specify the URL
-     * Defaults to "https://vitaq.online"
+     * Defaults to the value of VTQ_RUNNER_URL or "https://vitaq.online"
      */
     url?: string;
     /**

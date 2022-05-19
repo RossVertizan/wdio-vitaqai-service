@@ -4,7 +4,7 @@
 import type { VitaqServiceOptions } from './types'
 
 export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
-    url: "https://vitaq.online",
+    url: process.env.VTQ_RUNNER_URL ?? "https://vitaq.online",
     userName: undefined,
     userAPIKey: undefined,
     testActivityName: undefined,
