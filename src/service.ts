@@ -50,12 +50,16 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     private errorMessage: string
     private booleanOptions: string[]
     private numericOptions: string[]
+    private _errors: string[]
+    private _warnings: string[]
 
     constructor(
         serviceOptions: VitaqServiceOptions,
         capabilities: Capabilities.RemoteCapability,
         config: VtqTestRunner
     ) {
+        this._errors = [];
+        this._warnings = [];
         try {
             log.debug("serviceOptions: ", serviceOptions);
             log.debug("capabilities: ", capabilities);
@@ -108,6 +112,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
 
         } catch (error) {
             log.error("Error: Vitaq Service failed to initialise");
+            this._errors.push("Error: Vitaq Service failed to initialise");
             log.error(error);
             // throw new Error("Vitaq Service failed to initialise");
             throw error;
@@ -158,7 +163,8 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             } else if (this.currentState === "failed") {
                 result = false;
             } else {
-                log.error("ERROR: Unexpected value for currentState")
+                log.error("Unexpected value for currentState")
+                this._errors.push("Unexpected value for currentState")
             }
         }
 
@@ -263,6 +269,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             }
         }
         log.error(`Was unable to find ${suiteName} in ${suite.fullTitle()}`)
+        this._errors.push(`Was unable to find ${suiteName} in ${suite.fullTitle()}`)
         log.info(`This will cause the test to end`)
         return null;
     }
@@ -278,6 +285,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             return JSON.parse(JSON.stringify(this._suiteMap[fileName]))
         }
         log.error("Was unable to find a file for test action: ", fileName);
+        this._errors.push("Was unable to find a file for test action: ", fileName);
         log.error(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
         log.error("The files that have been provided with defined tests are:");
         log.error(this._suiteMap);
@@ -326,8 +334,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 log.info(message[1])
             } else if (message[0] === "error") {
                 log.error(message[1])
+                this._errors.push(message[1])
             } else if (message[0] === "warning") {
                 log.warn(message[1])
+                this._warnings.push(message[1])
             } else {
                 log.info(message[1])
             }
@@ -665,6 +675,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 this.errorMessage = error.message
             }
             log.error(this.errorMessage)
+            this._errors.push(this.errorMessage)
         }
 
         // Run up the Vitaq session
@@ -681,6 +692,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                     this.errorMessage = error.message
                 }
                 log.error(this.errorMessage)
+                this._errors.push(this.errorMessage)
             }
         }
     }
@@ -696,8 +708,10 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             this.printMessages()
             log.error("An error with the following message has already been detected")
             log.error(this.errorMessage)
+            this._errors.push(this.errorMessage)
             if (Object.prototype.hasOwnProperty.call(this, "_api") && this._api.sessionEstablishedError !== "") {
                 log.error(this._api.sessionEstablishedError);
+                this._errors.push(this._api.sessionEstablishedError);
             }
             log.error("Please review the previous output for more details")
             await this._browser.deleteSession()
@@ -745,7 +759,22 @@ module.exports = class VitaqService implements Services.ServiceInstance {
     // }
 
     async afterSession() {
-        log.debug("Running the vitaq-service afterSession method");
+        if (this._errors.length > 0) {
+            log.error("===============================================================");
+            log.error("Errors encountered during run:")
+            this._errors.forEach(error => {
+                log.error(`  - ${error}`)
+            });
+            log.error("===============================================================\n");
+        }
+        if (this._warnings.length > 0) {
+            log.warn("===============================================================");
+            log.warn("Warnings encountered during run:")
+            this._warnings.forEach(warning => {
+                log.warn(`  - ${warning}`)
+            });
+            log.warn("===============================================================\n");
+        }
         this._api.closeVitaq();
     }
 
@@ -780,6 +809,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                     reject(this._api.sessionEstablished)
                 } else if (timeoutCounter > timeout) {
                     log.error('Did not generate script in timeout period')
+                    this._errors.push('Did not generate script in timeout period')
                     clearInterval(intervalId)
                     reject("timeout")
                 }
@@ -813,6 +843,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                     reject(this._api.sessionEstablished)
                 } else if (timeoutCounter > timeout) {
                     log.error('Did not establish session in timeout period')
+                    this._errors.push('Did not establish session in timeout period')
                     clearInterval(intervalId)
                     reject("timeout")
                 }
@@ -869,6 +900,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             if (Object.prototype.hasOwnProperty.call(options, key)) {
                 if (this.convertToBool(options[key], true) === "not_bool") {
                     log.error(`The value provided for ${key} cannot be evaluated to a boolean - please use "true" or "false"`)
+                    this._errors.push(`The value provided for ${key} cannot be evaluated to a boolean - please use "true" or "false"`)
                     throw new SevereServiceError(`The value provided for ${key} cannot be evaluated to a boolean - please use "true" or "false"`)
                 }
             }
@@ -881,17 +913,20 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                 let value = options[key]
                 if (isNaN(value) || isNaN(parseFloat(value))) {
                     log.error(`The value provided for ${key} cannot be evaluated to a number - please enter a number, got ${value}`)
+                    this._errors.push(`The value provided for ${key} cannot be evaluated to a number - please enter a number, got ${value}`)
                     throw new SevereServiceError(`The value provided for ${key} cannot be evaluated to a number - please enter a number, got ${value}`)
                 }
                 else if (key === 'aiVariability' || key === 'aiVariabilityDecay') {
                     if (parseFloat(value) < 1 || parseFloat(value) > 10) {
                         log.error(`The value provided for ${key} must be between 1 and 10, got ${value}`)
+                        this._errors.push(`The value provided for ${key} must be between 1 and 10, got ${value}`)
                         throw new SevereServiceError(`The value provided for ${key} must be between 1 and 10, got ${value}`)
                     }
                 }
                 else if (key === 'noProgressStop') {
                     if (parseInt(value, 10) < 1 ) {
                         log.error(`The value provided for ${key} must be greater than 1, got ${value}`)
+                        this._errors.push(`The value provided for ${key} must be greater than 1, got ${value}`)
                         throw new SevereServiceError(`The value provided for ${key} must be greater than 1, got ${value}`)
                     }
                 }
@@ -905,6 +940,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
             if (typeof value === 'string') {
                 if (!value.match(/^[0-9,-]*$/)) {
                     log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
+                    this._errors.push(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
                     throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`)
                 }
                 let entries = value.split(",")
@@ -912,6 +948,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
                     let entry = entries[index].trim()
                     if (!entry.match(/^[-]?[0-9]+$/) && !entry.match(/^[-]?[0-9]+-[-]?[0-9]+$/)) {
                         log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
+                        this._errors.push(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
                         throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`)
                     }
                 }

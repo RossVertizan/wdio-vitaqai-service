@@ -61,6 +61,12 @@ export interface VitaqServiceOptions {
     sequence?: string | undefined
 
     /**
+     * Specify that all sequences should be run straight through avoiding AI
+     * Defaults to false
+     */
+    sequences?: boolean
+
+    /**
      * Specify the timeout to use for the authentication with the runner
      * Defaults to 20000 ms (60000 ms in debug mode)
      */

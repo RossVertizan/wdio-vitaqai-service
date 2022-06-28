@@ -12,6 +12,7 @@ export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
     useSync: false,
     reloadSession: false,
     sequence: undefined,
+    sequences: false,
     authenticationTimeout: 20000,
     nextActionTimeout: 10000,
     scriptTimeout: 20000,
