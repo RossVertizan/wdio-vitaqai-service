@@ -52,6 +52,12 @@ export interface VitaqServiceOptions {
      */
     sequences?: boolean;
     /**
+     * Specify that actions with remaining coverage requirements after sequences are complete
+     * should be found and executed
+     * Defaults to false
+     */
+    actions?: boolean;
+    /**
      * Specify the timeout to use for the authentication with the runner
      * Defaults to 20000 ms (60000 ms in debug mode)
      */
