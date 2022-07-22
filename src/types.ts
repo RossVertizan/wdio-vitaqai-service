@@ -198,6 +198,7 @@ export interface MochaTest {
     type: "test";
     speed?: "slow" | "medium" | "fast"; // added by reporters
     err?: Error; // added by reporters
+    state?: "failed" | "passed" | "pending"; // added by reporters
     clone(): MochaTest;
 }
 

@@ -165,6 +165,7 @@ export interface MochaTest {
     type: "test";
     speed?: "slow" | "medium" | "fast";
     err?: Error;
+    state?: "failed" | "passed" | "pending";
     clone(): MochaTest;
 }
 export interface MochaRunnable {

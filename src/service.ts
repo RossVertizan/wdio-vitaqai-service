@@ -127,7 +127,7 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     async nextActionSelector(suite: MochaSuite, currentSuite: MochaSuite | undefined) {
         let result: boolean = true;
-        let returnSuite: MochaSuite;
+        // let returnSuite: MochaSuite;
 
         // Create the suite map if it has not been created
         if (Object.keys(this._suiteMap).length < 1) {
@@ -140,9 +140,14 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         // even if we have multiple suites in a file
         // - it starts as passed and can only ever go to failed
         if (typeof currentSuite !== "undefined") {
-            if (currentSuite.ctx._runnable.state === "failed") {
-                this.currentState = "failed"
+            const currentSuiteStates = currentSuite.tests.map(test => test.state)
+            log.debug("currentSuite pass/fail states: ", currentSuiteStates )
+            if (currentSuiteStates.indexOf('failed') > -1) {
+                this.currentState = "failed";
             }
+            // if (currentSuite.ctx._runnable.state === "failed") {
+            //     this.currentState = "failed"
+            // }
         }
 
         // Print messages from the queue
@@ -328,18 +333,20 @@ module.exports = class VitaqService implements Services.ServiceInstance {
      */
     printMessages(): void {
         let message: string[];
-        while (this._api.socket.messageQueue.length > 0) {
-            message = this._api.socket.messageQueue.shift();
-            if (message[0] === "info") {
-                log.info(message[1])
-            } else if (message[0] === "error") {
-                log.error(message[1])
-                this._errors.push(message[1])
-            } else if (message[0] === "warning") {
-                log.warn(message[1])
-                this._warnings.push(message[1])
-            } else {
-                log.info(message[1])
+        if (this._api.socket) {
+            while (this._api.socket.messageQueue.length > 0) {
+                message = this._api.socket.messageQueue.shift();
+                if (message[0] === "info") {
+                    log.info(message[1])
+                } else if (message[0] === "error") {
+                    log.error(message[1])
+                    this._errors.push(message[1])
+                } else if (message[0] === "warning") {
+                    log.warn(message[1])
+                    this._warnings.push(message[1])
+                } else {
+                    log.info(message[1])
+                }
             }
         }
     }
