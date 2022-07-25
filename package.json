@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "wdio-vitaqai-mocha-framework": "7.12.11",
-    "vitaqai-api": "1.1.14",
+    "vitaqai-api": "1.1.15",
     "vitaqai-mocha": "9.1.3"
   }
 }
