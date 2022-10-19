@@ -15,7 +15,7 @@ export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
     sequences: false,
     actions: false,
     authenticationTimeout: 20000,
-    nextActionTimeout: 10000,
+    nextActionTimeout: 300000,
     scriptTimeout: 20000,
     sessionTimeout: 20000,
     debug: false,

@@ -295,6 +295,50 @@ export function getEnabled(actionName: string,
 }
 
 /**
+ * Query if the action is exhaustive
+ * @param actionName - name of the action
+ * @param browser
+ * @param api
+ */
+// export function getExhaustive(actionName: string,
+//                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+//                            api: VitaqAiApi) {
+//     let args: any [] = Array.from(arguments);
+//     args.splice(-2, 2);
+//     log.debug('getExhaustive: actionName', actionName);
+//     let argumentsDescription = {"actionName": "string"}
+//     args = validateArguments('getExhaustive', argumentsDescription, args);
+//     // @ts-ignore
+//     let result = browser.call(() =>
+//         api.runCommandCaller('get_exhaustive', args)
+//     )
+//     log.info(`   -> ${result}`)
+//     return result
+// }
+
+/**
+ * Query the max sequence depth
+ * @param actionName - name of the action
+ * @param browser
+ * @param api
+ */
+// export function getMaxActionDepth(actionName: string,
+//                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+//                            api: VitaqAiApi) {
+//     let args: any [] = Array.from(arguments);
+//     args.splice(-2, 2);
+//     log.debug('getMaxActionDepth: actionName', actionName);
+//     let argumentsDescription = {"actionName": "string"}
+//     args = validateArguments('getMaxActionDepth', argumentsDescription, args);
+//     // @ts-ignore
+//     let result = browser.call(() =>
+//         api.runCommandCaller('get_max_sequence_depth', args)
+//     )
+//     log.info(`   -> ${result}`)
+//     return result
+// }
+
+/**
  * Get a unique ID for this action
  * @param actionName - name of the action
  * @param browser
