@@ -96,6 +96,18 @@ export declare function getCallLimit(actionName: string, browser: Browser<'async
  */
 export declare function getEnabled(actionName: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'>, api: VitaqAiApi): Promise<any>;
 /**
+ * Query if the action is exhaustive
+ * @param actionName - name of the action
+ * @param browser
+ * @param api
+ */
+/**
+ * Query the max sequence depth
+ * @param actionName - name of the action
+ * @param browser
+ * @param api
+ */
+/**
  * Get a unique ID for this action
  * @param actionName - name of the action
  * @param browser

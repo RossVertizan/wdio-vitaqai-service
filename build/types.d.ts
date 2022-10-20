@@ -63,8 +63,8 @@ export interface VitaqServiceOptions {
      */
     authenticationTimeout?: number;
     /**
-     * Specify the timeout to use when waiting for the next action frommthe Vitaq script
-     * Defaults to 10000 ms (3600000 ms (1 hour) in debug mode)
+     * Specify the timeout to use when waiting for the next action from the Vitaq script
+     * Defaults to 300000 ms (3600000 ms (1 hour) in debug mode)
      */
     nextActionTimeout?: number;
     /**
