@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "wdio-vitaqai-mocha-framework": "7.25.7",
+    "wdio-vitaqai-mocha-framework": "7.25.8",
     "vitaqai-api": "1.1.30",
     "vitaqai-mocha": "10.1.1"
   }
