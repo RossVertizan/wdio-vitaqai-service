@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "./build/index",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=14.0.0"
   },
   "keywords": [
     "webdriver",
@@ -27,8 +27,8 @@
     "access": "public"
   },
   "dependencies": {
-    "wdio-vitaqai-mocha-framework": "7.25.8",
-    "vitaqai-api": "1.1.30",
+    "wdio-vitaqai-mocha-framework": "7.25.9",
+    "vitaqai-api": "1.1.32",
     "vitaqai-mocha": "10.1.1"
   }
 }
