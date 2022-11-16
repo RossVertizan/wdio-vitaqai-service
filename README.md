@@ -21,7 +21,7 @@ The easiest way is to keep ```wdio-vitaqai-service``` as a devDependency in your
 ```json
 {
   "devDependencies": {
-    "wdio-vitaqai-service": "^1.1.25"
+    "wdio-vitaqai-service": "^1.1.26"
   }
 }
 ```
