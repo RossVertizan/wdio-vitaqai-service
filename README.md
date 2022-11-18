@@ -6,11 +6,11 @@
 [![npm version](https://badge.fury.io/js/wdio-vitaqai-service.svg)](https://badge.fury.io/js/wdio-vitaqai-service)
 [![downloads](https://img.shields.io/npm/dm/wdio-vitaqai-service)](https://img.shields.io/npm/dm/wdio-vitaqai-service)
 
-**A plugin service for WebdriverIO to allow the use of VitaqAI**
-
-
-## Description
-This is a [WebdriverIO](https://webdriver.io) service that integrates the [Vitaq AI](https://vitaq.online) testing platform.
+Vitaq AI is a unique AI-powered cloud based test automation tool built on WebdriverIO.
+Accessed through your browser to easily capture a graphical digital twin of your application. It extends the full capability of Webdriverio into a model-driven approach for web, mobile and API testing. 
+- Uses the power of variability to find defects that other approaches miss.
+- Measures and analyses what has been tested and what has not been tested into a user journey cloud based test coverage database.
+- Reduces your risks with machine learning by prioritising your most critical user journeys.
 
 ## Installation
 
@@ -59,7 +59,7 @@ In order to use this package the WebdriverIO configuration file (default name wd
 1. Group the specs so they are all run in the same runner instance:
 ```json
     "specs": [
-        ['./test/specs/*.js']
+        ["./test/specs/*.js"]
     ],
 ```
 2. Set the framework to be vitaqai-mocha:
@@ -70,15 +70,14 @@ In order to use this package the WebdriverIO configuration file (default name wd
 3. Add the vitaqai service and the parameters:
 ```json
 "services": [
-        ['vitaqai', {
-            userName: 'fred@webtesting.com',
-            testActivityName: 'Shopping_Basket_Test',
-            projectName: "SellStuff",
+        ["vitaqai", {
+            userName: "fred@webtesting.com",
+            testActivityName: "Shopping_Site_Test",
+            projectName: "Surf_Shop",
             url: "https://vitaq.online",
-            userAPIKey: "...",
-            useSync: true
+            userAPIKey: "..."
         }],
-        'chromedriver',
+        "chromedriver",
     ],
 ```
 Where:
@@ -88,7 +87,7 @@ Where:
 - `projectName` - refers to the project containing the test activity
 - `url` - is the URL for the Vitaq
 - `userAPIKey` - is the API key copied from your vitaq.online account
-- `useSync` - when set to true specifies that the @wdio/sync capability (now deprecated) should be used
+
 
 Mocha Options can be added in the [usual way](https://webdriver.io/docs/frameworks/#mocha-options)
 
