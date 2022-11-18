@@ -1,3 +1,4 @@
+
 ECHO OFF
 ECHO Have you committed all of your changes?
 ECHO If not you'll get an error at the next step.
