@@ -64,18 +64,18 @@ In order to use this package the WebdriverIO configuration file (default name wd
 ```
 2. Set the framework to be vitaqai-mocha:
 ```json
-    "framework": 'vitaqai-mocha',
+    "framework": "vitaqai-mocha",
 ```
 
 3. Add the vitaqai service and the parameters:
 ```json
 "services": [
         ["vitaqai", {
-            userName: "fred@webtesting.com",
-            testActivityName: "Shopping_Site_Test",
-            projectName: "Surf_Shop",
-            url: "https://vitaq.online",
-            userAPIKey: "..."
+            "userName": "fred@webtesting.com",
+            "testActivityName": "Shopping_Site_Test",
+            "projectName": "Surf_Shop",
+            "url": "https://vitaq.online",
+            "userAPIKey": "..."
         }],
         "chromedriver",
     ],
