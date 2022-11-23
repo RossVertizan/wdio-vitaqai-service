@@ -1,12 +1,12 @@
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
+import path from 'path'
+import logger from '@wdio/logger'
 
 // import stringify = Mocha.utils.stringify;
-
-const logger = require('@wdio/logger').default;
-const log = logger('wdio-vitaqai-service');
-const path = require("path");
+// const logger = require('@wdio/logger').default;
+// const path = require("path");
 
 // Packages
 // @ts-ignore
@@ -16,6 +16,9 @@ import { SevereServiceError } from 'webdriverio'
 // Type import
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'
 import type { Browser, MultiRemoteBrowser } from 'webdriverio'
+
+
+const log = logger('wdio-vitaqai-service');
 
 // Extend Options.Testrunner for Vitaq command line 'debug' option
 interface VtqTestRunner extends Options.Testrunner {
@@ -28,7 +31,7 @@ const { DEFAULT_OPTIONS } = require("./defaults")
 
 // TODO: Following line used for running tests - need to resolve this
 // exports.VitaqService = class VitaqService implements Services.ServiceInstance {
-module.exports = class VitaqService implements Services.ServiceInstance {
+export default class VitaqService implements Services.ServiceInstance {
     private _options: VitaqServiceOptions
     private _capabilities: Capabilities.RemoteCapability
     private _config: VtqTestRunner
@@ -313,15 +316,19 @@ module.exports = class VitaqService implements Services.ServiceInstance {
         let filenameObj;
         for (let index = 0; index < suite.suites.length; index += 1) {
             subSuite = suite.suites[index];
-            title = subSuite.title;
-            filenameObj = path.parse(path.resolve(subSuite.file));
-            filename = filenameObj.name;
+            if (typeof subSuite.file !== 'undefined' && typeof subSuite.title !== 'undefined') {
+                title = subSuite.title;
+                filenameObj = path.parse(path.resolve(subSuite.file));
+                filename = filenameObj.name;
 
-            // Add to the suiteMap with file as the key and titles as an array
-            if (Object.keys(this._suiteMap).indexOf(filename) > -1) {
-                this._suiteMap[filename].push(title)
+                // Add to the suiteMap with file as the key and titles as an array
+                if (Object.keys(this._suiteMap).indexOf(filename) > -1) {
+                    this._suiteMap[filename].push(title)
+                } else {
+                    this._suiteMap[filename] = [title]
+                }
             } else {
-                this._suiteMap[filename] = [title]
+                log.debug("createSuiteMap: subSuite.file and/or subSuite.title is undefined: ", subSuite);
             }
         }
         // log.debug("createSuiteMap: this._suiteMap: ", this._suiteMap)

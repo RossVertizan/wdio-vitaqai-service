@@ -2,7 +2,7 @@
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
 
-import { VitaqServiceError } from "./VitaqServiceError"
+import VitaqServiceError from "./VitaqServiceError"
 
 /**
  * Function to check as much as possible on the passed arguments to trap errors

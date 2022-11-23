@@ -1,9 +1,7 @@
 //==============================================================================
 // (c) Vertizan Limited 2020-2021
 //==============================================================================
-
 import logger from '@wdio/logger'
-const log = logger('wdio-vitaqai-service')
 
 // Packages
 import { SevereServiceError } from 'webdriverio'
@@ -19,7 +17,8 @@ interface VtqTestRunner extends Options.Testrunner {
 // Default options
 import { VitaqServiceOptions } from './types'
 
-// Have no need for this file at the moment, but keep it available.
+const log = logger('wdio-vitaqai-service')
+
 export default class VitaqLauncher {
     private _options: VitaqServiceOptions
     private _capabilities: Capabilities.RemoteCapability
