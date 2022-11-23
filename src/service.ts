@@ -10,8 +10,10 @@ import logger from '@wdio/logger'
 
 // Packages
 // @ts-ignore
-import { VitaqAiApi } from 'vitaqai-api'
-import { SevereServiceError } from 'webdriverio'
+import { VitaqAiApi } from 'vitaqai-api';
+import { SevereServiceError } from 'webdriverio';
+import * as vitaqSyncFunctions from "./functionsSync.js";
+import * as vitaqAsyncFunctions from "./functionsAsync.js";
 
 // Type import
 import type { Services, Capabilities, Options, Frameworks } from '@wdio/types'
@@ -27,7 +29,7 @@ interface VtqTestRunner extends Options.Testrunner {
 
 // Default options
 import { VitaqServiceOptions, MochaSuite } from './types'
-const { DEFAULT_OPTIONS } = require("./defaults")
+import { DEFAULT_OPTIONS } from "./defaults.js"
 
 // TODO: Following line used for running tests - need to resolve this
 // exports.VitaqService = class VitaqService implements Services.ServiceInstance {
@@ -92,11 +94,11 @@ export default class VitaqService implements Services.ServiceInstance {
                     ...this._config};
             }
 
-            // Import either the Sync or Async versions of the functions
+            // Use either the Sync or Async versions of the functions
             if (this._options.useSync) {
-                this.vitaqFunctions = require('./functionsSync')
+                this.vitaqFunctions = vitaqSyncFunctions;
             } else {
-                this.vitaqFunctions = require('./functionsAsync')
+                this.vitaqFunctions = vitaqAsyncFunctions;
             }
 
             // Process command line arguments
@@ -713,7 +715,7 @@ export default class VitaqService implements Services.ServiceInstance {
 
     // https://github.com/webdriverio/webdriverio/blob/master/examples/wdio.conf.js#L183-L326
     // before: function (capabilities, specs, browser) {
-    async before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
+    async before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined) {
         this._browser = browser
         log.debug("Running the vitaq-service before method")
         if (this.errorMessage !== "") {
@@ -728,7 +730,9 @@ export default class VitaqService implements Services.ServiceInstance {
                 this._errors.push(this._api.sessionEstablishedError);
             }
             log.error("Please review the previous output for more details")
-            await this._browser.deleteSession()
+            if (typeof this._browser !== "undefined") {
+                await this._browser.deleteSession()
+            }
             // @ts-ignore
             delete this._browser.sessionId;
             process.exit(1)

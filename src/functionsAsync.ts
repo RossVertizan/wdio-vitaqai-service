@@ -1,7 +1,7 @@
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
-import {validateArguments} from "./arguments";
+import {validateArguments} from "./arguments.js";
 
 // Type import
 // @ts-ignore
@@ -9,7 +9,7 @@ import VitaqAiApi from 'vitaqai-api'
 import type { Browser, MultiRemoteBrowser } from 'webdriverio'
 
 // import logger from '@wdio/logger'
-const logger = require('@wdio/logger').default;
+import logger from '@wdio/logger';
 const log = logger('wdio-vitaqai-service')
 
 
@@ -19,7 +19,7 @@ const log = logger('wdio-vitaqai-service')
  * @param browser
  */
 export async function sleep(ms: number,
-                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>) {
+                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined) {
     let args: any [] = Array.from(arguments);
     args.splice(-1, 1);
     log.debug("sleep: Sleeping for %s seconds", ms/1000);
@@ -39,7 +39,7 @@ export async function sleep(ms: number,
  * @param api
  */
 export async function requestData(variableName: string,
-                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -58,7 +58,7 @@ export async function requestData(variableName: string,
  * @param api
  */
 export async function recordCoverage(variablesArray: [],
-                               browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -76,7 +76,7 @@ export async function recordCoverage(variablesArray: [],
  * @param api
  */
 export async function sendDataToVitaq(variableName: string, value: any,
-                                browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                 api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -93,7 +93,7 @@ export async function sendDataToVitaq(variableName: string, value: any,
  * @param api
  */
 export async function readDataFromVitaq(variableName: string,
-                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -116,7 +116,7 @@ export async function readDataFromVitaq(variableName: string,
  * @param api
  */
 export async function createVitaqLogEntry(message: string | {}, format: string = 'text',
-                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -134,7 +134,7 @@ export async function createVitaqLogEntry(message: string | {}, format: string =
  * Abort the action causing it to not select a next action
  */
 export async function abort(actionName: string,
-                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -154,7 +154,7 @@ export async function abort(actionName: string,
  * @param api
  */
 export async function addNext(actionName: string, nextAction: string, weight: number = 1,
-                              browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                              browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -173,7 +173,7 @@ export async function addNext(actionName: string, nextAction: string, weight: nu
  * @param api
  */
 export async function clearCallCount(actionName: string, tree: boolean,
-                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                      api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -191,7 +191,7 @@ export async function clearCallCount(actionName: string, tree: boolean,
  * @param api
  */
 export async function displayNextActions(actionName: string,
-                                         browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                         browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                          api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -211,7 +211,7 @@ export async function displayNextActions(actionName: string,
  * @param api
  */
 export async function getCallCount(actionName: string,
-                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                    api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -231,7 +231,7 @@ export async function getCallCount(actionName: string,
  * @param api
  */
 export async function getCallLimit(actionName: string,
-                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                    api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -251,7 +251,7 @@ export async function getCallLimit(actionName: string,
  * @param api
  */
 export async function getEnabled(actionName: string,
-                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                  api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -271,7 +271,7 @@ export async function getEnabled(actionName: string,
  * @param api
  */
 // export async function getExhaustive(actionName: string,
-//                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+//                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
 //                                  api: VitaqAiApi) {
 //     let args: any [] = Array.from(arguments);
 //     args.splice(-2, 2);
@@ -291,7 +291,7 @@ export async function getEnabled(actionName: string,
  * @param api
  */
 // export async function getMaxActionDepth(actionName: string,
-//                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+//                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
 //                                  api: VitaqAiApi) {
 //     let args: any [] = Array.from(arguments);
 //     args.splice(-2, 2);
@@ -311,7 +311,7 @@ export async function getEnabled(actionName: string,
  * @param api
  */
 export async function getId(actionName: string,
-                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                             api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -332,7 +332,7 @@ export async function getId(actionName: string,
  * @param api
  */
 export async function getPrevious(actionName: string, steps: number,
-                            browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                             api: VitaqAiApi) {
     let result: string;
     let args: any [] = Array.from(arguments);
@@ -354,7 +354,7 @@ export async function getPrevious(actionName: string, steps: number,
  * @param api
  */
 export async function nextActions(actionName: string,
-                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -374,7 +374,7 @@ export async function nextActions(actionName: string,
  * @param api
  */
 export async function numberActiveNextActions(actionName: string,
-                                              browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                              browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -394,7 +394,7 @@ export async function numberActiveNextActions(actionName: string,
  * @param api
  */
 export async function numberNextActions(actionName: string,
-                                        browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                        browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -414,7 +414,7 @@ export async function numberNextActions(actionName: string,
  * @param api
  */
 export async function removeAllNext(actionName: string,
-                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -432,7 +432,7 @@ export async function removeAllNext(actionName: string,
  * @param api
  */
 export async function removeFromCallers(actionName: string,
-                                        browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                        browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -451,7 +451,7 @@ export async function removeFromCallers(actionName: string,
  * @param api
  */
 export async function removeNext(actionName: string, nextAction: string,
-                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                  api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -470,7 +470,7 @@ export async function removeNext(actionName: string, nextAction: string,
  * @param api
  */
 export async function setCallLimit(actionName: string, limit: number,
-                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                    api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -489,7 +489,7 @@ export async function setCallLimit(actionName: string, limit: number,
  * @param api
  */
 export async function setEnabled(actionName: string, enabled: boolean,
-                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                  api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -508,7 +508,7 @@ export async function setEnabled(actionName: string, enabled: boolean,
  * @param api
  */
 export async function setExhaustive(actionName: string, exhaustive: boolean,
-                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -527,7 +527,7 @@ export async function setExhaustive(actionName: string, exhaustive: boolean,
  * @param api
  */
 export async function setMaxActionDepth(actionName: string, depth: number = 1000,
-                                        browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                        browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -550,7 +550,7 @@ export async function setMaxActionDepth(actionName: string, depth: number = 1000
  * @param api
  */
 export async function allowList(variableName: string, list: []|{},
-                                browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                 api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -569,7 +569,7 @@ export async function allowList(variableName: string, list: []|{},
  * @param api
  */
 export async function allowOnlyList(variableName: string, list: []|{},
-                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -589,7 +589,7 @@ export async function allowOnlyList(variableName: string, list: []|{},
  * @param api
  */
 export async function allowOnlyRange(variableName: string, low: number | boolean, high: number | boolean,
-                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                      api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -608,7 +608,7 @@ export async function allowOnlyRange(variableName: string, low: number | boolean
  * @param api
  */
 export async function allowOnlyValue(variableName: string, value: number,
-                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                      api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -627,7 +627,7 @@ export async function allowOnlyValue(variableName: string, value: number,
  * @param api
  */
 export async function allowOnlyValues(variableName: string, valueList: [],
-                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                       api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -651,7 +651,7 @@ export async function allowOnlyValues(variableName: string, valueList: [],
  * @param api
  */
 export async function allowRange(variableName: string, low: number, high: number,
-                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                  api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -670,7 +670,7 @@ export async function allowRange(variableName: string, low: number, high: number
  * @param api
  */
 export async function allowValue(variableName: string, value: number,
-                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                  api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -689,7 +689,7 @@ export async function allowValue(variableName: string, value: number,
  * @param api
  */
 export async function allowValues(variableName: string, valueList: [],
-                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -713,7 +713,7 @@ export async function allowValues(variableName: string, valueList: [],
  * @param api
  */
 export async function disallowRange(variableName: string, low: number, high: number,
-                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -732,7 +732,7 @@ export async function disallowRange(variableName: string, low: number, high: num
  * @param api
  */
 export async function disallowValue(variableName: string, value: number,
-                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -751,7 +751,7 @@ export async function disallowValue(variableName: string, value: number,
  * @param api
  */
 export async function disallowValues(variableName: string, valueList: [],
-                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                      api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -774,7 +774,7 @@ export async function disallowValues(variableName: string, valueList: [],
  * @param api
  */
 export async function doNotRepeat(variableName: string, value: boolean,
-                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -792,7 +792,7 @@ export async function doNotRepeat(variableName: string, value: boolean,
  * @param api
  */
 export async function gen(variableName: string,
-                          browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                          browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                           api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -810,7 +810,7 @@ export async function gen(variableName: string,
  * @param api
  */
 export async function getDoNotRepeat(variableName: string,
-                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                      api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -830,7 +830,7 @@ export async function getDoNotRepeat(variableName: string,
  * @param api
  */
 export async function getSeed(variableName: string,
-                              browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                              browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -850,7 +850,7 @@ export async function getSeed(variableName: string,
  * @param api
  */
 export async function getValue(variableName: string,
-                               browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -870,7 +870,7 @@ export async function getValue(variableName: string,
  * @param api
  */
 export async function resetRanges(variableName: string,
-                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -889,7 +889,7 @@ export async function resetRanges(variableName: string,
  * @param api
  */
 export async function setSeed(variableName: string, seed: number,
-                              browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                              browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
@@ -908,7 +908,7 @@ export async function setSeed(variableName: string, seed: number,
  * @param api
  */
 export async function setValue(variableName: string, value: any,
-                               browser: Browser<'async'> | MultiRemoteBrowser<'async'>,
+                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
     args.splice(-2, 2);

@@ -68,28 +68,28 @@ export default class VitaqService implements Services.ServiceInstance {
      * Provide a simple sleep command
      * @param duration
      */
-    sleep(ms: number): any;
+    sleep(ms: number): void | Promise<unknown>;
     /**
      * Get Vitaq to generate a new value for the variable and then get it
      * @param variableName - name of the variable
      */
-    requestData(variableName: string): any;
+    requestData(variableName: string): unknown;
     /**
      * Get Vitaq to record coverage for the variables in the array
      * @param variablesArray - array of variables to record coverage for
      */
-    recordCoverage(variablesArray: []): any;
+    recordCoverage(variablesArray: []): void | Promise<any>;
     /**
      * Send data to Vitaq and record it on the named variable
      * @param variableName - name of the variable
      * @param value - value to store
      */
-    sendDataToVitaq(variableName: string, value: any): any;
+    sendDataToVitaq(variableName: string, value: any): void | Promise<any>;
     /**
      * Read data from a variable in Vitaq
      * @param variableName - name of the variable to read
      */
-    readDataFromVitaq(variableName: string): any;
+    readDataFromVitaq(variableName: string): unknown;
     /**
      * Create an entry in the Vitaq log
      * @param message - message/data to put into the log
@@ -98,52 +98,52 @@ export default class VitaqService implements Services.ServiceInstance {
      * When using the JSON option the JSON data needs to be stringified using the
      * JSON.stringify() method
      */
-    createVitaqLogEntry(message: string | {}, format: string): any;
-    record(variablesArray: []): any;
-    writeDataToVitaq(variableName: string, value: any): any;
-    write(variableName: string, value: any): any;
-    read(variableName: string): any;
-    log(message: string | {}, format: string): any;
-    abort(actionName: string): any;
-    addNext(actionName: string, nextAction: string, weight?: number): any;
-    clearCallCount(actionName: string, tree: boolean): any;
-    displayNextActions(actionName: string): any;
-    getCallCount(actionName: string): any;
-    getCallLimit(actionName: string): any;
-    getEnabled(actionName: string): any;
-    getPrevious(actionName: string, steps?: number): any;
-    getId(actionName: string): any;
-    nextActions(actionName: string): any;
-    numberActiveNextActions(actionName: string): any;
-    numberNextActions(actionName: string): any;
-    removeAllNext(actionName: string): any;
-    removeFromCallers(actionName: string): any;
-    removeNext(actionName: string, nextAction: string): any;
-    setCallLimit(actionName: string, limit: number): any;
-    setEnabled(actionName: string, enabled: boolean): any;
-    setExhaustive(actionName: string, exhaustive: boolean): any;
-    setMaxActionDepth(actionName: string, depth?: number): any;
-    allowList(variableName: string, list: []): any;
-    allowOnlyList(variableName: string, list: []): any;
-    allowOnlyRange(variableName: string, low: number, high: number): any;
-    allowOnlyValue(variableName: string, value: number): any;
-    allowOnlyValues(variableName: string, valueList: []): any;
-    allowRange(variableName: string, low: number, high: number): any;
-    allowValue(variableName: string, value: number): any;
-    allowValues(variableName: string, valueList: []): any;
-    disallowRange(variableName: string, low: number, high: number): any;
-    disallowValue(variableName: string, value: number): any;
-    disallowValues(variableName: string, valueList: []): any;
-    doNotRepeat(variableName: string, value: boolean): any;
-    gen(variableName: string): any;
-    getDoNotRepeat(variableName: string): any;
-    getSeed(variableName: string): any;
-    getValue(variableName: string): any;
-    resetRanges(variableName: string): any;
-    setSeed(variableName: string, seed: number): any;
-    setValue(variableName: string, value: any): any;
+    createVitaqLogEntry(message: string | {}, format: string): void | Promise<any>;
+    record(variablesArray: []): void | Promise<any>;
+    writeDataToVitaq(variableName: string, value: any): void | Promise<any>;
+    write(variableName: string, value: any): void | Promise<any>;
+    read(variableName: string): unknown;
+    log(message: string | {}, format: string): void | Promise<any>;
+    abort(actionName: string): void | Promise<any>;
+    addNext(actionName: string, nextAction: string, weight?: number): void | Promise<any>;
+    clearCallCount(actionName: string, tree: boolean): void | Promise<any>;
+    displayNextActions(actionName: string): unknown;
+    getCallCount(actionName: string): unknown;
+    getCallLimit(actionName: string): unknown;
+    getEnabled(actionName: string): unknown;
+    getPrevious(actionName: string, steps?: number): string | Promise<string>;
+    getId(actionName: string): unknown;
+    nextActions(actionName: string): unknown;
+    numberActiveNextActions(actionName: string): unknown;
+    numberNextActions(actionName: string): unknown;
+    removeAllNext(actionName: string): void | Promise<any>;
+    removeFromCallers(actionName: string): void | Promise<any>;
+    removeNext(actionName: string, nextAction: string): void | Promise<any>;
+    setCallLimit(actionName: string, limit: number): void | Promise<any>;
+    setEnabled(actionName: string, enabled: boolean): void | Promise<any>;
+    setExhaustive(actionName: string, exhaustive: boolean): void | Promise<any>;
+    setMaxActionDepth(actionName: string, depth?: number): void | Promise<any>;
+    allowList(variableName: string, list: []): void | Promise<any>;
+    allowOnlyList(variableName: string, list: []): void | Promise<any>;
+    allowOnlyRange(variableName: string, low: number, high: number): void | Promise<any>;
+    allowOnlyValue(variableName: string, value: number): void | Promise<any>;
+    allowOnlyValues(variableName: string, valueList: []): void | Promise<any>;
+    allowRange(variableName: string, low: number, high: number): void | Promise<any>;
+    allowValue(variableName: string, value: number): void | Promise<any>;
+    allowValues(variableName: string, valueList: []): void | Promise<any>;
+    disallowRange(variableName: string, low: number, high: number): void | Promise<any>;
+    disallowValue(variableName: string, value: number): void | Promise<any>;
+    disallowValues(variableName: string, valueList: []): void | Promise<any>;
+    doNotRepeat(variableName: string, value: boolean): void | Promise<any>;
+    gen(variableName: string): void | Promise<any>;
+    getDoNotRepeat(variableName: string): unknown;
+    getSeed(variableName: string): unknown;
+    getValue(variableName: string): unknown;
+    resetRanges(variableName: string): void | Promise<any>;
+    setSeed(variableName: string, seed: number): void | Promise<any>;
+    setValue(variableName: string, value: any): void | Promise<any>;
     beforeSession(config: Options.Testrunner, capabilities: Capabilities.RemoteCapability): Promise<void>;
-    before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'>): Promise<void>;
+    before(config: unknown, capabilities: unknown, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined): Promise<void>;
     afterSession(): Promise<void>;
     /**
      * waitForScript - Wait for test activity script

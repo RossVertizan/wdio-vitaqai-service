@@ -1,7 +1,7 @@
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
-import type { VitaqServiceOptions } from './types'
+import type { VitaqServiceOptions } from './types.js'
 
 export const DEFAULT_OPTIONS: Partial<VitaqServiceOptions> = {
     url: process.env.VTQ_RUNNER_URL ?? "https://vitaq.online",
