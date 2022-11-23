@@ -4,9 +4,12 @@
   "description": "A plugin service for WebdriverIO to allow the use of VitaqAI",
   "author": "Vertizan Support <support@vertizan.com>",
   "license": "MIT",
-  "main": "./build/index",
   "engines": {
     "node": ">=14.0.0"
+  },
+"repository": {
+    "type": "git",
+    "url": "git://github.com/RossVertizan/wdio-vitaqai-service.git"
   },
   "keywords": [
     "webdriver",
@@ -18,6 +21,10 @@
   "bugs": {
     "email": "support@vertizan.com"
   },
+  "type": "module",
+  "exports": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "typeScriptVersion": "3.8.3",
   "files": [
     "build/*",
     "package.json",

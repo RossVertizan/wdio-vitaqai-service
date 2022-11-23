@@ -185,14 +185,14 @@ export interface MochaRunnable {
     allowUncaught?: boolean;
     file?: string;
 }
-type MochaDone = (err?: any) => void;
+declare type MochaDone = (err?: any) => void;
 /**
  * Callback function used for tests and hooks.
  */
-type MochaFunc = (this: MochaContext, done: MochaDone) => void;
+declare type MochaFunc = (this: MochaContext, done: MochaDone) => void;
 /**
  * Async callback function used for tests and hooks.
  */
-type MochaAsyncFunc = (this: MochaContext) => PromiseLike<any>;
+declare type MochaAsyncFunc = (this: MochaContext) => PromiseLike<any>;
 export {};
 //# sourceMappingURL=types.d.ts.map
