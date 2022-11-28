@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./build/mjs",
+    "rootDir": "./src",
+    "module": "esnext",
+    "target": "esnext"
+  },
+  "include": [
+    "src/**/*",
+    "../../@types"
+  ]
+}

@@ -27,6 +27,19 @@ This package has three dependencies that may also need to be updated, these are:
 Check that these have all been published as necessary and their final versions inserted into the package.json of this package before going through the following steps.
 
 #### Build
+
+##### New build system
+When switching to building ofr CommonJS (cjs) and ES Module (esm), followed this [guide](https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html).
+
+Now the build is run directly from within the module using:
+
+```shell
+npm run build
+```
+
+Need to see if we can make this a stand-alone module.
+
+##### Old build system
 Before publishing, the code needs to be built. To do this go to the webdriverio-vitaq-dev project (H:\Git\webdriverio-vitaq-dev) and run
 ```node
 npm run build

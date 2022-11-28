@@ -21,10 +21,43 @@
   "bugs": {
     "email": "support@vertizan.com"
   },
+  "main": "./build/cjs/index.js",
   "type": "module",
-  "exports": "./build/index.js",
+  "module": "./build/index.js",
+  "exports": {
+    ".": [
+      {
+        "import": "./build/esm/index.js",
+        "require": "./build/cjs/index.js"
+      },
+      "./build/cjs/index.js"
+    ]
+  },
   "types": "./build/index.d.ts",
   "typeScriptVersion": "3.8.3",
+  "scripts": {
+    "build": "run-s clean compile:cjs compile:esm copy",
+    "clean": "rimraf ./build",
+    "compile:cjs": "tsc --build tsconfig_cjs.json",
+    "compile:esm": "tsc --build tsconfig_esm.json",
+    "copy": "shx cp src/cjs/package.json build/cjs && shx cp src/esm/package.json build/esm",
+    "test": "run-s test:*",
+    "test:eslint": "eslint src tests",
+    "test:unit": "vitest",
+    "watch": "npm run compile -- --watch"
+  },
+  "peerDependencies": {
+    "@wdio/types": "^7.0.0 || ^8.0.0-alpha.219",
+    "webdriverio": "^7.0.0 || ^8.0.0-alpha.219"
+  },
+  "peerDependenciesMeta": {
+    "@wdio/types": {
+      "optional": true
+    },
+    "webdriverio": {
+      "optional": false
+    }
+  },
   "files": [
     "build/*",
     "package.json",
@@ -37,5 +70,8 @@
     "vitaqai-api": "1.1.32",
     "vitaqai-mocha": "10.1.1",
     "wdio-vitaqai-mocha-framework": "next"
+  },
+  "devDependencies": {
+    "shx": "^0.3.4"
   }
 }
