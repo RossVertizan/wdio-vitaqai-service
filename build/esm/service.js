@@ -40,11 +40,13 @@ export default class VitaqService {
         this._errors = [];
         this._warnings = [];
         try {
-            log.debug("serviceOptions: ", serviceOptions);
-            log.debug("capabilities: ", capabilities);
-            log.debug("config: ", config);
-            this._capabilities = capabilities;
-            this._config = config;
+            if (log) {
+                log.debug("serviceOptions: ", serviceOptions);
+                log.debug("capabilities: ", capabilities);
+                log.debug("config: ", config);
+            }
+            this._capabilities = capabilities ?? {};
+            this._config = config ?? {};
             // Define the debug presets for various timeouts
             const debugOptions = {
                 authenticationTimeout: 60000,
@@ -102,6 +104,7 @@ export default class VitaqService {
      * @param currentSuite
      */
     async nextActionSelector(suite, currentSuite) {
+        // eslint-disable-next-line @typescript-eslint/no-inferrable-types
         let result = true;
         // let returnSuite: MochaSuite;
         // Create the suite map if it has not been created
@@ -171,7 +174,7 @@ export default class VitaqService {
                         await this._browser.reloadSession();
                     }
                     // Show which seed we are about to run
-                    let seed = await this.vitaqFunctions.getSeed('top', this._browser, this._api);
+                    const seed = await this.vitaqFunctions.getSeed('top', this._browser, this._api);
                     log.info(`====================   Running seed: ${seed}   ====================`);
                     await this.getNextAction('--*setUp*--', true);
                     this.currentState = "passed";
@@ -331,6 +334,7 @@ export default class VitaqService {
      * @param duration
      */
     sleep(ms) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.sleep(ms, this._browser);
     }
@@ -342,6 +346,7 @@ export default class VitaqService {
      * @param variableName - name of the variable
      */
     requestData(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.requestData(variableName, this._browser, this._api);
     }
@@ -350,6 +355,7 @@ export default class VitaqService {
      * @param variablesArray - array of variables to record coverage for
      */
     recordCoverage(variablesArray) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.recordCoverage(variablesArray, this._browser, this._api);
     }
@@ -359,6 +365,7 @@ export default class VitaqService {
      * @param value - value to store
      */
     sendDataToVitaq(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api);
     }
@@ -367,6 +374,7 @@ export default class VitaqService {
      * @param variableName - name of the variable to read
      */
     readDataFromVitaq(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api);
     }
@@ -378,7 +386,9 @@ export default class VitaqService {
      * When using the JSON option the JSON data needs to be stringified using the
      * JSON.stringify() method
      */
+    // eslint-disable-next-line @typescript-eslint/ban-types
     createVitaqLogEntry(message, format) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api);
     }
@@ -388,25 +398,31 @@ export default class VitaqService {
     // Easier names to use with the Vitaq control methods
     // recordCoverage
     record(variablesArray) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.recordCoverage(variablesArray, this._browser, this._api);
     }
     // sendDataToVitaq
     writeDataToVitaq(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api);
     }
     write(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.sendDataToVitaq(variableName, value, this._browser, this._api);
     }
     // readDataFromVitaq
     read(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.readDataFromVitaq(variableName, this._browser, this._api);
     }
     // createVitaqLogEntry
+    // eslint-disable-next-line @typescript-eslint/ban-types
     log(message, format) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api);
     }
@@ -414,78 +430,97 @@ export default class VitaqService {
     // Action Methods
     // =============================================================================
     abort(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.abort(actionName, this._browser, this._api);
     }
-    addNext(actionName, nextAction, weight = 1) {
+    addNext(actionName, nextAction, weight) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api);
     }
     clearCallCount(actionName, tree) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.clearCallCount(actionName, tree, this._browser, this._api);
     }
     displayNextActions(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.displayNextActions(actionName, this._browser, this._api);
     }
     getCallCount(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getCallCount(actionName, this._browser, this._api);
     }
     getCallLimit(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getCallLimit(actionName, this._browser, this._api);
     }
     getEnabled(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getEnabled(actionName, this._browser, this._api);
     }
-    getPrevious(actionName, steps = 1) {
+    getPrevious(actionName, steps) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getPrevious(actionName, steps, this._browser, this._api);
     }
     getId(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getId(actionName, this._browser, this._api);
     }
     nextActions(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.nextActions(actionName, this._browser, this._api);
     }
     numberActiveNextActions(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.numberActiveNextActions(actionName, this._browser, this._api);
     }
     numberNextActions(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.numberNextActions(actionName, this._browser, this._api);
     }
     removeAllNext(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.removeAllNext(actionName, this._browser, this._api);
     }
     removeFromCallers(actionName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.removeFromCallers(actionName, this._browser, this._api);
     }
     removeNext(actionName, nextAction) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.removeNext(actionName, nextAction, this._browser, this._api);
     }
     setCallLimit(actionName, limit) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setCallLimit(actionName, limit, this._browser, this._api);
     }
     setEnabled(actionName, enabled) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setEnabled(actionName, enabled, this._browser, this._api);
     }
     setExhaustive(actionName, exhaustive) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api);
     }
-    setMaxActionDepth(actionName, depth = 1000) {
+    setMaxActionDepth(actionName, depth) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api);
     }
@@ -493,78 +528,97 @@ export default class VitaqService {
     // Data Methods
     // =============================================================================
     allowList(variableName, list) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowList(variableName, list, this._browser, this._api);
     }
     allowOnlyList(variableName, list) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowOnlyList(variableName, list, this._browser, this._api);
     }
     allowOnlyRange(variableName, low, high) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowOnlyRange(variableName, low, high, this._browser, this._api);
     }
     allowOnlyValue(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowOnlyValue(variableName, value, this._browser, this._api);
     }
     allowOnlyValues(variableName, valueList) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowOnlyValues(variableName, valueList, this._browser, this._api);
     }
     allowRange(variableName, low, high) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowRange(variableName, low, high, this._browser, this._api);
     }
     allowValue(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowValue(variableName, value, this._browser, this._api);
     }
     allowValues(variableName, valueList) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.allowValues(variableName, valueList, this._browser, this._api);
     }
     disallowRange(variableName, low, high) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.disallowRange(variableName, low, high, this._browser, this._api);
     }
     disallowValue(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.disallowValue(variableName, value, this._browser, this._api);
     }
     disallowValues(variableName, valueList) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.disallowValues(variableName, valueList, this._browser, this._api);
     }
     doNotRepeat(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.doNotRepeat(variableName, value, this._browser, this._api);
     }
     gen(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.gen(variableName, this._browser, this._api);
     }
     getDoNotRepeat(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getDoNotRepeat(variableName, this._browser, this._api);
     }
     getSeed(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getSeed(variableName, this._browser, this._api);
     }
     getValue(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.getValue(variableName, this._browser, this._api);
     }
     resetRanges(variableName) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.resetRanges(variableName, this._browser, this._api);
     }
     setSeed(variableName, seed) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setSeed(variableName, seed, this._browser, this._api);
     }
     setValue(variableName, value) {
+        // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setValue(variableName, value, this._browser, this._api);
     }
@@ -701,7 +755,7 @@ export default class VitaqService {
     waitForScript(timeout = 20000, delay = 100) {
         return new Promise((resolve, reject) => {
             let timeoutCounter = 0;
-            let intervalId = setInterval(async () => {
+            const intervalId = setInterval(async () => {
                 // Increment the timeoutCounter for a crude timeout
                 timeoutCounter += delay;
                 // log.debug('waitForNextAction: this.nextTestAction: ', this.nextTestAction)
@@ -735,7 +789,7 @@ export default class VitaqService {
     waitForSession(timeout = 20000, delay = 100) {
         return new Promise((resolve, reject) => {
             let timeoutCounter = 0;
-            let intervalId = setInterval(async () => {
+            const intervalId = setInterval(async () => {
                 // Increment the timeoutCounter for a crude timeout
                 timeoutCounter += delay;
                 // log.debug('waitForNextAction: this.nextTestAction: ', this.nextTestAction)
@@ -812,7 +866,7 @@ export default class VitaqService {
         for (let index = 0; index < this.numericOptions.length; index += 1) {
             key = this.numericOptions[index];
             if (Object.prototype.hasOwnProperty.call(options, key)) {
-                let value = options[key];
+                const value = options[key];
                 if (isNaN(value) || isNaN(parseFloat(value))) {
                     log.error(`The value provided for ${key} cannot be evaluated to a number - please enter a number, got ${value}`);
                     this._errors.push(`The value provided for ${key} cannot be evaluated to a number - please enter a number, got ${value}`);
@@ -836,7 +890,7 @@ export default class VitaqService {
         }
         // Check the value of seed
         if (Object.prototype.hasOwnProperty.call(options, 'seed')) {
-            let value = options['seed'];
+            const value = options['seed'];
             // Check that we only have 0-9, "," and "-"
             if (typeof value === 'string') {
                 if (!value.match(/^[0-9,-]*$/)) {
@@ -844,9 +898,9 @@ export default class VitaqService {
                     this._errors.push(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`);
                     throw new SevereServiceError(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${value}`);
                 }
-                let entries = value.split(",");
+                const entries = value.split(",");
                 for (let index = 0; index < entries.length; index += 1) {
-                    let entry = entries[index].trim();
+                    const entry = entries[index].trim();
                     if (!entry.match(/^[-]?[0-9]+$/) && !entry.match(/^[-]?[0-9]+-[-]?[0-9]+$/)) {
                         log.error(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`);
                         this._errors.push(`The value provided for "seed" must be of the form "1-9,10,11,12,13,14-25", got ${entry}`);
@@ -878,6 +932,7 @@ export default class VitaqService {
      * @param value - the value to convert
      * @param check - optional check to see of this looks like a boolean
      */
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     convertToBool(value, check = false) {
         if (typeof (value) === 'string') {
             value = value.trim().toLowerCase();

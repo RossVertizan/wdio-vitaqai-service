@@ -2,10 +2,11 @@
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
 
-const {countNonOptionalArguments,
+import {countNonOptionalArguments,
     countArgumentsReceived,
     checkArgumentTypes,
-    validateArguments} = require("../build/arguments");
+    validateArguments} from "../build/esm/arguments";
+import { test, describe, expect } from 'vitest';
 
 describe('countNonOptionalArguments', () => {
     let result;

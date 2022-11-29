@@ -12,8 +12,8 @@ import VitaqServiceError from "./VitaqServiceError.js";
 export function validateArguments(functionName, argumentsDescription, argumentsObject) {
     // First count the number if non-optional arguments and compare that with the
     // number of arguments passed
-    let numberArgsRequired = countNonOptionalArguments(argumentsDescription);
-    let numberArgsReceived = countArgumentsReceived(argumentsObject);
+    const numberArgsRequired = countNonOptionalArguments(argumentsDescription);
+    const numberArgsReceived = countArgumentsReceived(argumentsObject);
     if (numberArgsRequired > numberArgsReceived) {
         throw new VitaqServiceError(`${functionName} requires a minimum of ${numberArgsRequired} argument(s) but received ${numberArgsReceived}`);
     }
@@ -27,10 +27,12 @@ export function validateArguments(functionName, argumentsDescription, argumentsO
  * Get the number of non-optionel arguments from the argumentsDescription object
  * @param argumentsDescription  -the arguments description object passed in
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function countNonOptionalArguments(argumentsDescription) {
     let key;
+    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
     let count = 0;
-    let keys = Object.keys(argumentsDescription);
+    const keys = Object.keys(argumentsDescription);
     for (let index = 0; index < keys.length; index += 1) {
         key = keys[index];
         if (!key.endsWith("?")) {
@@ -62,7 +64,7 @@ export function countArgumentsReceived(argumentsObject) {
 export function checkArgumentTypes(functionName, argumentsDescription, argumentsObject) {
     let descriptionKey;
     let descriptionType;
-    let descriptionKeys = Object.keys(argumentsDescription);
+    const descriptionKeys = Object.keys(argumentsDescription);
     let passedValue;
     for (let index = 0; index < descriptionKeys.length; index += 1) {
         descriptionKey = descriptionKeys[index];

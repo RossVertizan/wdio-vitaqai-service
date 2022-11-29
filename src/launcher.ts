@@ -37,12 +37,14 @@ export default class VitaqLauncher {
     async onPrepare (config: VtqTestRunner, capabilities: unknown) {
         log.debug("Running the vitaq-service onPrepare method")
         log.debug("config.specs: ", config.specs)
+        // eslint-disable-next-line @typescript-eslint/no-inferrable-types
         let everythingOK: boolean = true
 
         // ==== Check the specs in the config ====
         // Check to see if the specs have been grouped
         // Expect a single group, so specs with a length of 1
         // and the single spec entry is itself an array with 1 or more entries
+        // eslint-disable-next-line @typescript-eslint/no-inferrable-types
         let specsLookGood: boolean = true;
         if (typeof config.specs !== "undefined") {
             if (config.specs.length === 1) {
@@ -80,6 +82,7 @@ export default class VitaqLauncher {
         }
 
         // ==== Check the options for required fields ====
+        // eslint-disable-next-line @typescript-eslint/no-inferrable-types
         let optionsLookGood: boolean = true;
         if (typeof this._options.userName === "undefined") {
             log.error("userName is not defined in the vitaqai options");

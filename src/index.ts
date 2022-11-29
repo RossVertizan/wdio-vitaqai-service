@@ -10,7 +10,9 @@ export const launcher = VitaqLauncher
 export * from './types.js'
 
 declare global {
+    // eslint-disable-next-line @typescript-eslint/no-namespace
     namespace WebdriverIO {
+        // eslint-disable-next-line @typescript-eslint/no-empty-interface
         interface ServiceOption extends VitaqServiceOptions {}
     }
 }

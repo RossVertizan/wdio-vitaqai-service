@@ -105,13 +105,13 @@ export default class VitaqService implements Services.ServiceInstance {
     read(variableName: string): unknown;
     log(message: string | {}, format: string): void | Promise<any>;
     abort(actionName: string): void | Promise<any>;
-    addNext(actionName: string, nextAction: string, weight?: number): void | Promise<any>;
+    addNext(actionName: string, nextAction: string, weight: 1): void | Promise<any>;
     clearCallCount(actionName: string, tree: boolean): void | Promise<any>;
     displayNextActions(actionName: string): unknown;
     getCallCount(actionName: string): unknown;
     getCallLimit(actionName: string): unknown;
     getEnabled(actionName: string): unknown;
-    getPrevious(actionName: string, steps?: number): string | Promise<string>;
+    getPrevious(actionName: string, steps: 1): string | Promise<string>;
     getId(actionName: string): unknown;
     nextActions(actionName: string): unknown;
     numberActiveNextActions(actionName: string): unknown;
@@ -122,7 +122,7 @@ export default class VitaqService implements Services.ServiceInstance {
     setCallLimit(actionName: string, limit: number): void | Promise<any>;
     setEnabled(actionName: string, enabled: boolean): void | Promise<any>;
     setExhaustive(actionName: string, exhaustive: boolean): void | Promise<any>;
-    setMaxActionDepth(actionName: string, depth?: number): void | Promise<any>;
+    setMaxActionDepth(actionName: string, depth: 1000): void | Promise<any>;
     allowList(variableName: string, list: []): void | Promise<any>;
     allowOnlyList(variableName: string, list: []): void | Promise<any>;
     allowOnlyRange(variableName: string, low: number, high: number): void | Promise<any>;

@@ -2542,7 +2542,7 @@ declare function run(): void;
  *
  * @see https://mochajs.org/api/global.html#before
  */
-declare var before: Mocha.HookFunction;
+declare let before: Mocha.HookFunction;
 
 /**
  * Execute before running tests.
@@ -2551,7 +2551,7 @@ declare var before: Mocha.HookFunction;
  *
  * @see https://mochajs.org/api/global.html#before
  */
-declare var suiteSetup: Mocha.HookFunction;
+declare let suiteSetup: Mocha.HookFunction;
 
 /**
  * Execute after running tests.
@@ -2560,7 +2560,7 @@ declare var suiteSetup: Mocha.HookFunction;
  *
  * @see https://mochajs.org/api/global.html#after
  */
-declare var after: Mocha.HookFunction;
+declare let after: Mocha.HookFunction;
 
 /**
  * Execute after running tests.
@@ -2569,7 +2569,7 @@ declare var after: Mocha.HookFunction;
  *
  * @see https://mochajs.org/api/global.html#after
  */
-declare var suiteTeardown: Mocha.HookFunction;
+declare let suiteTeardown: Mocha.HookFunction;
 
 /**
  * Execute before each test case.
@@ -2578,7 +2578,7 @@ declare var suiteTeardown: Mocha.HookFunction;
  *
  * @see https://mochajs.org/api/global.html#beforeEach
  */
-declare var beforeEach: Mocha.HookFunction;
+declare let beforeEach: Mocha.HookFunction;
 
 /**
  * Execute before each test case.
@@ -2587,7 +2587,7 @@ declare var beforeEach: Mocha.HookFunction;
  *
  * @see https://mochajs.org/api/global.html#beforeEach
  */
-declare var setup: Mocha.HookFunction;
+declare let setup: Mocha.HookFunction;
 
 /**
  * Execute after each test case.
@@ -2596,7 +2596,7 @@ declare var setup: Mocha.HookFunction;
  *
  * @see https://mochajs.org/api/global.html#afterEach
  */
-declare var afterEach: Mocha.HookFunction;
+declare let afterEach: Mocha.HookFunction;
 
 /**
  * Execute after each test case.
@@ -2605,77 +2605,77 @@ declare var afterEach: Mocha.HookFunction;
  *
  * @see https://mochajs.org/api/global.html#afterEach
  */
-declare var teardown: Mocha.HookFunction;
+declare let teardown: Mocha.HookFunction;
 
 /**
  * Describe a "suite" containing nested suites and tests.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var describe: Mocha.SuiteFunction;
+declare let describe: Mocha.SuiteFunction;
 
 /**
  * Describe a "suite" containing nested suites and tests.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var context: Mocha.SuiteFunction;
+declare let context: Mocha.SuiteFunction;
 
 /**
  * Describe a "suite" containing nested suites and tests.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var suite: Mocha.SuiteFunction;
+declare let suite: Mocha.SuiteFunction;
 
 /**
  * Pending suite.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var xdescribe: Mocha.PendingSuiteFunction;
+declare let xdescribe: Mocha.PendingSuiteFunction;
 
 /**
  * Pending suite.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var xcontext: Mocha.PendingSuiteFunction;
+declare let xcontext: Mocha.PendingSuiteFunction;
 
 /**
  * Describes a test case.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var it: Mocha.TestFunction;
+declare const it: Mocha.TestFunction;
 
 /**
  * Describes a test case.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var specify: Mocha.TestFunction;
+declare let specify: Mocha.TestFunction;
 
 /**
  * Describes a test case.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var test: Mocha.TestFunction;
+declare let test: Mocha.TestFunction;
 
 /**
  * Describes a pending test case.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var xit: Mocha.PendingTestFunction;
+declare let xit: Mocha.PendingTestFunction;
 
 /**
  * Describes a pending test case.
  *
  * - _Only available when invoked via the mocha CLI._
  */
-declare var xspecify: Mocha.PendingTestFunction;
+declare let xspecify: Mocha.PendingTestFunction;
 
 // #endregion Test interface augmentations
 
@@ -2689,7 +2689,7 @@ interface HTMLLIElement { }
 
 // Augments the DOM `Window` object when lib.dom.d.ts is loaded.
 // tslint:disable-next-line no-empty-interface
-interface Window extends Mocha.MochaGlobals { }
+type Window = Mocha.MochaGlobals
 
 declare namespace NodeJS {
     // Forward declaration for `NodeJS.EventEmitter` from node.d.ts.

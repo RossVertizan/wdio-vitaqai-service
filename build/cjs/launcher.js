@@ -29,11 +29,13 @@ class VitaqLauncher {
         return __awaiter(this, void 0, void 0, function* () {
             log.debug("Running the vitaq-service onPrepare method");
             log.debug("config.specs: ", config.specs);
+            // eslint-disable-next-line @typescript-eslint/no-inferrable-types
             let everythingOK = true;
             // ==== Check the specs in the config ====
             // Check to see if the specs have been grouped
             // Expect a single group, so specs with a length of 1
             // and the single spec entry is itself an array with 1 or more entries
+            // eslint-disable-next-line @typescript-eslint/no-inferrable-types
             let specsLookGood = true;
             if (typeof config.specs !== "undefined") {
                 if (config.specs.length === 1) {
@@ -70,6 +72,7 @@ class VitaqLauncher {
                 everythingOK = false;
             }
             // ==== Check the options for required fields ====
+            // eslint-disable-next-line @typescript-eslint/no-inferrable-types
             let optionsLookGood = true;
             if (typeof this._options.userName === "undefined") {
                 log.error("userName is not defined in the vitaqai options");

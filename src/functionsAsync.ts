@@ -3,7 +3,7 @@
 //==============================================================================
 import {validateArguments} from "./arguments.js";
 
-// Type import
+// Type imports
 // @ts-ignore
 import VitaqAiApi from 'vitaqai-api'
 import type { Browser, MultiRemoteBrowser } from 'webdriverio'
@@ -19,11 +19,12 @@ const log = logger('wdio-vitaqai-service')
  * @param browser
  */
 export async function sleep(ms: number,
-                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined) {
-    let args: any [] = Array.from(arguments);
+                            browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
+                            ...args: any[]) {
+    //const args: any [] = Array.from(arguments);
     args.splice(-1, 1);
     log.debug("sleep: Sleeping for %s seconds", ms/1000);
-    let argumentsDescription = {"ms": "number"}
+    const argumentsDescription = {"ms": "number"}
     validateArguments('sleep', argumentsDescription, args);
     // @ts-ignore
     return await new Promise(resolve => setTimeout(resolve, ms))
@@ -40,13 +41,14 @@ export async function sleep(ms: number,
  */
 export async function requestData(variableName: string,
                             browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                            api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                            api: VitaqAiApi,
+                            ...args: any[]) {
+    // const args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug("requestData: variableName ", variableName);
-    let argumentsDescription = {"variableName": "string"}
+    const argumentsDescription = {"variableName": "string"}
     validateArguments('requestData', argumentsDescription, args);
-    let result = await api.requestDataCaller(variableName)
+    const result = await api.requestDataCaller(variableName)
     log.info(`   -> ${result}`)
     return result
 }
@@ -59,11 +61,12 @@ export async function requestData(variableName: string,
  */
 export async function recordCoverage(variablesArray: [],
                                browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                               api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                               api: VitaqAiApi,
+                               ...args: any[]) {
+    // const args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug("recordCoverage: variablesArray ", variablesArray);
-    let argumentsDescription = {"variablesArray": "array"}
+    const argumentsDescription = {"variablesArray": "array"}
     validateArguments('recordCoverage', argumentsDescription, args);
     return await api.recordCoverageCaller(variablesArray)
 }
@@ -77,11 +80,12 @@ export async function recordCoverage(variablesArray: [],
  */
 export async function sendDataToVitaq(variableName: string, value: any,
                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                api: VitaqAiApi,
+                                ...args: any[]) {
+    // const args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug("sendDataToVitaq: variableName value", variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "any"}
+    const argumentsDescription = {"variableName": "string", "value": "any"}
     validateArguments('sendDataToVitaq', argumentsDescription, args);
     return await api.sendDataToVitaqCaller(variableName, value)
 }
@@ -94,13 +98,14 @@ export async function sendDataToVitaq(variableName: string, value: any,
  */
 export async function readDataFromVitaq(variableName: string,
                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                  api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                  api: VitaqAiApi,
+                                  ...args: any[]) {
+    // const args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug("readDataFromVitaq: variableName ", variableName);
-    let argumentsDescription = {"variableName": "string"}
+    const argumentsDescription = {"variableName": "string"}
     validateArguments('readDataFromVitaq', argumentsDescription, args);
-    let result = await api.readDataFromVitaqCaller(variableName)
+    const result = await api.readDataFromVitaqCaller(variableName)
     log.info(`   -> ${result}`)
     return result
 }
@@ -115,13 +120,15 @@ export async function readDataFromVitaq(variableName: string,
  * @param browser
  * @param api
  */
-export async function createVitaqLogEntry(message: string | {}, format: string = 'text',
+// eslint-disable-next-line @typescript-eslint/ban-types
+export async function createVitaqLogEntry(message: string | {}, format = 'text',
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                    api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                    api: VitaqAiApi,
+                                    ...args: any[]) {
+    // const args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug("createVitaqLogEntry: message format", message, format);
-    let argumentsDescription = {"message": "string", "format?": "string"}
+    const argumentsDescription = {"message": "string", "format?": "string"}
     validateArguments('createVitaqLogEntry', argumentsDescription, args);
     return await api.createVitaqLogEntryCaller(message, format)
 }
@@ -135,11 +142,12 @@ export async function createVitaqLogEntry(message: string | {}, format: string =
  */
 export async function abort(actionName: string,
                             browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                            api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                            api: VitaqAiApi,
+                            ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('abort: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('abort', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('abort', args)
@@ -153,13 +161,14 @@ export async function abort(actionName: string,
  * @param browser
  * @param api
  */
-export async function addNext(actionName: string, nextAction: string, weight: number = 1,
+export async function addNext(actionName: string, nextAction: string, weight = 1,
                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                              api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                              api: VitaqAiApi,
+                              ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('addNext: actionName, nextAction, weight', actionName, nextAction, weight);
-    let argumentsDescription = {"actionName": "string", "nextAction": "string", "weight": "number"}
+    const argumentsDescription = {"actionName": "string", "nextAction": "string", "weight": "number"}
     args = validateArguments('addNext', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('add_next', args)
@@ -174,11 +183,12 @@ export async function addNext(actionName: string, nextAction: string, weight: nu
  */
 export async function clearCallCount(actionName: string, tree: boolean,
                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                     api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                     api: VitaqAiApi,
+                                     ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('clearCallCount: actionName, tree', actionName, tree);
-    let argumentsDescription = {"actionName": "string", "tree?": "boolean"}
+    const argumentsDescription = {"actionName": "string", "tree?": "boolean"}
     args = validateArguments('clearCallCount', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('clear_call_count', args)
@@ -192,14 +202,15 @@ export async function clearCallCount(actionName: string, tree: boolean,
  */
 export async function displayNextActions(actionName: string,
                                          browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                         api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                         api: VitaqAiApi,
+                                         ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('displayNextActions: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = args = validateArguments('displayNextActions', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('display_next_sequences', args)
+    const result = await api.runCommandCaller('display_next_sequences', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -212,14 +223,15 @@ export async function displayNextActions(actionName: string,
  */
 export async function getCallCount(actionName: string,
                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                   api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                   api: VitaqAiApi,
+                                   ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getCallCount: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallCount', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('get_call_count', args)
+    const result = await api.runCommandCaller('get_call_count', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -232,14 +244,15 @@ export async function getCallCount(actionName: string,
  */
 export async function getCallLimit(actionName: string,
                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                   api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                   api: VitaqAiApi,
+                                   ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getCallLimit: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('getCallLimit', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('get_call_limit', args)
+    const result = await api.runCommandCaller('get_call_limit', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -252,14 +265,15 @@ export async function getCallLimit(actionName: string,
  */
 export async function getEnabled(actionName: string,
                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                 api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                 api: VitaqAiApi,
+                                 ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getEnabled: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('getEnabled', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('get_enabled', args)
+    const result = await api.runCommandCaller('get_enabled', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -273,7 +287,7 @@ export async function getEnabled(actionName: string,
 // export async function getExhaustive(actionName: string,
 //                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
 //                                  api: VitaqAiApi) {
-//     let args: any [] = Array.from(arguments);
+//     // let args: any [] = Array.from(arguments);
 //     args.splice(-2, 2);
 //     log.debug('getExhaustive: actionName', actionName);
 //     let argumentsDescription = {"actionName": "string"}
@@ -293,7 +307,7 @@ export async function getEnabled(actionName: string,
 // export async function getMaxActionDepth(actionName: string,
 //                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
 //                                  api: VitaqAiApi) {
-//     let args: any [] = Array.from(arguments);
+//     // let args: any [] = Array.from(arguments);
 //     args.splice(-2, 2);
 //     log.debug('getMaxActionDepth: actionName', actionName);
 //     let argumentsDescription = {"actionName": "string"}
@@ -312,14 +326,15 @@ export async function getEnabled(actionName: string,
  */
 export async function getId(actionName: string,
                             browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                            api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                            api: VitaqAiApi,
+                            ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getId: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('getId', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('get_id', args)
+    const result = await api.runCommandCaller('get_id', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -333,12 +348,13 @@ export async function getId(actionName: string,
  */
 export async function getPrevious(actionName: string, steps: number,
                             browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                            api: VitaqAiApi) {
+                            api: VitaqAiApi,
+                            ...args: any[]) {
     let result: string;
-    let args: any [] = Array.from(arguments);
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getPrevious: actionName, steps', actionName, steps);
-    let argumentsDescription = {"actionName": "string", "steps?": "number"}
+    const argumentsDescription = {"actionName": "string", "steps?": "number"}
     args = validateArguments('getPrevious', argumentsDescription, args);
     // @ts-ignore
     result = await api.runCommandCaller('get_previous', args)
@@ -355,14 +371,15 @@ export async function getPrevious(actionName: string, steps: number,
  */
 export async function nextActions(actionName: string,
                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                  api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                  api: VitaqAiApi,
+                                  ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('nextActions: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('nextActions', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('next_sequences', args)
+    const result = await api.runCommandCaller('next_sequences', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -375,14 +392,15 @@ export async function nextActions(actionName: string,
  */
 export async function numberActiveNextActions(actionName: string,
                                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                              api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                              api: VitaqAiApi,
+                                              ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('numberActiveNextActions: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberActiveNextActions', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('number_active_next_sequences', args)
+    const result = await api.runCommandCaller('number_active_next_sequences', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -395,14 +413,15 @@ export async function numberActiveNextActions(actionName: string,
  */
 export async function numberNextActions(actionName: string,
                                         browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                        api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                        api: VitaqAiApi,
+                                        ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('numberNextActions: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('numberNextActions', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('number_next_sequences', args)
+    const result = await api.runCommandCaller('number_next_sequences', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -415,11 +434,12 @@ export async function numberNextActions(actionName: string,
  */
 export async function removeAllNext(actionName: string,
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                    api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                    api: VitaqAiApi,
+                                    ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('removeAllNext: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('removeAllNext', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('remove_all_next', args)
@@ -433,11 +453,12 @@ export async function removeAllNext(actionName: string,
  */
 export async function removeFromCallers(actionName: string,
                                         browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                        api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                        api: VitaqAiApi,
+                                        ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('removeFromCallers: actionName', actionName);
-    let argumentsDescription = {"actionName": "string"}
+    const argumentsDescription = {"actionName": "string"}
     args = validateArguments('removeFromCallers', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('remove_from_callers', args)
@@ -452,11 +473,12 @@ export async function removeFromCallers(actionName: string,
  */
 export async function removeNext(actionName: string, nextAction: string,
                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                 api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                 api: VitaqAiApi,
+                                 ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('removeNext: actionName, nextAction', actionName, nextAction);
-    let argumentsDescription = {"actionName": "string", "nextAction": "string"}
+    const argumentsDescription = {"actionName": "string", "nextAction": "string"}
     args = validateArguments('removeNext', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('remove_next', args)
@@ -471,11 +493,12 @@ export async function removeNext(actionName: string, nextAction: string,
  */
 export async function setCallLimit(actionName: string, limit: number,
                                    browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                   api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                   api: VitaqAiApi,
+                                   ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('setCallLimit: actionName, limit', actionName, limit);
-    let argumentsDescription = {"actionName": "string", "limit": "number"}
+    const argumentsDescription = {"actionName": "string", "limit": "number"}
     args = validateArguments('setCallLimit', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('set_call_limit', args)
@@ -490,11 +513,12 @@ export async function setCallLimit(actionName: string, limit: number,
  */
 export async function setEnabled(actionName: string, enabled: boolean,
                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                 api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                 api: VitaqAiApi,
+                                 ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('setEnabled: actionName, enabled', actionName, enabled);
-    let argumentsDescription = {"actionName": "string", "enabled": "boolean"}
+    const argumentsDescription = {"actionName": "string", "enabled": "boolean"}
     args = validateArguments('setEnabled', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('set_enabled', args)
@@ -509,11 +533,12 @@ export async function setEnabled(actionName: string, enabled: boolean,
  */
 export async function setExhaustive(actionName: string, exhaustive: boolean,
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                    api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                    api: VitaqAiApi,
+                                    ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('setExhaustive: actionName, exhaustive', actionName, exhaustive);
-    let argumentsDescription = {"actionName": "string", "exhaustive": "boolean"}
+    const argumentsDescription = {"actionName": "string", "exhaustive": "boolean"}
     args = validateArguments('setExhaustive', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('set_exhaustive', args)
@@ -526,13 +551,14 @@ export async function setExhaustive(actionName: string, exhaustive: boolean,
  * @param browser
  * @param api
  */
-export async function setMaxActionDepth(actionName: string, depth: number = 1000,
+export async function setMaxActionDepth(actionName: string, depth = 1000,
                                         browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                        api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                        api: VitaqAiApi,
+                                        ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('setMaxActionDepth: actionName, depth', actionName, depth);
-    let argumentsDescription = {"actionName": "string", "depth": "number"}
+    const argumentsDescription = {"actionName": "string", "depth": "number"}
     args = validateArguments('setMaxActionDepth', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('set_max_sequence_depth', args)
@@ -549,13 +575,15 @@ export async function setMaxActionDepth(actionName: string, depth: number = 1000
  * @param browser
  * @param api
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export async function allowList(variableName: string, list: []|{},
                                 browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                api: VitaqAiApi,
+                                ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowList: variableName, list', variableName, list);
-    let argumentsDescription = {"variableName": "string", "list": "object"}
+    const argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowList', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_list', args)
@@ -568,13 +596,15 @@ export async function allowList(variableName: string, list: []|{},
  * @param browser
  * @param api
  */
+// eslint-disable-next-line @typescript-eslint/ban-types
 export async function allowOnlyList(variableName: string, list: []|{},
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                    api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                    api: VitaqAiApi,
+                                    ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowOnlyList: variableName, list', variableName, list);
-    let argumentsDescription = {"variableName": "string", "list": "object"}
+    const argumentsDescription = {"variableName": "string", "list": "object"}
     args = validateArguments('allowOnlyList', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_only_list', args)
@@ -590,11 +620,12 @@ export async function allowOnlyList(variableName: string, list: []|{},
  */
 export async function allowOnlyRange(variableName: string, low: number | boolean, high: number | boolean,
                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                     api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                     api: VitaqAiApi,
+                                     ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowOnlyRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
+    const argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowOnlyRange', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_only_range', args)
@@ -609,11 +640,12 @@ export async function allowOnlyRange(variableName: string, low: number | boolean
  */
 export async function allowOnlyValue(variableName: string, value: number,
                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                     api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                     api: VitaqAiApi,
+                                     ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowOnlyValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
+    const argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowOnlyValue', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_only_value', args)
@@ -628,13 +660,14 @@ export async function allowOnlyValue(variableName: string, value: number,
  */
 export async function allowOnlyValues(variableName: string, valueList: [],
                                       browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                      api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                      api: VitaqAiApi,
+                                      ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowOnlyValues: variableName, valueList', variableName, valueList);
-    let argumentsDescription = {"variableName": "string", "valueList": "array"}
+    const argumentsDescription = {"variableName": "string", "valueList": "array"}
     args = validateArguments('allowOnlyValues', argumentsDescription, args);
-    let vtqArguments = [variableName, valueList.length]
+    const vtqArguments = [variableName, valueList.length]
     for (let index = 0; index < valueList.length; index += 1) {
         vtqArguments.push(valueList[index])
     }
@@ -652,11 +685,12 @@ export async function allowOnlyValues(variableName: string, valueList: [],
  */
 export async function allowRange(variableName: string, low: number, high: number,
                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                 api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                 api: VitaqAiApi,
+                                 ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
+    const argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('allowRange', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_range', args)
@@ -671,11 +705,12 @@ export async function allowRange(variableName: string, low: number, high: number
  */
 export async function allowValue(variableName: string, value: number,
                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                 api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                 api: VitaqAiApi,
+                                 ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
+    const argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('allowValue', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('allow_value', args)
@@ -690,13 +725,14 @@ export async function allowValue(variableName: string, value: number,
  */
 export async function allowValues(variableName: string, valueList: [],
                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                  api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                  api: VitaqAiApi,
+                                  ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('allowValues: variableName, valueList', variableName, valueList);
-    let argumentsDescription = {"variableName": "string", "valueList": "array"}
+    const argumentsDescription = {"variableName": "string", "valueList": "array"}
     args = validateArguments('allowValues', argumentsDescription, args);
-    let vtqArguments = [variableName, valueList.length]
+    const vtqArguments = [variableName, valueList.length]
     for (let index = 0; index < valueList.length; index += 1) {
         vtqArguments.push(valueList[index])
     }
@@ -714,11 +750,12 @@ export async function allowValues(variableName: string, valueList: [],
  */
 export async function disallowRange(variableName: string, low: number, high: number,
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                    api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                    api: VitaqAiApi,
+                                    ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('disallowRange: variableName, low, high', variableName, low, high);
-    let argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
+    const argumentsDescription = {"variableName": "string", "low": "numberOrBool", "high": "numberOrBool"}
     args = validateArguments('disallowRange', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('disallow_range', args)
@@ -733,11 +770,12 @@ export async function disallowRange(variableName: string, low: number, high: num
  */
 export async function disallowValue(variableName: string, value: number,
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                    api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                    api: VitaqAiApi,
+                                    ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('disallowValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
+    const argumentsDescription = {"variableName": "string", "value": "numberOrBool"}
     args = validateArguments('disallowValue', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('disallow_value', args)
@@ -752,13 +790,14 @@ export async function disallowValue(variableName: string, value: number,
  */
 export async function disallowValues(variableName: string, valueList: [],
                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                     api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                     api: VitaqAiApi,
+                                     ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('disallowValues: variableName, valueList', variableName, valueList);
-    let argumentsDescription = {"variableName": "string", "valueList": "array"}
+    const argumentsDescription = {"variableName": "string", "valueList": "array"}
     args = validateArguments('disallowValues', argumentsDescription, args);
-    let vtqArguments = [variableName, valueList.length]
+    const vtqArguments = [variableName, valueList.length]
     for (let index = 0; index < valueList.length; index += 1) {
         vtqArguments.push(valueList[index])
     }
@@ -775,11 +814,12 @@ export async function disallowValues(variableName: string, valueList: [],
  */
 export async function doNotRepeat(variableName: string, value: boolean,
                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                  api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                  api: VitaqAiApi,
+                                  ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('doNotRepeat: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "boolean"}
+    const argumentsDescription = {"variableName": "string", "value": "boolean"}
     args = validateArguments('doNotRepeat', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('do_not_repeat', args)
@@ -793,11 +833,12 @@ export async function doNotRepeat(variableName: string, value: boolean,
  */
 export async function gen(variableName: string,
                           browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                          api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                          api: VitaqAiApi,
+                          ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('gen: variableName', variableName);
-    let argumentsDescription = {"variableName": "string"}
+    const argumentsDescription = {"variableName": "string"}
     args = validateArguments('gen', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('gen', args)
@@ -811,14 +852,15 @@ export async function gen(variableName: string,
  */
 export async function getDoNotRepeat(variableName: string,
                                      browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                     api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                     api: VitaqAiApi,
+                                     ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getDoNotRepeat: variableName', variableName);
-    let argumentsDescription = {"variableName": "string"}
+    const argumentsDescription = {"variableName": "string"}
     args = validateArguments('getDoNotRepeat', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('get_do_not_repeat', args)
+    const result = await api.runCommandCaller('get_do_not_repeat', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -831,14 +873,15 @@ export async function getDoNotRepeat(variableName: string,
  */
 export async function getSeed(variableName: string,
                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                              api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                              api: VitaqAiApi,
+                              ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getSeed: variableName', variableName);
-    let argumentsDescription = {"variableName": "string"}
+    const argumentsDescription = {"variableName": "string"}
     args = validateArguments('getSeed', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('get_seed', args)
+    const result = await api.runCommandCaller('get_seed', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -851,14 +894,15 @@ export async function getSeed(variableName: string,
  */
 export async function getValue(variableName: string,
                                browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                               api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                               api: VitaqAiApi,
+                               ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('getValue: variableName', variableName);
-    let argumentsDescription = {"variableName": "string"}
+    const argumentsDescription = {"variableName": "string"}
     args = validateArguments('getValue', argumentsDescription, args);
     // @ts-ignore
-    let result = await api.runCommandCaller('get_value', args)
+    const result = await api.runCommandCaller('get_value', args)
     log.info(`   -> ${result}`)
     return result
 }
@@ -871,11 +915,12 @@ export async function getValue(variableName: string,
  */
 export async function resetRanges(variableName: string,
                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                                  api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                                  api: VitaqAiApi,
+                                  ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('resetRanges: variableName', variableName);
-    let argumentsDescription = {"variableName": "string"}
+    const argumentsDescription = {"variableName": "string"}
     args = validateArguments('resetRanges', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('reset_ranges', args)
@@ -890,11 +935,12 @@ export async function resetRanges(variableName: string,
  */
 export async function setSeed(variableName: string, seed: number,
                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                              api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                              api: VitaqAiApi,
+                              ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('setSeed: variableName, seed', variableName, seed);
-    let argumentsDescription = {"variableName": "string", "seed": "number"}
+    const argumentsDescription = {"variableName": "string", "seed": "number"}
     args = validateArguments('setSeed', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('set_seed', args)
@@ -909,11 +955,12 @@ export async function setSeed(variableName: string, seed: number,
  */
 export async function setValue(variableName: string, value: any,
                                browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
-                               api: VitaqAiApi) {
-    let args: any [] = Array.from(arguments);
+                               api: VitaqAiApi,
+                               ...args: any[]) {
+    // let args: any [] = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('setValue: variableName, value', variableName, value);
-    let argumentsDescription = {"variableName": "string", "value": "any"}
+    const argumentsDescription = {"variableName": "string", "value": "any"}
     args = validateArguments('setValue', argumentsDescription, args);
     // @ts-ignore
     return await api.runCommandCaller('set_value', args)

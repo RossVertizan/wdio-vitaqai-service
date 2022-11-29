@@ -2,8 +2,11 @@
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
 
-const { VitaqService } = require("../build/service");
-const { SevereServiceError } = require('webdriverio');
+import VitaqService from "../build/esm/service.js";
+import  { SevereServiceError } from "webdriverio";
+import { test, describe, expect } from 'vitest';
+
+
 
 // beforeEach(() => {
 //     // Create a VitaqAiSocketClient object without running the constructor
@@ -12,6 +15,7 @@ const { SevereServiceError } = require('webdriverio');
 
 describe('convertToBool', () => {
     let result;
+    console.log(VitaqService);
     let vs = new VitaqService()
 
     test('it should identify true-like arguments', async () => {
