@@ -18,7 +18,7 @@ REM Offer to tag the release
 echo[
 echo Should we tag the release with something other than 'latest'?
 SET /P TAG=Enter tag to use (Hit enter for 'latest')? %=%
-if %TAG% == "" (
+if [%TAG%] == [] (
     SET TAG="latest"
 )
 
