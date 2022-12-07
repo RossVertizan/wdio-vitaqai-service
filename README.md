@@ -6,6 +6,8 @@
 [![npm version](https://badge.fury.io/js/wdio-vitaqai-service.svg)](https://badge.fury.io/js/wdio-vitaqai-service)
 [![downloads](https://img.shields.io/npm/dm/wdio-vitaqai-service)](https://img.shields.io/npm/dm/wdio-vitaqai-service)
 
+Supports WebdriverIO version 8
+
 Vitaq AI is a unique AI-powered cloud based test automation tool built on WebdriverIO.
 Accessed through your browser to easily capture a graphical digital twin of your application. It extends the full capability of Webdriverio into a model-driven approach for web, mobile and API testing. 
 - Uses the power of variability to find defects that other approaches miss.
