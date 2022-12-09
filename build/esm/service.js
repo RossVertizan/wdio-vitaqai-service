@@ -107,109 +107,114 @@ export default class VitaqService {
         // eslint-disable-next-line @typescript-eslint/no-inferrable-types
         let result = true;
         // let returnSuite: MochaSuite;
-        // Create the suite map if it has not been created
-        if (Object.keys(this._suiteMap).length < 1) {
-            if (suite.root) {
-                this.createSuiteMap(suite);
-            }
-        }
-        // Accumulate the result first so we have one place that tracks the result
-        // even if we have multiple suites in a file
-        // - it starts as passed and can only ever go to failed
-        if (typeof currentSuite !== "undefined") {
-            const currentSuiteStates = currentSuite.tests.map(test => test.state);
-            log.debug("currentSuite pass/fail states: ", currentSuiteStates);
-            if (currentSuiteStates.indexOf('failed') > -1) {
-                this.currentState = "failed";
-            }
-            // if (currentSuite.ctx._runnable.state === "failed") {
-            //     this.currentState = "failed"
-            // }
-        }
-        // Print messages from the queue
-        this.printMessages();
-        // Check if there are any remaining activeSuites, if so use the next suite
-        if (this._activeSuites.length > 0) {
-            // @ts-ignore
-            return this.getSuite(suite, this._activeSuites.shift());
-        }
-        // Get the result (pass/fail) off the _runnable
-        if (typeof currentSuite !== "undefined") {
-            // Map the passed/failed result to true and false
-            log.info(`>>>>>   Test action ${this.nextAction} ${this.currentState}`);
-            if (this.currentState === "passed") {
-                result = true;
-            }
-            else if (this.currentState === "failed") {
-                result = false;
-            }
-            else {
-                log.error("Unexpected value for currentState");
-                this._errors.push("Unexpected value for currentState");
-            }
-        }
-        // Send the result and get the next action
-        if (suite.root) {
-            // log.debug("nextActionSelector: This is the root suite");
-            if (this.nextAction === "") {
-                log.debug("nextActionSelector: nextAction is undefined");
-                await this.getNextAction(undefined, result);
-            }
-            else {
-                log.debug("nextActionSelector: Last action was: ", this.nextAction);
-                await this.getNextAction(this.nextAction, result);
-            }
-            // Reset the current state to passed
-            this.currentState = "passed";
-            // Handle the special actions
-            // Need to update vitaq_runner if any specialActions added
-            const specialActions = ['--*setUp*--', '--*tearDown*--', '--*EndSeed*--', '--*EndAll*--'];
-            while (specialActions.indexOf(this.nextAction) > -1) {
-                // Print messages from the queue
-                this.printMessages();
-                if (this.nextAction === '--*setUp*--') {
-                    // Do a session reload if one is needed
-                    if (this.sessionReloadNeeded) {
-                        // @ts-ignore
-                        await this._browser.reloadSession();
-                    }
-                    // Show which seed we are about to run
-                    const seed = await this.vitaqFunctions.getSeed('top', this._browser, this._api);
-                    log.info(`====================   Running seed: ${seed}   ====================`);
-                    await this.getNextAction('--*setUp*--', true);
-                    this.currentState = "passed";
-                }
-                else if (this.nextAction === '--*tearDown*--') {
-                    // Do nothing on tearDown - just go to the next action
-                    await this.getNextAction('--*tearDown*--', true);
-                    this.currentState = "passed";
-                }
-                else if (this.nextAction === '--*EndSeed*--') {
-                    if (Object.prototype.hasOwnProperty.call(this._options, "reloadSession")
-                        && this._options.reloadSession) {
-                        // Record the need for a session reload
-                        // - avoids session reload on last seed
-                        this.sessionReloadNeeded = true;
-                    }
-                    // Now get the next action
-                    await this.getNextAction('--*EndSeed*--', true);
-                    this.currentState = "passed";
-                }
-                else if (this.nextAction === '--*EndAll*--') {
-                    // Send result back to the API and return the response (which is null)
-                    // ... to indicate that the test has finished
-                    return await this.getNextAction('--*EndAll*--', true);
+        try {
+            // Create the suite map if it has not been created
+            if (Object.keys(this._suiteMap).length < 1) {
+                if (suite.root) {
+                    this.createSuiteMap(suite);
                 }
             }
-            // Now handle the real nextAction
-            log.debug("nextActionSelector: Next action is: ", this.nextAction);
-            log.info(`--------------------   Running test action: ${this.nextAction}   --------------------`);
+            // Accumulate the result first so we have one place that tracks the result
+            // even if we have multiple suites in a file
+            // - it starts as passed and can only ever go to failed
+            if (typeof currentSuite !== "undefined") {
+                const currentSuiteStates = currentSuite.tests.map(test => test.state);
+                log.debug("currentSuite pass/fail states: ", currentSuiteStates);
+                if (currentSuiteStates.indexOf('failed') > -1) {
+                    this.currentState = "failed";
+                }
+                // if (currentSuite.ctx._runnable.state === "failed") {
+                //     this.currentState = "failed"
+                // }
+            }
             // Print messages from the queue
             this.printMessages();
-            // Need to return the suite object
-            this._activeSuites = this.getSuitesFromFile(this.nextAction);
-            // @ts-ignore
-            return this.getSuite(suite, this._activeSuites.shift());
+            // Check if there are any remaining activeSuites, if so use the next suite
+            if (this._activeSuites.length > 0) {
+                // @ts-ignore
+                return this.getSuite(suite, this._activeSuites.shift());
+            }
+            // Get the result (pass/fail) off the _runnable
+            if (typeof currentSuite !== "undefined") {
+                // Map the passed/failed result to true and false
+                log.info(`>>>>>   Test action ${this.nextAction} ${this.currentState}`);
+                if (this.currentState === "passed") {
+                    result = true;
+                }
+                else if (this.currentState === "failed") {
+                    result = false;
+                }
+                else {
+                    log.error("Unexpected value for currentState");
+                    this._errors.push("Unexpected value for currentState");
+                }
+            }
+            // Send the result and get the next action
+            if (suite.root) {
+                // log.debug("nextActionSelector: This is the root suite");
+                if (this.nextAction === "") {
+                    log.debug("nextActionSelector: nextAction is undefined");
+                    await this.getNextAction(undefined, result);
+                }
+                else {
+                    log.debug("nextActionSelector: Last action was: ", this.nextAction);
+                    await this.getNextAction(this.nextAction, result);
+                }
+                // Reset the current state to passed
+                this.currentState = "passed";
+                // Handle the special actions
+                // Need to update vitaq_runner if any specialActions added
+                const specialActions = ['--*setUp*--', '--*tearDown*--', '--*EndSeed*--', '--*EndAll*--'];
+                while (specialActions.indexOf(this.nextAction) > -1) {
+                    // Print messages from the queue
+                    this.printMessages();
+                    if (this.nextAction === '--*setUp*--') {
+                        // Do a session reload if one is needed
+                        if (this.sessionReloadNeeded) {
+                            // @ts-ignore
+                            await this._browser.reloadSession();
+                        }
+                        // Show which seed we are about to run
+                        const seed = await this.vitaqFunctions.getSeed('top', this._browser, this._api);
+                        log.info(`====================   Running seed: ${seed}   ====================`);
+                        await this.getNextAction('--*setUp*--', true);
+                        this.currentState = "passed";
+                    }
+                    else if (this.nextAction === '--*tearDown*--') {
+                        // Do nothing on tearDown - just go to the next action
+                        await this.getNextAction('--*tearDown*--', true);
+                        this.currentState = "passed";
+                    }
+                    else if (this.nextAction === '--*EndSeed*--') {
+                        if (Object.prototype.hasOwnProperty.call(this._options, "reloadSession")
+                            && this._options.reloadSession) {
+                            // Record the need for a session reload
+                            // - avoids session reload on last seed
+                            this.sessionReloadNeeded = true;
+                        }
+                        // Now get the next action
+                        await this.getNextAction('--*EndSeed*--', true);
+                        this.currentState = "passed";
+                    }
+                    else if (this.nextAction === '--*EndAll*--') {
+                        // Send result back to the API and return the response (which is null)
+                        // ... to indicate that the test has finished
+                        return await this.getNextAction('--*EndAll*--', true);
+                    }
+                }
+                // Now handle the real nextAction
+                log.debug("nextActionSelector: Next action is: ", this.nextAction);
+                log.info(`--------------------   Running test action: ${this.nextAction}   --------------------`);
+                // Print messages from the queue
+                this.printMessages();
+                // Need to return the suite object
+                this._activeSuites = this.getSuitesFromFile(this.nextAction);
+                // @ts-ignore
+                return this.getSuite(suite, this._activeSuites.shift());
+            }
+        }
+        catch (error) {
+            log.error("nextActionSelector: Error: ", error);
         }
     }
     // -------------------------------------------------------------------------
@@ -230,16 +235,22 @@ export default class VitaqService {
      * @returns {suite/null}
      */
     getSuite(suite, suiteName) {
-        for (let index = 0; index < suite.suites.length; index += 1) {
-            const subSuite = suite.suites[index];
-            if (subSuite.fullTitle() === suiteName) {
-                return subSuite;
+        try {
+            for (let index = 0; index < suite.suites.length; index += 1) {
+                const subSuite = suite.suites[index];
+                if (subSuite.fullTitle() === suiteName) {
+                    return subSuite;
+                }
             }
+            log.error(`Was unable to find ${suiteName} in ${suite.fullTitle()}`);
+            this._errors.push(`Was unable to find ${suiteName} in ${suite.fullTitle()}`);
+            log.info(`This will cause the test to end`);
+            return null;
         }
-        log.error(`Was unable to find ${suiteName} in ${suite.fullTitle()}`);
-        this._errors.push(`Was unable to find ${suiteName} in ${suite.fullTitle()}`);
-        log.info(`This will cause the test to end`);
-        return null;
+        catch (error) {
+            log.error("getSuite: Error: ", error);
+            return null;
+        }
     }
     // -------------------------------------------------------------------------
     /**
@@ -248,16 +259,22 @@ export default class VitaqService {
      * @returns {suites/null}
      */
     getSuitesFromFile(fileName) {
-        if (Object.prototype.hasOwnProperty.call(this._suiteMap, fileName)) {
-            return JSON.parse(JSON.stringify(this._suiteMap[fileName]));
+        try {
+            if (Object.prototype.hasOwnProperty.call(this._suiteMap, fileName)) {
+                return JSON.parse(JSON.stringify(this._suiteMap[fileName]));
+            }
+            log.error("Was unable to find a file for test action: ", fileName);
+            this._errors.push("Was unable to find a file for test action: ", fileName);
+            log.error(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
+            log.error("The files that have been provided with defined tests are:");
+            log.error(this._suiteMap);
+            log.error(`This will cause the test to end`);
+            this.deleteSession().then(() => { return null; });
         }
-        log.error("Was unable to find a file for test action: ", fileName);
-        this._errors.push("Was unable to find a file for test action: ", fileName);
-        log.error(`Make sure you have a test file with ${fileName} as the name of the file (excluding the extension)`);
-        log.error("The files that have been provided with defined tests are:");
-        log.error(this._suiteMap);
-        log.error(`This will cause the test to end`);
-        this.deleteSession().then(() => { return null; });
+        catch (error) {
+            log.error("getSuitesFromFile: Error: ", error);
+            return null;
+        }
     }
     // -------------------------------------------------------------------------
     /**
@@ -272,25 +289,30 @@ export default class VitaqService {
         let title;
         let filename;
         let filenameObj;
-        for (let index = 0; index < suite.suites.length; index += 1) {
-            subSuite = suite.suites[index];
-            if (typeof subSuite.file !== 'undefined' && typeof subSuite.title !== 'undefined') {
-                title = subSuite.title;
-                filenameObj = path.parse(path.resolve(subSuite.file));
-                filename = filenameObj.name;
-                // Add to the suiteMap with file as the key and titles as an array
-                if (Object.keys(this._suiteMap).indexOf(filename) > -1) {
-                    this._suiteMap[filename].push(title);
+        try {
+            for (let index = 0; index < suite.suites.length; index += 1) {
+                subSuite = suite.suites[index];
+                if (typeof subSuite.file !== 'undefined' && typeof subSuite.title !== 'undefined') {
+                    title = subSuite.title;
+                    filenameObj = path.parse(path.resolve(subSuite.file));
+                    filename = filenameObj.name;
+                    // Add to the suiteMap with file as the key and titles as an array
+                    if (Object.keys(this._suiteMap).indexOf(filename) > -1) {
+                        this._suiteMap[filename].push(title);
+                    }
+                    else {
+                        this._suiteMap[filename] = [title];
+                    }
                 }
                 else {
-                    this._suiteMap[filename] = [title];
+                    log.debug("createSuiteMap: subSuite.file and/or subSuite.title is undefined: ", subSuite);
                 }
             }
-            else {
-                log.debug("createSuiteMap: subSuite.file and/or subSuite.title is undefined: ", subSuite);
-            }
+            // log.debug("createSuiteMap: this._suiteMap: ", this._suiteMap)
         }
-        // log.debug("createSuiteMap: this._suiteMap: ", this._suiteMap)
+        catch (error) {
+            log.error("createSuiteMap: Error: ", error);
+        }
     }
     // -------------------------------------------------------------------------
     /**

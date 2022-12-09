@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setValue = exports.setSeed = exports.resetRanges = exports.getValue = exports.getSeed = exports.getDoNotRepeat = exports.gen = exports.doNotRepeat = exports.disallowValues = exports.disallowValue = exports.disallowRange = exports.allowValues = exports.allowValue = exports.allowRange = exports.allowOnlyValues = exports.allowOnlyValue = exports.allowOnlyRange = exports.allowOnlyList = exports.allowList = exports.setMaxActionDepth = exports.setExhaustive = exports.setEnabled = exports.setCallLimit = exports.removeNext = exports.removeFromCallers = exports.removeAllNext = exports.numberNextActions = exports.numberActiveNextActions = exports.nextActions = exports.getPrevious = exports.getId = exports.getEnabled = exports.getCallLimit = exports.getCallCount = exports.displayNextActions = exports.clearCallCount = exports.addNext = exports.abort = exports.createVitaqLogEntry = exports.readDataFromVitaq = exports.sendDataToVitaq = exports.recordCoverage = exports.requestData = exports.sleep = void 0;
+/* eslint-disable prefer-rest-params */
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
@@ -25,13 +26,13 @@ const log = (0, logger_1.default)('wdio-vitaqai-service');
  * @param ms
  * @param browser
  */
-function sleep(ms, browser, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        //const args: any [] = Array.from(arguments);
+function sleep(ms, browser) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-1, 1);
         log.debug("sleep: Sleeping for %s seconds", ms / 1000);
         const argumentsDescription = { "ms": "number" };
-        (0, arguments_js_1.validateArguments)('sleep', argumentsDescription, args);
+        args = (0, arguments_js_1.validateArguments)('sleep', argumentsDescription, args);
         // @ts-ignore
         return yield new Promise(resolve => setTimeout(resolve, ms));
     });
@@ -46,13 +47,13 @@ exports.sleep = sleep;
  * @param browser
  * @param api
  */
-function requestData(variableName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const args: any [] = Array.from(arguments);
+function requestData(variableName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug("requestData: variableName ", variableName);
         const argumentsDescription = { "variableName": "string" };
-        (0, arguments_js_1.validateArguments)('requestData', argumentsDescription, args);
+        args = (0, arguments_js_1.validateArguments)('requestData', argumentsDescription, args);
         const result = yield api.requestDataCaller(variableName);
         log.info(`   -> ${result}`);
         return result;
@@ -65,13 +66,13 @@ exports.requestData = requestData;
  * @param browser
  * @param api
  */
-function recordCoverage(variablesArray, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const args: any [] = Array.from(arguments);
+function recordCoverage(variablesArray, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug("recordCoverage: variablesArray ", variablesArray);
         const argumentsDescription = { "variablesArray": "array" };
-        (0, arguments_js_1.validateArguments)('recordCoverage', argumentsDescription, args);
+        args = (0, arguments_js_1.validateArguments)('recordCoverage', argumentsDescription, args);
         return yield api.recordCoverageCaller(variablesArray);
     });
 }
@@ -83,13 +84,13 @@ exports.recordCoverage = recordCoverage;
  * @param browser
  * @param api
  */
-function sendDataToVitaq(variableName, value, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const args: any [] = Array.from(arguments);
+function sendDataToVitaq(variableName, value, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug("sendDataToVitaq: variableName value", variableName, value);
         const argumentsDescription = { "variableName": "string", "value": "any" };
-        (0, arguments_js_1.validateArguments)('sendDataToVitaq', argumentsDescription, args);
+        args = (0, arguments_js_1.validateArguments)('sendDataToVitaq', argumentsDescription, args);
         return yield api.sendDataToVitaqCaller(variableName, value);
     });
 }
@@ -100,13 +101,13 @@ exports.sendDataToVitaq = sendDataToVitaq;
  * @param browser
  * @param api
  */
-function readDataFromVitaq(variableName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const args: any [] = Array.from(arguments);
+function readDataFromVitaq(variableName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug("readDataFromVitaq: variableName ", variableName);
         const argumentsDescription = { "variableName": "string" };
-        (0, arguments_js_1.validateArguments)('readDataFromVitaq', argumentsDescription, args);
+        args = (0, arguments_js_1.validateArguments)('readDataFromVitaq', argumentsDescription, args);
         const result = yield api.readDataFromVitaqCaller(variableName);
         log.info(`   -> ${result}`);
         return result;
@@ -124,13 +125,13 @@ exports.readDataFromVitaq = readDataFromVitaq;
  * @param api
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-function createVitaqLogEntry(message, format = 'text', browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // const args: any [] = Array.from(arguments);
+function createVitaqLogEntry(message, format = 'text', browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug("createVitaqLogEntry: message format", message, format);
         const argumentsDescription = { "message": "string", "format?": "string" };
-        (0, arguments_js_1.validateArguments)('createVitaqLogEntry', argumentsDescription, args);
+        args = (0, arguments_js_1.validateArguments)('createVitaqLogEntry', argumentsDescription, args);
         return yield api.createVitaqLogEntryCaller(message, format);
     });
 }
@@ -141,9 +142,9 @@ exports.createVitaqLogEntry = createVitaqLogEntry;
 /**
  * Abort the action causing it to not select a next action
  */
-function abort(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function abort(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('abort: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -161,9 +162,9 @@ exports.abort = abort;
  * @param browser
  * @param api
  */
-function addNext(actionName, nextAction, weight = 1, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function addNext(actionName, nextAction, weight = 1, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('addNext: actionName, nextAction, weight', actionName, nextAction, weight);
         const argumentsDescription = { "actionName": "string", "nextAction": "string", "weight": "number" };
@@ -180,9 +181,9 @@ exports.addNext = addNext;
  * @param browser
  * @param api
  */
-function clearCallCount(actionName, tree, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function clearCallCount(actionName, tree, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('clearCallCount: actionName, tree', actionName, tree);
         const argumentsDescription = { "actionName": "string", "tree?": "boolean" };
@@ -198,9 +199,9 @@ exports.clearCallCount = clearCallCount;
  * @param browser
  * @param api
  */
-function displayNextActions(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function displayNextActions(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('displayNextActions: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -218,9 +219,9 @@ exports.displayNextActions = displayNextActions;
  * @param browser
  * @param api
  */
-function getCallCount(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function getCallCount(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getCallCount: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -238,9 +239,9 @@ exports.getCallCount = getCallCount;
  * @param browser
  * @param api
  */
-function getCallLimit(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function getCallLimit(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getCallLimit: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -258,9 +259,9 @@ exports.getCallLimit = getCallLimit;
  * @param browser
  * @param api
  */
-function getEnabled(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function getEnabled(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getEnabled: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -281,7 +282,7 @@ exports.getEnabled = getEnabled;
 // export async function getExhaustive(actionName: string,
 //                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
 //                                  api: VitaqAiApi) {
-//     // let args: any [] = Array.from(arguments);
+//     let args: any [] = Array.from(arguments);
 //     args.splice(-2, 2);
 //     log.debug('getExhaustive: actionName', actionName);
 //     let argumentsDescription = {"actionName": "string"}
@@ -300,7 +301,7 @@ exports.getEnabled = getEnabled;
 // export async function getMaxActionDepth(actionName: string,
 //                                  browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
 //                                  api: VitaqAiApi) {
-//     // let args: any [] = Array.from(arguments);
+//     let args: any [] = Array.from(arguments);
 //     args.splice(-2, 2);
 //     log.debug('getMaxActionDepth: actionName', actionName);
 //     let argumentsDescription = {"actionName": "string"}
@@ -316,9 +317,9 @@ exports.getEnabled = getEnabled;
  * @param browser
  * @param api
  */
-function getId(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function getId(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getId: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -337,10 +338,10 @@ exports.getId = getId;
  * @param browser
  * @param api
  */
-function getPrevious(actionName, steps, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
+function getPrevious(actionName, steps, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
         let result;
-        // let args: any [] = Array.from(arguments);
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getPrevious: actionName, steps', actionName, steps);
         const argumentsDescription = { "actionName": "string", "steps?": "number" };
@@ -359,9 +360,9 @@ exports.getPrevious = getPrevious;
  * @param browser
  * @param api
  */
-function nextActions(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function nextActions(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('nextActions: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -379,9 +380,9 @@ exports.nextActions = nextActions;
  * @param browser
  * @param api
  */
-function numberActiveNextActions(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function numberActiveNextActions(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('numberActiveNextActions: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -399,9 +400,9 @@ exports.numberActiveNextActions = numberActiveNextActions;
  * @param browser
  * @param api
  */
-function numberNextActions(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function numberNextActions(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('numberNextActions: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -419,9 +420,9 @@ exports.numberNextActions = numberNextActions;
  * @param browser
  * @param api
  */
-function removeAllNext(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function removeAllNext(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('removeAllNext: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -437,9 +438,9 @@ exports.removeAllNext = removeAllNext;
  * @param browser
  * @param api
  */
-function removeFromCallers(actionName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function removeFromCallers(actionName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('removeFromCallers: actionName', actionName);
         const argumentsDescription = { "actionName": "string" };
@@ -456,9 +457,9 @@ exports.removeFromCallers = removeFromCallers;
  * @param browser
  * @param api
  */
-function removeNext(actionName, nextAction, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function removeNext(actionName, nextAction, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('removeNext: actionName, nextAction', actionName, nextAction);
         const argumentsDescription = { "actionName": "string", "nextAction": "string" };
@@ -475,9 +476,9 @@ exports.removeNext = removeNext;
  * @param browser
  * @param api
  */
-function setCallLimit(actionName, limit, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function setCallLimit(actionName, limit, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('setCallLimit: actionName, limit', actionName, limit);
         const argumentsDescription = { "actionName": "string", "limit": "number" };
@@ -494,9 +495,9 @@ exports.setCallLimit = setCallLimit;
  * @param browser
  * @param api
  */
-function setEnabled(actionName, enabled, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function setEnabled(actionName, enabled, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('setEnabled: actionName, enabled', actionName, enabled);
         const argumentsDescription = { "actionName": "string", "enabled": "boolean" };
@@ -513,9 +514,9 @@ exports.setEnabled = setEnabled;
  * @param browser
  * @param api
  */
-function setExhaustive(actionName, exhaustive, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function setExhaustive(actionName, exhaustive, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('setExhaustive: actionName, exhaustive', actionName, exhaustive);
         const argumentsDescription = { "actionName": "string", "exhaustive": "boolean" };
@@ -532,9 +533,9 @@ exports.setExhaustive = setExhaustive;
  * @param browser
  * @param api
  */
-function setMaxActionDepth(actionName, depth = 1000, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function setMaxActionDepth(actionName, depth = 1000, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('setMaxActionDepth: actionName, depth', actionName, depth);
         const argumentsDescription = { "actionName": "string", "depth": "number" };
@@ -555,9 +556,9 @@ exports.setMaxActionDepth = setMaxActionDepth;
  * @param api
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-function allowList(variableName, list, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowList(variableName, list, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowList: variableName, list', variableName, list);
         const argumentsDescription = { "variableName": "string", "list": "object" };
@@ -575,9 +576,9 @@ exports.allowList = allowList;
  * @param api
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-function allowOnlyList(variableName, list, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowOnlyList(variableName, list, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowOnlyList: variableName, list', variableName, list);
         const argumentsDescription = { "variableName": "string", "list": "object" };
@@ -595,9 +596,9 @@ exports.allowOnlyList = allowOnlyList;
  * @param browser
  * @param api
  */
-function allowOnlyRange(variableName, low, high, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowOnlyRange(variableName, low, high, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowOnlyRange: variableName, low, high', variableName, low, high);
         const argumentsDescription = { "variableName": "string", "low": "numberOrBool", "high": "numberOrBool" };
@@ -614,9 +615,9 @@ exports.allowOnlyRange = allowOnlyRange;
  * @param browser
  * @param api
  */
-function allowOnlyValue(variableName, value, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowOnlyValue(variableName, value, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowOnlyValue: variableName, value', variableName, value);
         const argumentsDescription = { "variableName": "string", "value": "numberOrBool" };
@@ -633,9 +634,9 @@ exports.allowOnlyValue = allowOnlyValue;
  * @param browser
  * @param api
  */
-function allowOnlyValues(variableName, valueList, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowOnlyValues(variableName, valueList, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowOnlyValues: variableName, valueList', variableName, valueList);
         const argumentsDescription = { "variableName": "string", "valueList": "array" };
@@ -657,9 +658,9 @@ exports.allowOnlyValues = allowOnlyValues;
  * @param browser
  * @param api
  */
-function allowRange(variableName, low, high, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowRange(variableName, low, high, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowRange: variableName, low, high', variableName, low, high);
         const argumentsDescription = { "variableName": "string", "low": "numberOrBool", "high": "numberOrBool" };
@@ -676,9 +677,9 @@ exports.allowRange = allowRange;
  * @param browser
  * @param api
  */
-function allowValue(variableName, value, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowValue(variableName, value, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowValue: variableName, value', variableName, value);
         const argumentsDescription = { "variableName": "string", "value": "numberOrBool" };
@@ -695,9 +696,9 @@ exports.allowValue = allowValue;
  * @param browser
  * @param api
  */
-function allowValues(variableName, valueList, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function allowValues(variableName, valueList, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('allowValues: variableName, valueList', variableName, valueList);
         const argumentsDescription = { "variableName": "string", "valueList": "array" };
@@ -719,9 +720,9 @@ exports.allowValues = allowValues;
  * @param browser
  * @param api
  */
-function disallowRange(variableName, low, high, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function disallowRange(variableName, low, high, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('disallowRange: variableName, low, high', variableName, low, high);
         const argumentsDescription = { "variableName": "string", "low": "numberOrBool", "high": "numberOrBool" };
@@ -738,9 +739,9 @@ exports.disallowRange = disallowRange;
  * @param browser
  * @param api
  */
-function disallowValue(variableName, value, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function disallowValue(variableName, value, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('disallowValue: variableName, value', variableName, value);
         const argumentsDescription = { "variableName": "string", "value": "numberOrBool" };
@@ -757,9 +758,9 @@ exports.disallowValue = disallowValue;
  * @param browser
  * @param api
  */
-function disallowValues(variableName, valueList, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function disallowValues(variableName, valueList, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('disallowValues: variableName, valueList', variableName, valueList);
         const argumentsDescription = { "variableName": "string", "valueList": "array" };
@@ -780,9 +781,9 @@ exports.disallowValues = disallowValues;
  * @param browser
  * @param api
  */
-function doNotRepeat(variableName, value, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function doNotRepeat(variableName, value, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('doNotRepeat: variableName, value', variableName, value);
         const argumentsDescription = { "variableName": "string", "value": "boolean" };
@@ -798,9 +799,9 @@ exports.doNotRepeat = doNotRepeat;
  * @param browser
  * @param api
  */
-function gen(variableName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function gen(variableName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('gen: variableName', variableName);
         const argumentsDescription = { "variableName": "string" };
@@ -816,9 +817,9 @@ exports.gen = gen;
  * @param browser
  * @param api
  */
-function getDoNotRepeat(variableName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function getDoNotRepeat(variableName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getDoNotRepeat: variableName', variableName);
         const argumentsDescription = { "variableName": "string" };
@@ -836,9 +837,9 @@ exports.getDoNotRepeat = getDoNotRepeat;
  * @param browser
  * @param api
  */
-function getSeed(variableName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function getSeed(variableName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getSeed: variableName', variableName);
         const argumentsDescription = { "variableName": "string" };
@@ -856,9 +857,9 @@ exports.getSeed = getSeed;
  * @param browser
  * @param api
  */
-function getValue(variableName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function getValue(variableName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('getValue: variableName', variableName);
         const argumentsDescription = { "variableName": "string" };
@@ -876,9 +877,9 @@ exports.getValue = getValue;
  * @param browser
  * @param api
  */
-function resetRanges(variableName, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function resetRanges(variableName, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('resetRanges: variableName', variableName);
         const argumentsDescription = { "variableName": "string" };
@@ -895,9 +896,9 @@ exports.resetRanges = resetRanges;
  * @param browser
  * @param api
  */
-function setSeed(variableName, seed, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function setSeed(variableName, seed, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('setSeed: variableName, seed', variableName, seed);
         const argumentsDescription = { "variableName": "string", "seed": "number" };
@@ -914,9 +915,9 @@ exports.setSeed = setSeed;
  * @param browser
  * @param api
  */
-function setValue(variableName, value, browser, api, ...args) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // let args: any [] = Array.from(arguments);
+function setValue(variableName, value, browser, api) {
+    return __awaiter(this, arguments, void 0, function* () {
+        let args = Array.from(arguments);
         args.splice(-2, 2);
         log.debug('setValue: variableName, value', variableName, value);
         const argumentsDescription = { "variableName": "string", "value": "any" };
