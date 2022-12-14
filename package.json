@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "@wdio/cli": "^6.0.0||^7.0.0||^8.0.0",
-    "vitaqai-api": "1.1.36",
+    "vitaqai-api": "1.1.38",
     "vitaqai-mocha": "10.1.1",
     "wdio-vitaqai-mocha-framework": "8.0.1"
   },
