@@ -125,7 +125,7 @@ exports.readDataFromVitaq = readDataFromVitaq;
  * @param api
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-function createVitaqLogEntry(message, format = 'text', browser, api) {
+function createVitaqLogEntry(message, format, browser, api) {
     return __awaiter(this, arguments, void 0, function* () {
         let args = Array.from(arguments);
         args.splice(-2, 2);
@@ -162,7 +162,7 @@ exports.abort = abort;
  * @param browser
  * @param api
  */
-function addNext(actionName, nextAction, weight = 1, browser, api) {
+function addNext(actionName, nextAction, weight, browser, api) {
     return __awaiter(this, arguments, void 0, function* () {
         let args = Array.from(arguments);
         args.splice(-2, 2);
@@ -533,7 +533,7 @@ exports.setExhaustive = setExhaustive;
  * @param browser
  * @param api
  */
-function setMaxActionDepth(actionName, depth = 1000, browser, api) {
+function setMaxActionDepth(actionName, depth, browser, api) {
     return __awaiter(this, arguments, void 0, function* () {
         let args = Array.from(arguments);
         args.splice(-2, 2);

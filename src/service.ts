@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
@@ -456,7 +457,7 @@ export default class VitaqService implements Services.ServiceInstance {
      * JSON.stringify() method
      */
     // eslint-disable-next-line @typescript-eslint/ban-types
-    createVitaqLogEntry(message: string | {}, format: string) {
+    createVitaqLogEntry(message: string | {}, format: string = 'text') {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
         return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api)
@@ -496,7 +497,7 @@ export default class VitaqService implements Services.ServiceInstance {
 
     // createVitaqLogEntry
     // eslint-disable-next-line @typescript-eslint/ban-types
-    log(message: string | {}, format: string) {
+    log(message: string | {}, format: string = 'text') {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
         return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api)
@@ -512,7 +513,7 @@ export default class VitaqService implements Services.ServiceInstance {
         return this.vitaqFunctions.abort(actionName, this._browser, this._api)
     }
 
-    addNext(actionName: string, nextAction: string, weight: 1) {
+    addNext(actionName: string, nextAction: string, weight: number=1) {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
         return this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api)
@@ -614,7 +615,7 @@ export default class VitaqService implements Services.ServiceInstance {
         return this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api)
     }
 
-    setMaxActionDepth(actionName: string, depth: 1000) {
+    setMaxActionDepth(actionName: string, depth: number=1000) {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`)
         return this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api)

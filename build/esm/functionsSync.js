@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable prefer-rest-params */
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
@@ -131,7 +132,7 @@ export function abort(actionName, browser, api) {
  * @param browser
  * @param api
  */
-export function addNext(actionName, nextAction, weight = 1, browser, api) {
+export function addNext(actionName, nextAction, weight, browser, api) {
     let args = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('addNext: actionName, nextAction, weight', actionName, nextAction, weight);

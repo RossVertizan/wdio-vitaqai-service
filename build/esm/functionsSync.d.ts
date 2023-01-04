@@ -58,7 +58,7 @@ export declare function abort(actionName: string, browser: Browser<'async'> | Mu
  * @param browser
  * @param api
  */
-export declare function addNext(actionName: string, nextAction: string, weight: number | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): void;
+export declare function addNext(actionName: string, nextAction: string, weight: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): void;
 /**
  * Set the call_count back to zero
  * @param actionName - name of the action
@@ -196,7 +196,7 @@ export declare function setExhaustive(actionName: string, exhaustive: boolean, b
  * @param browser
  * @param api
  */
-export declare function setMaxActionDepth(actionName: string, depth: 1000, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): void;
+export declare function setMaxActionDepth(actionName: string, depth: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): void;
 /**
  * Specify a list to add to the existing list in a list variable
  * @param variableName - name of the variable

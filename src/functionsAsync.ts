@@ -117,7 +117,7 @@ export async function readDataFromVitaq(variableName: string,
  * @param api
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export async function createVitaqLogEntry(message: string | {}, format = 'text',
+export async function createVitaqLogEntry(message: string | {}, format: string,
                                     browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                     api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
@@ -155,7 +155,7 @@ export async function abort(actionName: string,
  * @param browser
  * @param api
  */
-export async function addNext(actionName: string, nextAction: string, weight = 1,
+export async function addNext(actionName: string, nextAction: string, weight: number,
                               browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                               api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
@@ -528,7 +528,7 @@ export async function setExhaustive(actionName: string, exhaustive: boolean,
  * @param browser
  * @param api
  */
-export async function setMaxActionDepth(actionName: string, depth = 1000,
+export async function setMaxActionDepth(actionName: string, depth: number,
                                         browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);

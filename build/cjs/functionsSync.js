@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setValue = exports.setSeed = exports.resetRanges = exports.getValue = exports.getSeed = exports.getDoNotRepeat = exports.gen = exports.doNotRepeat = exports.disallowValues = exports.disallowValue = exports.disallowRange = exports.allowValues = exports.allowValue = exports.allowRange = exports.allowOnlyValues = exports.allowOnlyValue = exports.allowOnlyRange = exports.allowOnlyList = exports.allowList = exports.setMaxActionDepth = exports.setExhaustive = exports.setEnabled = exports.setCallLimit = exports.removeNext = exports.removeFromCallers = exports.removeAllNext = exports.numberNextActions = exports.numberActiveNextActions = exports.nextActions = exports.getPrevious = exports.getId = exports.getEnabled = exports.getCallLimit = exports.getCallCount = exports.displayNextActions = exports.clearCallCount = exports.addNext = exports.abort = exports.createVitaqLogEntry = exports.readDataFromVitaq = exports.sendDataToVitaq = exports.recordCoverage = exports.requestData = exports.sleep = void 0;
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable prefer-rest-params */
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
@@ -144,7 +145,7 @@ exports.abort = abort;
  * @param browser
  * @param api
  */
-function addNext(actionName, nextAction, weight = 1, browser, api) {
+function addNext(actionName, nextAction, weight, browser, api) {
     let args = Array.from(arguments);
     args.splice(-2, 2);
     log.debug('addNext: actionName, nextAction, weight', actionName, nextAction, weight);

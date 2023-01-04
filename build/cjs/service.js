@@ -35,6 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
 //==============================================================================
@@ -431,7 +432,7 @@ class VitaqService {
      * JSON.stringify() method
      */
     // eslint-disable-next-line @typescript-eslint/ban-types
-    createVitaqLogEntry(message, format) {
+    createVitaqLogEntry(message, format = 'text') {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api);
@@ -465,7 +466,7 @@ class VitaqService {
     }
     // createVitaqLogEntry
     // eslint-disable-next-line @typescript-eslint/ban-types
-    log(message, format) {
+    log(message, format = 'text') {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.createVitaqLogEntry(message, format, this._browser, this._api);
@@ -478,7 +479,7 @@ class VitaqService {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.abort(actionName, this._browser, this._api);
     }
-    addNext(actionName, nextAction, weight) {
+    addNext(actionName, nextAction, weight = 1) {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.addNext(actionName, nextAction, weight, this._browser, this._api);
@@ -563,7 +564,7 @@ class VitaqService {
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setExhaustive(actionName, exhaustive, this._browser, this._api);
     }
-    setMaxActionDepth(actionName, depth) {
+    setMaxActionDepth(actionName, depth = 1000) {
         // eslint-disable-next-line prefer-rest-params
         log.info(`Calling "${this.getFuncName()}" with arguments "${this.createArgumentString(arguments)}"`);
         return this.vitaqFunctions.setMaxActionDepth(actionName, depth, this._browser, this._api);

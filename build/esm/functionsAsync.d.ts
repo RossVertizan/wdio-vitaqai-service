@@ -45,7 +45,7 @@ export declare function readDataFromVitaq(variableName: string, browser: Browser
  * @param browser
  * @param api
  */
-export declare function createVitaqLogEntry(message: string | {}, format: string | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): Promise<any>;
+export declare function createVitaqLogEntry(message: string | {}, format: string, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): Promise<any>;
 /**
  * Abort the action causing it to not select a next action
  */
@@ -58,7 +58,7 @@ export declare function abort(actionName: string, browser: Browser<'async'> | Mu
  * @param browser
  * @param api
  */
-export declare function addNext(actionName: string, nextAction: string, weight: number | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): Promise<any>;
+export declare function addNext(actionName: string, nextAction: string, weight: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): Promise<any>;
 /**
  * Set the call_count back to zero
  * @param actionName - name of the action
@@ -196,7 +196,7 @@ export declare function setExhaustive(actionName: string, exhaustive: boolean, b
  * @param browser
  * @param api
  */
-export declare function setMaxActionDepth(actionName: string, depth: number | undefined, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): Promise<any>;
+export declare function setMaxActionDepth(actionName: string, depth: number, browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined, api: VitaqAiApi): Promise<any>;
 /**
  * Specify a list to add to the existing list in a list variable
  * @param variableName - name of the variable

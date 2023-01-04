@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 /* eslint-disable prefer-rest-params */
 //==============================================================================
 // (c) Vertizan Limited 2011-2022
@@ -173,7 +174,7 @@ export function abort(actionName: string,
  * @param browser
  * @param api
  */
-export function addNext(actionName: string, nextAction: string, weight = 1,
+export function addNext(actionName: string, nextAction: string, weight: number,
                         browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                         api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
@@ -584,7 +585,7 @@ export function setExhaustive(actionName: string, exhaustive: boolean,
  * @param browser
  * @param api
  */
-export function setMaxActionDepth(actionName: string, depth: 1000,
+export function setMaxActionDepth(actionName: string, depth: number,
                                   browser: Browser<'async'> | MultiRemoteBrowser<'async'> | undefined,
                                   api: VitaqAiApi) {
     let args: any [] = Array.from(arguments);
